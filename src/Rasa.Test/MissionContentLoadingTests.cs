@@ -979,6 +979,8 @@ namespace Rasa.Test
                 references.Items.UnionWith(new uint[] { 2524, 2527, 2532, 2533 });
                 // PravusResearchInstance: the Level 1 Access Keypass the entrance Trainees drop.
                 references.Items.Add(11505);
+                // PalisadesDossierMissions: Executor Gantic's Datapad and Barbrix's Boot.
+                references.Items.UnionWith(new uint[] { 123352, 118803 });
                 // Kill bindings name world-seed creatures: the Wilderness hub's Proctor Fulgor (76) and Arioch Xanx
                 // (77). The real runtime resolves those through CreatureManager.LoadedCreatures; this migrated test
                 // world carries only the content's own rows, so the two ids the bindings use are declared here.
@@ -1237,6 +1239,71 @@ namespace Rasa.Test
                 CollectionAssert.AreEquivalent(new uint[] { 1349100, 1349102, 1349104, 1349105 }, torcastra.Keys.ToArray());
                 CollectionAssert.AreEquivalent(new uint[] { 1349103 }, ContentMaterializer.UsablesToSpawn(validation, 1349).Select(placement => placement.Id).ToArray());
                 Assert.IsTrue(minos.Values.Concat(timora.Values).Concat(torcastra.Values).All(placement => placement.PresentConditionId == 0));
+
+                // PalisadesDossierMissions (2026-09-27): 1812, 1813, 1988, 2014 and 1795 load offerable. The Logos missions wait on
+                // Palisades shrines; 2014 completes on Derac's 136 and Matlin's 1214 through the npc_package rows this migration
+                // adds, reveals 1 -> 2 -> 6 and collects Gantic's datapad; 1795 collects Barbrix's boot. Both bosses respawn.
+                foreach (var missionId in new uint[] { 1812, 1813, 1988, 2014, 1795 })
+                {
+                    Assert.IsFalse(validation.MissionGaps.ContainsKey(missionId), $"mission {missionId}: {string.Join(" | ", validation.MissionGaps.GetValueOrDefault(missionId) ?? Array.Empty<string>())}");
+                    CollectionAssert.AreEqual(Array.Empty<string>(), missions.LoadedMissions[missionId].DefinitionGaps(), $"mission {missionId}");
+                    Assert.IsTrue(missions.LoadedMissions[missionId].IsDispensable, $"mission {missionId}");
+                    Assert.AreEqual(0, missions.LoadedMissions[missionId].Prerequisites.Count, $"mission {missionId}");
+                }
+                foreach (var (missionId, objectiveId, logosId) in new[] { (1812u, 18u, 333u), (1813u, 19u, 322u) })
+                {
+                    var arizpeLogos = missions.LoadedMissions[missionId];
+                    Assert.AreEqual((199085u, 199085u), (arizpeLogos.MissionGiver, arizpeLogos.MissionReciver));
+                    Assert.AreEqual((objectiveId, ObjectiveBindingKind.LogosRecovered, logosId),
+                        arizpeLogos.Bindings.Select(binding => (binding.ObjectiveId, (ObjectiveBindingKind)binding.Kind, binding.PlacementId)).Single());
+                    Assert.AreEqual((9000L, 1800L), ((long)arizpeLogos.RewardExperience, (long)arizpeLogos.RewardCredits));
+                    Assert.AreEqual(0, arizpeLogos.OfferedSelectableRewards.Count + arizpeLogos.OfferedFixedItems.Count);
+                }
+                var pilgrimage = missions.LoadedMissions[1988];
+                Assert.AreEqual((199102u, 199102u), (pilgrimage.MissionGiver, pilgrimage.MissionReciver));
+                CollectionAssert.AreEquivalent(new[] { (1u, ObjectiveBindingKind.LogosRecovered, 208u), (2u, ObjectiveBindingKind.LogosRecovered, 219u), (3u, ObjectiveBindingKind.LogosRecovered, 266u) },
+                    pilgrimage.Bindings.Select(binding => (binding.ObjectiveId, (ObjectiveBindingKind)binding.Kind, binding.PlacementId)).ToArray());
+                Assert.AreEqual((20000L, 3000L), ((long)pilgrimage.RewardExperience, (long)pilgrimage.RewardCredits));
+                Assert.AreEqual(3, pilgrimage.OfferedSelectableRewards.Count);
+                var crashCourse = missions.LoadedMissions[2014];
+                Assert.AreEqual((199053u, 199053u), (crashCourse.MissionGiver, crashCourse.MissionReciver));
+                Assert.IsTrue(crashCourse.HasObjectiveConversation(1, 136, 1));
+                Assert.IsTrue(crashCourse.HasObjectiveConversation(6, 1214, 1));
+                CollectionAssert.AreEquivalent(new uint[] { 1 }, crashCourse.Objectives.Values.Where(objective => objective.RevealedOnAccept == true).Select(objective => objective.ObjectiveId).ToArray());
+                CollectionAssert.AreEqual(new uint[] { 2 }, crashCourse.Transitions[1]);
+                CollectionAssert.AreEqual(new uint[] { 6 }, crashCourse.Transitions[2]);
+                Assert.AreEqual((2u, ObjectiveBindingKind.ItemCollected, 199054u, 123352u),
+                    crashCourse.Bindings.Select(binding => (binding.ObjectiveId, (ObjectiveBindingKind)binding.Kind, binding.CreatureId, binding.ItemTemplateId)).Single());
+                Assert.AreEqual((0L, 0L), ((long)crashCourse.RewardExperience, (long)crashCourse.RewardCredits));
+                Assert.AreEqual(3, crashCourse.OfferedSelectableRewards.Count);
+                var bloodyBooty = missions.LoadedMissions[1795];
+                Assert.AreEqual((510135u, 510135u), (bloodyBooty.MissionGiver, bloodyBooty.MissionReciver));
+                Assert.AreEqual((1u, ObjectiveBindingKind.ItemCollected, 199095u, 118803u),
+                    bloodyBooty.Bindings.Select(binding => (binding.ObjectiveId, (ObjectiveBindingKind)binding.Kind, binding.CreatureId, binding.ItemTemplateId)).Single());
+                Assert.AreEqual((19000L, 2850L), ((long)bloodyBooty.RewardExperience, (long)bloodyBooty.RewardCredits));
+                Assert.AreEqual(0, bloodyBooty.OfferedSelectableRewards.Count + bloodyBooty.OfferedFixedItems.Count);
+                foreach (var held in new uint[] { 1799, 1800, 1801, 1802, 337, 1630, 2006, 1809, 1817 })
+                    Assert.IsFalse(missions.LoadedMissions.ContainsKey(held), $"mission {held} is held");
+                // Gantic and Barbrix stand on the shared Palisades map and come back 60 s after a kill (OD-160); only a
+                // player on the mission gets the proof item, from the boss that carries it.
+                Assert.IsFalse(validation.WithheldContexts.Contains(1244u));
+                var palisades = ContentMaterializer.PlacementsToSpawn(validation, 1244).ToDictionary(placement => placement.Id);
+                foreach (var boss in new uint[] { 199054, 199095 })
+                    Assert.AreEqual((boss, (byte)ContentPlacementBehavior.Stationary, 60000u, 0u), (palisades[boss].CreatureId, palisades[boss].Behavior, palisades[boss].RespawnMs, palisades[boss].PresentConditionId));
+                var datapadHunter = new Client(null, new ClientPacketHandler()) { Player = new Manifestation() };
+                var crash = new PlayerMission { MissionId = 2014, State = MissionState.Active };
+                crash.Objectives[1] = MissionObjectiveState.Completed;
+                crash.Objectives[2] = MissionObjectiveState.Incomplete;
+                datapadHunter.Player.Missions[2014] = crash;
+                CollectionAssert.AreEqual(new uint[] { 123352 }, content.RollMissionItemDrops(datapadHunter, new Creature { DbId = 199054 }, () => 0.999).ToArray());
+                Assert.AreEqual(0, content.RollMissionItemDrops(datapadHunter, new Creature { DbId = 199095 }, () => 0.0).Count(), "Barbrix carries no datapad");
+                var bootHunter = new Client(null, new ClientPacketHandler()) { Player = new Manifestation() };
+                var booty = new PlayerMission { MissionId = 1795, State = MissionState.Active };
+                booty.Objectives[1] = MissionObjectiveState.Incomplete;
+                bootHunter.Player.Missions[1795] = booty;
+                CollectionAssert.AreEqual(new uint[] { 118803 }, content.RollMissionItemDrops(bootHunter, new Creature { DbId = 199095 }, () => 0.999).ToArray());
+                var bystander = new Client(null, new ClientPacketHandler()) { Player = new Manifestation() };
+                Assert.AreEqual(0, content.RollMissionItemDrops(bystander, new Creature { DbId = 199054 }, () => 0.0).Count(), "no mission, no datapad");
 
                 // Capture the Flag: both bindings, the boss counter, both indicators and the prerequisite are attached live.
                 var captureTheFlag = missions.LoadedMissions[1994];

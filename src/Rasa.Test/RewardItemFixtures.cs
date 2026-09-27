@@ -126,7 +126,15 @@ namespace Rasa.Test
             new RewardTemplate { Template = 45062, Class = (EntityClasses)22545, MaxHitPoints = 100, Level = 35, StackSize = 100, Consumable = true },
             new RewardTemplate { Template = 118898, Class = (EntityClasses)28489, MaxHitPoints = 100, Level = 35, StackSize = 5000, Consumable = true },
             new RewardTemplate { Template = 111048, Class = (EntityClasses)26298, MaxHitPoints = 100, Level = 31, StackSize = 5000, Consumable = true },
-            new RewardTemplate { Template = 45446, Class = (EntityClasses)22963, MaxHitPoints = 100, Level = 31, StackSize = 5000, Consumable = true }
+            new RewardTemplate { Template = 45446, Class = (EntityClasses)22963, MaxHitPoints = 100, Level = 31, StackSize = 5000, Consumable = true },
+            // PalisadesDossierMissions (2026-09-27): 1988's AccuMax laser pistol, rifle and shotgun and 2014's Hazmat vest,
+            // Reflective vest and Motor Assist boots, with the deployed world seed's rows.
+            new RewardTemplate { Template = 122719, Class = (EntityClasses)27113, MaxHitPoints = 120, Skill = 1, Level = 20, Weapon = true, WeaponClass = Weapon(27113, 75, 1, 67, 1, 51, 25920, 10, 250, 6, 1) },
+            new RewardTemplate { Template = 122720, Class = (EntityClasses)27213, MaxHitPoints = 120, Skill = 1, Level = 21, Weapon = true, WeaponClass = Weapon(27213, 83, 1, 68, 2, 63, 25920, 10, 505, 6, 2) },
+            new RewardTemplate { Template = 122721, Class = (EntityClasses)27311, MaxHitPoints = 120, Skill = 1, Level = 22, Weapon = true, WeaponClass = Weapon(27311, 89, 1, 147, 3, 76, 25920, 30, 1018, 6, 3) },
+            new RewardTemplate { Template = 130322, Class = (EntityClasses)23666, MaxHitPoints = 694, Skill = 30, Level = 19, ArmorClass = Armor(23666, 6940, 29) },
+            new RewardTemplate { Template = 130323, Class = (EntityClasses)19301, MaxHitPoints = 810, Skill = 21, Level = 19, ArmorClass = Armor(19301, 8097, 22) },
+            new RewardTemplate { Template = 130324, Class = (EntityClasses)15557, MaxHitPoints = 199, Skill = 19, Level = 18, ArmorClass = Armor(15557, 1989, 7) }
         };
 
         private readonly object _previousItemManager;

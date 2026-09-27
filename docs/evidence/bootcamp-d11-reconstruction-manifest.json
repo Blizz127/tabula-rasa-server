@@ -555,6 +555,26 @@
    "era": "final_live",
    "sha256": "9f300ba5b0eeca08dc256844b3cb41a1acc9d27d867bac54d48f5fe6e7cefe47",
    "locator": "Tabula Rasa 1.16.5.0 data/maps/adv_foreas_concordia_divide_torcastraprison/adv_foreas_concordia_divide_torcastraprison.map (decoded by the dossier's tools/mapdump, Rasa.ClientData.MapFile, to research/20260926-instance-dossiers-divide/work/maps/adv_foreas_concordia_divide_torcastraprison.entities.txt)"
+  },
+  "community_db:tarapedia-palisades-20260927": {
+   "kind": "community_db",
+   "era": "unknown",
+   "url": "https://tabularasa.fandom.com",
+   "locator": "research/20260927-palisades-dossiers/work/tarapedia/{missions,npc,other}/*.json (MediaWiki API, full revision histories with content, fetched 2026-09-27 by tools/tp.py)",
+   "note": "Community transcription. Each citation names the revision id and date it reads; tools/reward_eras.py dates each reward value to its first revision (pre-1.4 before 2008-01-29)."
+  },
+  "client_map:adv_foreas_concordia_palisades": {
+   "kind": "client_map",
+   "era": "final_live",
+   "sha256": "899180a7a717fb686b33d042de437c87edc1b6af328c6b80f59c14b4d915a917",
+   "member": "Tabula Rasa 1.16.5.0/data/maps/adv_foreas_concordia_palisades/adv_foreas_concordia_palisades.map",
+   "locator": "research/20260927-palisades-dossiers/work/maps/palisades.json (4,898 entities, tools/mapents.py; file dated 2009-02-11)"
+  },
+  "measurement:palisades-navprobe-20260927": {
+   "kind": "measurement",
+   "era": "final_live",
+   "member": "research/20260927-palisades-dossiers/work/probes/out1.txt (sha256 36a45b912dd2fca0320cdbddc715e49b9bd876fbcd61cbd9b3a42b4afbccb25c)",
+   "note": "tools/navprobe (Rasa.Navigation) on navmesh/adv_foreas_concordia_palisades.nav (sha256 a2e2c6a90b73d8ee7e6a100662b9cff84d36a3029fce8f7fc6264d507354207f, built from the 1.16.5.0 client map): ground height, levels and a path from the nearest client waypoint marker; floor = surface - 0.276 m. Re-checked in this tree by PalisadesDossierMissionsTests."
   }
  },
  "scope": [
@@ -103801,6 +103821,2853 @@
      "decision": "OD-145"
     }
    }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199087
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "package_id": {
+     "value": 136,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client objectiveconversation (2014,1,136,1,1) completion 21833 \"The Commander wants to test our commitment? No problem. Take Conner with you. ...\" and (337,1,136,1,1); missionobjective (2014,1) \"Talk to Derac\", (337,1) \"Talk to Derac Bensen\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      },
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Derac Bensen Corman' rev 35394 (2008-10-25): 'in the hydroponics dome in the north end'"
+      }
+     ],
+     "reasoning": "Package 136 is the client's completion package for both \"Talk to Derac\" objectives (original); no creature carries it. That Derac Bensen Corman (199087, CodexNpcCorrections, standing at TaRapedia rev 35394's post-D12 hydroponics-dome reading inside New Cumbria) speaks it follows from the objective names and 2014's opening (inferred). The placement keeps npc_package_id 0, so the creature row supplies it."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Derac Bensen Corman (client package 136)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199053
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "package_id": {
+     "value": 1214,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client objectiveconversation (2014,6,1214,1,1) completion 21844 and (1139,6,1214) \"Return ... to Base Commander Matlin\"; missionobjective (2014,6) \"Return to Commander Matlin\", body 21843 \"Bring the Datapad to Commander Matlin\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      },
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Base Cmdr. Matlin' revs 35367 (2008-10-25), 36079/36080 (2009-02-17): Level=30; page 'Crash Course' rev 35368 (2008-10-25) MissionGiver/RewardGiver='Base Cmdr. Matlin'"
+      }
+     ],
+     "reasoning": "Package 1214 completes 2014/6 \"Return to Commander Matlin\" and the other Matlin turn-ins (1139/6, 356/2, 356/13, 1817/1; none seeded); no creature carries it. Base Cmdr. Matlin (199053, TarapediaMissingNpcBatch, TaRapedia rev 36080 inside New Cumbria) is the one Matlin in the world (inferred)."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Base Cmdr. Matlin (client package 1214)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_package",
+   "key": {
+    "id": 199086
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "package_id": {
+     "value": 134,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client objectiveconversation (331,1,134, flags 141-148) choice and completion rows and (337,3,134,1,1) completion 2255; missionobjective (337,3) \"Speak with Corporal Orton\"; missionconversation log of 331: \"Corporal Orton from Cumbria Research wants you to translate the symbols on the Eloh Obelisk located among the ruins of an Eloh shrine to the North of the facility.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      },
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Corporal Orton' rev 27661 (2008-01-21): Level=15, 'near the camp with all the tents'; page 'Eloh Translations' MissionGiver='Corporal Orton' (rev 12712 2007-11-04 to 34888 2008-10-08)"
+      }
+     ],
+     "reasoning": "Package 134 is Corporal Orton's (331 objective 1, 337 objective 3). The client text places Orton \"from Cumbria Research\", i.e. on Palisades, where CodexNpcCorrections stands him (199086, TaRapedia rev 27661); the world bound it to the upstream duplicate 510196 on Valverde Pools, whose position (-859.6, 791.54, 35.2) reads like a New Cumbria point with y and z swapped (PAL-DEF-5). Moved under OD-158. Neither 331 nor 337 is seeded, so no mission changes with it."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Corporal Orton (client package 134)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1812
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "giver_id": {
+     "value": 199085,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: True' rev 25738 (2008-01-05) MissionGiver='Receptive Liaison Arizpe'; rev 34261 (2008-09-25) RewardGiver='Receptive Liaison Arizpe', Requirement=None"
+      }
+     ],
+     "reasoning": "Receptive Liaison Arizpe (199085), who gives 1652 Ground on the same pattern (LiaisonLogosMissions). He stands on his pre-D12 reading (TaRapedia rev 25740) in the destroyed Research HQ; no post-D12 position exists (OD-153, GAP-NEW-CUMBRIA-ARIZPE)."
+    },
+    "reciver_id": {
+     "value": 199085,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: True' rev 25738 (2008-01-05) MissionGiver='Receptive Liaison Arizpe'; rev 34261 (2008-09-25) RewardGiver='Receptive Liaison Arizpe', Requirement=None"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client mission 1812: missionconversation log 18297 \"Retrieve the Logos Information - True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the giver takes it back: TaRapedia's RewardGiver and the client text (\"Return to ...\") agree."
+    },
+    "level": {
+     "value": 25,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Receptive Liaison Arizpe' rev 25740 (2008-01-05): Level=25; world creature 199085 level 25"
+      }
+     ],
+     "counterpart": "the giver's level, the rule OD-100/OD-140 applied to the Liaison Logos and Crater Lake missions (page 'Receptive Liaison Arizpe' rev 25740 (2008-01-05))",
+     "required_because": "npc_mission.level is required for the mission to load; the client carries no mission level (GAP-MISSION-LEVEL)",
+     "decision": "OD-155"
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: True' rev 25738 (2008-01-05) MissionGiver='Receptive Liaison Arizpe'; rev 34261 (2008-09-25) RewardGiver='Receptive Liaison Arizpe', Requirement=None"
+      }
+     ],
+     "reasoning": "the value every reconstructed mission carries (EarlyReadyMissions, LiaisonLogosMissions)."
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: True' rev 25738 (2008-01-05) MissionGiver='Receptive Liaison Arizpe'; rev 34261 (2008-09-25) RewardGiver='Receptive Liaison Arizpe', Requirement=None"
+      }
+     ],
+     "reasoning": "the general category every reconstructed mission uses."
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: True' rev 25738 (2008-01-05) MissionGiver='Receptive Liaison Arizpe'; rev 34261 (2008-09-25) RewardGiver='Receptive Liaison Arizpe', Requirement=None"
+      }
+     ],
+     "reasoning": "the reconstructed-mission default; no source records sharing for this mission."
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: True' rev 25738 (2008-01-05) MissionGiver='Receptive Liaison Arizpe'; rev 34261 (2008-09-25) RewardGiver='Receptive Liaison Arizpe', Requirement=None"
+      }
+     ],
+     "reasoning": "completed at the receiver in person; no source records a radio turn-in."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Logos: True (Palisades)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1813
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "giver_id": {
+     "value": 199085,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: Through' rev 25739 (2008-01-05) MissionGiver='Receptive Liaison Arizpe'; rev 34258 (2008-09-25) RewardGiver='Receptive Liaison Arizpe', Requirement=None"
+      }
+     ],
+     "reasoning": "Receptive Liaison Arizpe (199085), as 1812 (OD-153, GAP-NEW-CUMBRIA-ARIZPE)."
+    },
+    "reciver_id": {
+     "value": 199085,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: Through' rev 25739 (2008-01-05) MissionGiver='Receptive Liaison Arizpe'; rev 34258 (2008-09-25) RewardGiver='Receptive Liaison Arizpe', Requirement=None"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client mission 1813: missionconversation log 18306 \"Retrieve the Logos Information - Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the giver takes it back: TaRapedia's RewardGiver and the client text (\"Return to ...\") agree."
+    },
+    "level": {
+     "value": 25,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Receptive Liaison Arizpe' rev 25740 (2008-01-05): Level=25; world creature 199085 level 25"
+      }
+     ],
+     "counterpart": "the giver's level, the rule OD-100/OD-140 applied to the Liaison Logos and Crater Lake missions (page 'Receptive Liaison Arizpe' rev 25740 (2008-01-05))",
+     "required_because": "npc_mission.level is required for the mission to load; the client carries no mission level (GAP-MISSION-LEVEL)",
+     "decision": "OD-155"
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: Through' rev 25739 (2008-01-05) MissionGiver='Receptive Liaison Arizpe'; rev 34258 (2008-09-25) RewardGiver='Receptive Liaison Arizpe', Requirement=None"
+      }
+     ],
+     "reasoning": "the value every reconstructed mission carries (EarlyReadyMissions, LiaisonLogosMissions)."
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: Through' rev 25739 (2008-01-05) MissionGiver='Receptive Liaison Arizpe'; rev 34258 (2008-09-25) RewardGiver='Receptive Liaison Arizpe', Requirement=None"
+      }
+     ],
+     "reasoning": "the general category every reconstructed mission uses."
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: Through' rev 25739 (2008-01-05) MissionGiver='Receptive Liaison Arizpe'; rev 34258 (2008-09-25) RewardGiver='Receptive Liaison Arizpe', Requirement=None"
+      }
+     ],
+     "reasoning": "the reconstructed-mission default; no source records sharing for this mission."
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: Through' rev 25739 (2008-01-05) MissionGiver='Receptive Liaison Arizpe'; rev 34258 (2008-09-25) RewardGiver='Receptive Liaison Arizpe', Requirement=None"
+      }
+     ],
+     "reasoning": "completed at the receiver in person; no source records a radio turn-in."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Logos: Through (Palisades)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1988
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "giver_id": {
+     "value": 199102,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'A Spiritual Pilgrimage' revs 31548 (2008-07-29) to 31585 (2008-08-01): MissionGiver/RewardGiver='Warden Brocail', RewardGiverLocation=Walk of Giants, Requirement='None?'"
+      },
+      {
+       "source": "official_notes:d10",
+       "locator": "Deployment 10 live notes (2008-07-23): \"speak with Warden Brocail and complete the mission 'A Spiritual Pilgrimage'\" to enter the Eloh Temples"
+      }
+     ],
+     "reasoning": "Warden Brocail (199102, PalisadesConversationNpc, package 40): the D10 live note (\"speak with Warden Brocail and complete the mission 'A Spiritual Pilgrimage'\") names him as giver and the client log sends the player back to him."
+    },
+    "reciver_id": {
+     "value": 199102,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'A Spiritual Pilgrimage' revs 31548 (2008-07-29) to 31585 (2008-08-01): MissionGiver/RewardGiver='Warden Brocail', RewardGiverLocation=Walk of Giants, Requirement='None?'"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client mission 1988: missionconversation log 21053 \"Explore Palisades and find the Logos of Knowledge, Man, and Planet. Return to Warden Brocail at the Walk of Giants once you have completed your spiritual pilgrimage.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the giver takes it back: TaRapedia's RewardGiver and the client text (\"Return to ...\") agree."
+    },
+    "level": {
+     "value": 15,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Warden Brocail' rev 31689 (2008-08-10): Level=15; world creature 199102 level 15"
+      }
+     ],
+     "counterpart": "the giver's level, the rule OD-100/OD-140 applied to the Liaison Logos and Crater Lake missions (page 'Warden Brocail' rev 31689 (2008-08-10))",
+     "required_because": "npc_mission.level is required for the mission to load; the client carries no mission level (GAP-MISSION-LEVEL)",
+     "decision": "OD-155"
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'A Spiritual Pilgrimage' revs 31548 (2008-07-29) to 31585 (2008-08-01): MissionGiver/RewardGiver='Warden Brocail', RewardGiverLocation=Walk of Giants, Requirement='None?'"
+      }
+     ],
+     "reasoning": "the value every reconstructed mission carries (EarlyReadyMissions, LiaisonLogosMissions)."
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'A Spiritual Pilgrimage' revs 31548 (2008-07-29) to 31585 (2008-08-01): MissionGiver/RewardGiver='Warden Brocail', RewardGiverLocation=Walk of Giants, Requirement='None?'"
+      }
+     ],
+     "reasoning": "the general category every reconstructed mission uses."
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'A Spiritual Pilgrimage' revs 31548 (2008-07-29) to 31585 (2008-08-01): MissionGiver/RewardGiver='Warden Brocail', RewardGiverLocation=Walk of Giants, Requirement='None?'"
+      }
+     ],
+     "reasoning": "the reconstructed-mission default; no source records sharing for this mission."
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'A Spiritual Pilgrimage' revs 31548 (2008-07-29) to 31585 (2008-08-01): MissionGiver/RewardGiver='Warden Brocail', RewardGiverLocation=Walk of Giants, Requirement='None?'"
+      }
+     ],
+     "reasoning": "completed at the receiver in person; no source records a radio turn-in."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "A Spiritual Pilgrimage (Palisades)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 2014
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "giver_id": {
+     "value": 199053,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Crash Course' revs 35368-35396 (2008-10-25): MissionGiver/RewardGiver='Base Cmdr. Matlin', MissionGiverLocation='Cumbria Research Facility', Requirement=none"
+      },
+      {
+       "source": "official_notes:d12.5",
+       "locator": "Deployment 12.5 live notes (2008-09-18): the Cumbria Research Facility destroyed, New Cumbria built, \"The Reformists\" and \"Crash Course\" added"
+      }
+     ],
+     "reasoning": "Base Cmdr. Matlin (199053, at TaRapedia rev 36080's reading inside New Cumbria): TaRapedia's giver and reward giver, and 2014/6 completes on his package 1214."
+    },
+    "reciver_id": {
+     "value": 199053,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Crash Course' revs 35368-35396 (2008-10-25): MissionGiver/RewardGiver='Base Cmdr. Matlin', MissionGiverLocation='Cumbria Research Facility', Requirement=none"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client mission 2014: missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the giver takes it back: TaRapedia's RewardGiver and the client text (\"Return to ...\") agree."
+    },
+    "level": {
+     "value": 30,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Base Cmdr. Matlin' revs 35367 (2008-10-25), 36079/36080 (2009-02-17): Level=30; world creature 199053 level 30"
+      }
+     ],
+     "counterpart": "the giver's level, the rule OD-100/OD-140 applied to the Liaison Logos and Crater Lake missions (page 'Base Cmdr. Matlin' revs 35367 (2008-10-25), 36079/36080 (2009-02-17))",
+     "required_because": "npc_mission.level is required for the mission to load; the client carries no mission level (GAP-MISSION-LEVEL)",
+     "decision": "OD-155"
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Crash Course' revs 35368-35396 (2008-10-25): MissionGiver/RewardGiver='Base Cmdr. Matlin', MissionGiverLocation='Cumbria Research Facility', Requirement=none"
+      }
+     ],
+     "reasoning": "the value every reconstructed mission carries (EarlyReadyMissions, LiaisonLogosMissions)."
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Crash Course' revs 35368-35396 (2008-10-25): MissionGiver/RewardGiver='Base Cmdr. Matlin', MissionGiverLocation='Cumbria Research Facility', Requirement=none"
+      }
+     ],
+     "reasoning": "the general category every reconstructed mission uses."
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Crash Course' revs 35368-35396 (2008-10-25): MissionGiver/RewardGiver='Base Cmdr. Matlin', MissionGiverLocation='Cumbria Research Facility', Requirement=none"
+      }
+     ],
+     "reasoning": "the reconstructed-mission default; no source records sharing for this mission."
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Crash Course' revs 35368-35396 (2008-10-25): MissionGiver/RewardGiver='Base Cmdr. Matlin', MissionGiverLocation='Cumbria Research Facility', Requirement=none"
+      }
+     ],
+     "reasoning": "completed at the receiver in person; no source records a radio turn-in."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Crash Course (Palisades)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission",
+   "key": {
+    "id": 1795
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "giver_id": {
+     "value": 510135,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Bloody Booty' rev 21572 (2007-12-16) MissionGiver='Sergeant Mullen'; rev 22221 (2007-12-18) RewardGiver='Sergeant Mullen'; latest rev 30921 (2008-05-10)"
+      }
+     ],
+     "reasoning": "Sergeant Mullen (upstream spawnpool/creature 510135 at River-base Krimm; his position is an upstream arrangement 4-9 m from the control-point marker, GAP-PALISADES-KRIMM-NPC-POSITIONS). Control-point presence is not modelled (GAP-KRIMM-CP-NPC-PRESENCE)."
+    },
+    "reciver_id": {
+     "value": 510135,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Bloody Booty' rev 21572 (2007-12-16) MissionGiver='Sergeant Mullen'; rev 22221 (2007-12-18) RewardGiver='Sergeant Mullen'; latest rev 30921 (2008-05-10)"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client mission 1795: missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the giver takes it back: TaRapedia's RewardGiver and the client text (\"Return to ...\") agree."
+    },
+    "level": {
+     "value": 20,
+     "tier": "analogue",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Sergeant Mullen' rev 27659 (2008-01-21): Level=20; his world creature row carries the upstream preloader's 10 (GAP-MULLEN-LEVEL)"
+      }
+     ],
+     "counterpart": "the giver's level, the rule OD-100/OD-140 applied to the Liaison Logos and Crater Lake missions (page 'Sergeant Mullen' rev 27659 (2008-01-21))",
+     "required_because": "npc_mission.level is required for the mission to load; the client carries no mission level (GAP-MISSION-LEVEL)",
+     "decision": "OD-155"
+    },
+    "group_type": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Bloody Booty' rev 21572 (2007-12-16) MissionGiver='Sergeant Mullen'; rev 22221 (2007-12-18) RewardGiver='Sergeant Mullen'; latest rev 30921 (2008-05-10)"
+      }
+     ],
+     "reasoning": "the value every reconstructed mission carries (EarlyReadyMissions, LiaisonLogosMissions)."
+    },
+    "category_id": {
+     "value": 10000001,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Bloody Booty' rev 21572 (2007-12-16) MissionGiver='Sergeant Mullen'; rev 22221 (2007-12-18) RewardGiver='Sergeant Mullen'; latest rev 30921 (2008-05-10)"
+      }
+     ],
+     "reasoning": "the general category every reconstructed mission uses."
+    },
+    "shareable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Bloody Booty' rev 21572 (2007-12-16) MissionGiver='Sergeant Mullen'; rev 22221 (2007-12-18) RewardGiver='Sergeant Mullen'; latest rev 30921 (2008-05-10)"
+      }
+     ],
+     "reasoning": "the reconstructed-mission default; no source records sharing for this mission."
+    },
+    "radio_completeable": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Bloody Booty' rev 21572 (2007-12-16) MissionGiver='Sergeant Mullen'; rev 22221 (2007-12-18) RewardGiver='Sergeant Mullen'; latest rev 30921 (2008-05-10)"
+      }
+     ],
+     "reasoning": "completed at the receiver in person; no source records a radio turn-in."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "Bloody Booty (Palisades)",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1812,
+    "objective_id": 18
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "comment": {
+     "value": "Acquire Logos Information: True",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1812,18) \"Acquire Logos Information: True\"; missionconversation log 18297 \"Retrieve the Logos Information - True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1812,18) \"Acquire Logos Information: True\"; missionconversation log 18297 \"Retrieve the Logos Information - True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client objective order (the mission's only objective)"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1812,18) \"Acquire Logos Information: True\"; missionconversation log 18297 \"Retrieve the Logos Information - True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "a mission completes on its required objectives; every client objective of this mission is a step of its log."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1812,18) \"Acquire Logos Information: True\"; missionconversation log 18297 \"Retrieve the Logos Information - True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the mission's only objective"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1813,
+    "objective_id": 19
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "comment": {
+     "value": "Acquire Logos Information: Through",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1813,19) \"Acquire Logos Information: Through\"; missionconversation log 18306 \"Retrieve the Logos Information - Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1813,19) \"Acquire Logos Information: Through\"; missionconversation log 18306 \"Retrieve the Logos Information - Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client objective order (the mission's only objective)"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1813,19) \"Acquire Logos Information: Through\"; missionconversation log 18306 \"Retrieve the Logos Information - Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "a mission completes on its required objectives; every client objective of this mission is a step of its log."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1813,19) \"Acquire Logos Information: Through\"; missionconversation log 18306 \"Retrieve the Logos Information - Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the mission's only objective"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1988,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "comment": {
+     "value": "Recover the Knowledge Logos",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1988,1) \"Recover the Knowledge Logos\"; missionconversation log 21053 \"Explore Palisades and find the Logos of Knowledge, Man, and Planet. Return to Warden Brocail at the Walk of Giants once you have completed your spiritual pilgrimage.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1988,1) \"Recover the Knowledge Logos\"; missionconversation log 21053 \"Explore Palisades and find the Logos of Knowledge, Man, and Planet. Return to Warden Brocail at the Walk of Giants once you have completed your spiritual pilgrimage.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client objective order (1, 2, 3)"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1988,1) \"Recover the Knowledge Logos\"; missionconversation log 21053 \"Explore Palisades and find the Logos of Knowledge, Man, and Planet. Return to Warden Brocail at the Walk of Giants once you have completed your spiritual pilgrimage.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "a mission completes on its required objectives; every client objective of this mission is a step of its log."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1988,1) \"Recover the Knowledge Logos\"; missionconversation log 21053 \"Explore Palisades and find the Logos of Knowledge, Man, and Planet. Return to Warden Brocail at the Walk of Giants once you have completed your spiritual pilgrimage.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "revealed with the mission: the log lists every step at once and nothing orders them"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1988,
+    "objective_id": 2
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "comment": {
+     "value": "Recover the Man Logos",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1988,2) \"Recover the Man Logos\"; missionconversation log 21053 \"Explore Palisades and find the Logos of Knowledge, Man, and Planet. Return to Warden Brocail at the Walk of Giants once you have completed your spiritual pilgrimage.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1988,2) \"Recover the Man Logos\"; missionconversation log 21053 \"Explore Palisades and find the Logos of Knowledge, Man, and Planet. Return to Warden Brocail at the Walk of Giants once you have completed your spiritual pilgrimage.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client objective order (1, 2, 3)"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1988,2) \"Recover the Man Logos\"; missionconversation log 21053 \"Explore Palisades and find the Logos of Knowledge, Man, and Planet. Return to Warden Brocail at the Walk of Giants once you have completed your spiritual pilgrimage.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "a mission completes on its required objectives; every client objective of this mission is a step of its log."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1988,2) \"Recover the Man Logos\"; missionconversation log 21053 \"Explore Palisades and find the Logos of Knowledge, Man, and Planet. Return to Warden Brocail at the Walk of Giants once you have completed your spiritual pilgrimage.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "revealed with the mission: the log lists every step at once and nothing orders them"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1988,
+    "objective_id": 3
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "comment": {
+     "value": "Recover the Planet Logos",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1988,3) \"Recover the Planet Logos\"; missionconversation log 21053 \"Explore Palisades and find the Logos of Knowledge, Man, and Planet. Return to Warden Brocail at the Walk of Giants once you have completed your spiritual pilgrimage.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1988,3) \"Recover the Planet Logos\"; missionconversation log 21053 \"Explore Palisades and find the Logos of Knowledge, Man, and Planet. Return to Warden Brocail at the Walk of Giants once you have completed your spiritual pilgrimage.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client objective order (1, 2, 3)"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1988,3) \"Recover the Planet Logos\"; missionconversation log 21053 \"Explore Palisades and find the Logos of Knowledge, Man, and Planet. Return to Warden Brocail at the Walk of Giants once you have completed your spiritual pilgrimage.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "a mission completes on its required objectives; every client objective of this mission is a step of its log."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1988,3) \"Recover the Planet Logos\"; missionconversation log 21053 \"Explore Palisades and find the Logos of Knowledge, Man, and Planet. Return to Warden Brocail at the Walk of Giants once you have completed your spiritual pilgrimage.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "revealed with the mission: the log lists every step at once and nothing orders them"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 2014,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "comment": {
+     "value": "Talk to Derac",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,1) \"Talk to Derac\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,1) \"Talk to Derac\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client objective order (1, 2, 6)"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,1) \"Talk to Derac\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "a mission completes on its required objectives; every client objective of this mission is a step of its log."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,1) \"Talk to Derac\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the first step, \"Go talk to Derac\", is what the opening asks first"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 2014,
+    "objective_id": 2
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "comment": {
+     "value": "Kill Gantic And Retrieve His Datapad",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 2,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client objective order (1, 2, 6)"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "a mission completes on its required objectives; every client objective of this mission is a step of its log."
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "revealed by npc_mission_objective_transition after the step before it, in the client order the log narrates (Derac, then Gantic, then Matlin); CompleteNpcObjective refuses an objective the player does not have yet, so Matlin cannot be done first"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 2014,
+    "objective_id": 6
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "comment": {
+     "value": "Return to Commander Matlin",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,6) \"Return to Commander Matlin\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 3,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,6) \"Return to Commander Matlin\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client objective order (1, 2, 6)"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,6) \"Return to Commander Matlin\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "a mission completes on its required objectives; every client objective of this mission is a step of its log."
+    },
+    "revealed_on_accept": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,6) \"Return to Commander Matlin\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "revealed by npc_mission_objective_transition after the step before it, in the client order the log narrates (Derac, then Gantic, then Matlin); CompleteNpcObjective refuses an objective the player does not have yet, so Matlin cannot be done first"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1795,
+    "objective_id": 1
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "comment": {
+     "value": "Collect Barbrix's Boot",
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\"; missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client's own objective name, as the skeleton carries it"
+    },
+    "ordinal": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\"; missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the client objective order (the mission's only objective)"
+    },
+    "is_required": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\"; missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "a mission completes on its required objectives; every client objective of this mission is a step of its log."
+    },
+    "revealed_on_accept": {
+     "value": true,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\"; missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the mission's only objective"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 2014,
+    "completed_objective_id": 1,
+    "revealed_objective_id": 2
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {},
+   "note": {
+    "tier": "inferred",
+    "reasoning": "Crash Course in the client order: Derac sends Conner (21833), then the datapad from Gantic, then Matlin decrypts it (finishing 21822). The server reveals by npc_mission_objective_transition (MissionManager).",
+    "citations": [
+     {
+      "source": "client_table:game.zip",
+      "locator": "generated/client mission 2014: missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+     }
+    ]
+   }
+  },
+  {
+   "table": "npc_mission_objective_transition",
+   "key": {
+    "mission_id": 2014,
+    "completed_objective_id": 2,
+    "revealed_objective_id": 6
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {},
+   "note": {
+    "tier": "inferred",
+    "reasoning": "Crash Course in the client order: Derac sends Conner (21833), then the datapad from Gantic, then Matlin decrypts it (finishing 21822). The server reveals by npc_mission_objective_transition (MissionManager).",
+    "citations": [
+     {
+      "source": "client_table:game.zip",
+      "locator": "generated/client mission 2014: missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+     }
+    ]
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 1812,
+    "objective_id": 18,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "kind": {
+     "value": 8,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: TRUE = 333; missionobjective (1812,18) \"Acquire Logos Information: True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "ObjectiveBindingKind.LogosRecovered: the objective is met by drawing the Logos from its shrine; DynamicObjectManager.LogosRecovery completes such objectives on activation, also for a player who already holds the Logos. The client carries no binding table."
+    },
+    "placement_id": {
+     "value": 333,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: TRUE = 333; missionobjective (1812,18) \"Acquire Logos Information: True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      },
+      {
+       "source": "client_map:adv_foreas_concordia_palisades",
+       "locator": "final-map ArchElohLogosDispenserBase (-423.5,147.8,-417.1)"
+      },
+      {
+       "source": "measurement:palisades-navprobe-20260927",
+       "locator": "probe logos.333.True: surface (-423.65,148.74,-417.02), path complete len=246.9 from the Viands Village waypoint marker"
+      }
+     ],
+     "reasoning": "the `logos` row of the True shrine on 1244: its id is the client's logosstone constant and it stands on a final-map Logos Base."
+    },
+    "area_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: TRUE = 333; missionobjective (1812,18) \"Acquire Logos Information: True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "area_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "creature_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: TRUE = 333; missionobjective (1812,18) \"Acquire Logos Information: True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "creature_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "action_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: TRUE = 333; missionobjective (1812,18) \"Acquire Logos Information: True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "action_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "equip_match": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: TRUE = 333; missionobjective (1812,18) \"Acquire Logos Information: True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "equip_match is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "item_template_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: TRUE = 333; missionobjective (1812,18) \"Acquire Logos Information: True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: TRUE = 333; missionobjective (1812,18) \"Acquire Logos Information: True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "item_set_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "target_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: TRUE = 333; missionobjective (1812,18) \"Acquire Logos Information: True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "target_state is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "destroying_hit_only": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: TRUE = 333; missionobjective (1812,18) \"Acquire Logos Information: True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "destroying_hit_only is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: TRUE = 333; missionobjective (1812,18) \"Acquire Logos Information: True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "read only by an item-collected (kind 9) binding; the neutral 0 of every non-item binding."
+    },
+    "counter_id": {
+     "value": 255,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: TRUE = 333; missionobjective (1812,18) \"Acquire Logos Information: True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "counter_id (255 = none) is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "1812/18 the True shrine",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 1813,
+    "objective_id": 19,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "kind": {
+     "value": 8,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: THROUGH = 322; missionobjective (1813,19) \"Acquire Logos Information: Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "ObjectiveBindingKind.LogosRecovered: the objective is met by drawing the Logos from its shrine; DynamicObjectManager.LogosRecovery completes such objectives on activation, also for a player who already holds the Logos. The client carries no binding table."
+    },
+    "placement_id": {
+     "value": 322,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: THROUGH = 322; missionobjective (1813,19) \"Acquire Logos Information: Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      },
+      {
+       "source": "client_map:adv_foreas_concordia_palisades",
+       "locator": "final-map ArchElohLogosDispenserBase (-404.8,166.0,635.7)"
+      },
+      {
+       "source": "measurement:palisades-navprobe-20260927",
+       "locator": "probe logos.322.Through: surface (-404.83,166.73,635.79), path complete len=108.5"
+      }
+     ],
+     "reasoning": "the `logos` row of the Through shrine on 1244: its id is the client's logosstone constant and it stands on a final-map Logos Base."
+    },
+    "area_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: THROUGH = 322; missionobjective (1813,19) \"Acquire Logos Information: Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "area_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "creature_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: THROUGH = 322; missionobjective (1813,19) \"Acquire Logos Information: Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "creature_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "action_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: THROUGH = 322; missionobjective (1813,19) \"Acquire Logos Information: Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "action_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "equip_match": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: THROUGH = 322; missionobjective (1813,19) \"Acquire Logos Information: Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "equip_match is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "item_template_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: THROUGH = 322; missionobjective (1813,19) \"Acquire Logos Information: Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: THROUGH = 322; missionobjective (1813,19) \"Acquire Logos Information: Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "item_set_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "target_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: THROUGH = 322; missionobjective (1813,19) \"Acquire Logos Information: Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "target_state is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "destroying_hit_only": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: THROUGH = 322; missionobjective (1813,19) \"Acquire Logos Information: Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "destroying_hit_only is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: THROUGH = 322; missionobjective (1813,19) \"Acquire Logos Information: Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "read only by an item-collected (kind 9) binding; the neutral 0 of every non-item binding."
+    },
+    "counter_id": {
+     "value": 255,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: THROUGH = 322; missionobjective (1813,19) \"Acquire Logos Information: Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "counter_id (255 = none) is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "1813/19 the Through shrine",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 1988,
+    "objective_id": 1,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "kind": {
+     "value": 8,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: KNOWLEDGE = 208; missionobjective (1988,1) \"Recover the Knowledge Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "ObjectiveBindingKind.LogosRecovered: the objective is met by drawing the Logos from its shrine; DynamicObjectManager.LogosRecovery completes such objectives on activation, also for a player who already holds the Logos. The client carries no binding table."
+    },
+    "placement_id": {
+     "value": 208,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: KNOWLEDGE = 208; missionobjective (1988,1) \"Recover the Knowledge Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      },
+      {
+       "source": "client_map:adv_foreas_concordia_palisades",
+       "locator": "final-map ArchElohLogosDispenserBase (-290.0,159.9,984.0)"
+      },
+      {
+       "source": "measurement:palisades-navprobe-20260927",
+       "locator": "probe logos.208.Knowledge: surface (-290.00,160.58,984.00), path complete len=628.5"
+      }
+     ],
+     "reasoning": "the `logos` row of the Knowledge shrine on 1244: its id is the client's logosstone constant and it stands on a final-map Logos Base."
+    },
+    "area_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: KNOWLEDGE = 208; missionobjective (1988,1) \"Recover the Knowledge Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "area_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "creature_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: KNOWLEDGE = 208; missionobjective (1988,1) \"Recover the Knowledge Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "creature_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "action_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: KNOWLEDGE = 208; missionobjective (1988,1) \"Recover the Knowledge Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "action_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "equip_match": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: KNOWLEDGE = 208; missionobjective (1988,1) \"Recover the Knowledge Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "equip_match is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "item_template_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: KNOWLEDGE = 208; missionobjective (1988,1) \"Recover the Knowledge Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: KNOWLEDGE = 208; missionobjective (1988,1) \"Recover the Knowledge Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "item_set_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "target_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: KNOWLEDGE = 208; missionobjective (1988,1) \"Recover the Knowledge Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "target_state is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "destroying_hit_only": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: KNOWLEDGE = 208; missionobjective (1988,1) \"Recover the Knowledge Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "destroying_hit_only is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: KNOWLEDGE = 208; missionobjective (1988,1) \"Recover the Knowledge Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "read only by an item-collected (kind 9) binding; the neutral 0 of every non-item binding."
+    },
+    "counter_id": {
+     "value": 255,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: KNOWLEDGE = 208; missionobjective (1988,1) \"Recover the Knowledge Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "counter_id (255 = none) is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "1988/1 the Knowledge shrine",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 1988,
+    "objective_id": 2,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "kind": {
+     "value": 8,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: MAN = 219; missionobjective (1988,2) \"Recover the Man Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "ObjectiveBindingKind.LogosRecovered: the objective is met by drawing the Logos from its shrine; DynamicObjectManager.LogosRecovery completes such objectives on activation, also for a player who already holds the Logos. The client carries no binding table."
+    },
+    "placement_id": {
+     "value": 219,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: MAN = 219; missionobjective (1988,2) \"Recover the Man Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      },
+      {
+       "source": "client_map:adv_foreas_concordia_palisades",
+       "locator": "final-map ArchElohLogosDispenserBase (-184.0,63.9,-120.0)"
+      },
+      {
+       "source": "measurement:palisades-navprobe-20260927",
+       "locator": "probe logos.219.Man: surface (-184.01,64.54,-120.00), path PARTIAL: the gorge floor under Horsetail Falls (surface 64.54, not underground) is a navmesh island ~120 m across that no path from the surface joins (endGap 78.9); NPC pathing only, the player moves client-side (GAP-PALISADES-MAN-CAVE-NAVMESH)"
+      }
+     ],
+     "reasoning": "the `logos` row of the Man shrine on 1244: its id is the client's logosstone constant and it stands on a final-map Logos Base."
+    },
+    "area_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: MAN = 219; missionobjective (1988,2) \"Recover the Man Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "area_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "creature_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: MAN = 219; missionobjective (1988,2) \"Recover the Man Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "creature_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "action_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: MAN = 219; missionobjective (1988,2) \"Recover the Man Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "action_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "equip_match": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: MAN = 219; missionobjective (1988,2) \"Recover the Man Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "equip_match is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "item_template_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: MAN = 219; missionobjective (1988,2) \"Recover the Man Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: MAN = 219; missionobjective (1988,2) \"Recover the Man Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "item_set_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "target_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: MAN = 219; missionobjective (1988,2) \"Recover the Man Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "target_state is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "destroying_hit_only": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: MAN = 219; missionobjective (1988,2) \"Recover the Man Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "destroying_hit_only is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: MAN = 219; missionobjective (1988,2) \"Recover the Man Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "read only by an item-collected (kind 9) binding; the neutral 0 of every non-item binding."
+    },
+    "counter_id": {
+     "value": 255,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: MAN = 219; missionobjective (1988,2) \"Recover the Man Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "counter_id (255 = none) is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "1988/2 the Man shrine",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 1988,
+    "objective_id": 3,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "kind": {
+     "value": 8,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: PLANET = 266; missionobjective (1988,3) \"Recover the Planet Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "ObjectiveBindingKind.LogosRecovered: the objective is met by drawing the Logos from its shrine; DynamicObjectManager.LogosRecovery completes such objectives on activation, also for a player who already holds the Logos. The client carries no binding table."
+    },
+    "placement_id": {
+     "value": 266,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: PLANET = 266; missionobjective (1988,3) \"Recover the Planet Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      },
+      {
+       "source": "client_map:adv_foreas_concordia_palisades",
+       "locator": "final-map ArchElohLogosDispenserBase (416.1,109.6,386.4)"
+      },
+      {
+       "source": "measurement:palisades-navprobe-20260927",
+       "locator": "probe logos.266.Planet: surface (416.04,110.13,386.46), path complete len=268.0"
+      }
+     ],
+     "reasoning": "the `logos` row of the Planet shrine on 1244: its id is the client's logosstone constant and it stands on a final-map Logos Base."
+    },
+    "area_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: PLANET = 266; missionobjective (1988,3) \"Recover the Planet Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "area_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "creature_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: PLANET = 266; missionobjective (1988,3) \"Recover the Planet Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "creature_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "action_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: PLANET = 266; missionobjective (1988,3) \"Recover the Planet Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "action_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "equip_match": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: PLANET = 266; missionobjective (1988,3) \"Recover the Planet Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "equip_match is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "item_template_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: PLANET = 266; missionobjective (1988,3) \"Recover the Planet Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "item_template_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: PLANET = 266; missionobjective (1988,3) \"Recover the Planet Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "item_set_id is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "target_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: PLANET = 266; missionobjective (1988,3) \"Recover the Planet Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "target_state is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "destroying_hit_only": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: PLANET = 266; missionobjective (1988,3) \"Recover the Planet Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "destroying_hit_only is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    },
+    "drop_chance": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: PLANET = 266; missionobjective (1988,3) \"Recover the Planet Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "read only by an item-collected (kind 9) binding; the neutral 0 of every non-item binding."
+    },
+    "counter_id": {
+     "value": 255,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client/logosstone.pyo: PLANET = 266; missionobjective (1988,3) \"Recover the Planet Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "counter_id (255 = none) is not read by a LogosRecovered binding (MissionContentCatalog.Validate uses only kind and placement_id); the neutral value every Logos binding carries (SeedLogosMissions, LiaisonLogosMissions)."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "1988/3 the Planet shrine",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 2014,
+    "objective_id": 2,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "kind": {
+     "value": 9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "ObjectiveBindingKind.ItemCollected: the objective ends with the named item in the player's inventory (OnItemCollected), taken from the boss's corpse (RollMissionItemDrops)."
+    },
+    "area_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "area_id is not read by an item-collected binding; the neutral value."
+    },
+    "placement_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "placement_id is not read by an item-collected binding; the neutral value."
+    },
+    "creature_id": {
+     "value": 199054,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      },
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Executor Gantic' revs 35363-36760 (2008-10-25 to 2009-03-05): Level=18; page 'Crash Course' rev 35396 (2008-10-25)"
+      },
+      {
+       "source": "measurement:palisades-navprobe-20260927",
+       "locator": "navprobe cp.199054 complete len=440.0"
+      }
+     ],
+     "reasoning": "Executor Gantic (199054, TarapediaMissingNpcBatch) at TaRapedia rev 35365's post-D12 /loc (-60, 597), 18 m from the final-map BaneVehicleDropshipV01Destroyed (the crash site); navprobe cp.199054 complete len=440.0"
+    },
+    "action_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "action_id is not read by an item-collected binding; the neutral value."
+    },
+    "destroying_hit_only": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "not read by an item-collected binding; the neutral value."
+    },
+    "equip_match": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "not read by an item-collected binding; the neutral value."
+    },
+    "item_template_id": {
+     "value": 123352,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client entityclass 29949 MisPalisadesCrashCourseDatapad (\"Executor Gantic's Datapad\"); itemtemplate_itemclass 123352 -> 29949, the class's only template"
+      }
+     ],
+     "reasoning": "the client's item class for the objective's item and its only template."
+    },
+    "drop_chance": {
+     "value": 100.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      },
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Executor Gantic' revs 35363-36760 (2008-10-25 to 2009-03-05): Level=18; page 'Crash Course' rev 35396 (2008-10-25)"
+      }
+     ],
+     "reasoning": "a unique proof item carried by one named boss (the 479/758 rule for single-source quest items): every kill by a player on the mission yields it. The original rate is unrecorded.",
+     "confidence": "low"
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "not read by an item-collected binding; the neutral value."
+    },
+    "target_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "not read by an item-collected binding; the neutral value."
+    },
+    "counter_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the objective's first client counter slot (index 0; the client carries no counter text); item collection needs a counter."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "2014/2 Executor Gantic's Datapad",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_counter",
+   "key": {
+    "mission_id": 2014,
+    "objective_id": 2,
+    "counter_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "initial_value": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "a collection starts at none held."
+    },
+    "target_value": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\"; missionconversation log 21820 \"Take one of the Corman Reformists with you and locate the crashed Bane Dropship. Kill \\\"Executor Gantic\\\" and bring his Personal Datapad to Commander Matlin.\"; opening 21821 \"... Go talk to Derac and have him send his best man with you ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      },
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Executor Gantic' revs 35363-36760 (2008-10-25 to 2009-03-05): Level=18; page 'Crash Course' rev 35396 (2008-10-25)"
+      }
+     ],
+     "reasoning": "one item: the objective names a single datapad/boot."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_binding",
+   "key": {
+    "mission_id": 1795,
+    "objective_id": 1,
+    "binding_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "kind": {
+     "value": 9,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\"; missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "ObjectiveBindingKind.ItemCollected: the objective ends with the named item in the player's inventory (OnItemCollected), taken from the boss's corpse (RollMissionItemDrops)."
+    },
+    "area_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\"; missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "area_id is not read by an item-collected binding; the neutral value."
+    },
+    "placement_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\"; missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "placement_id is not read by an item-collected binding; the neutral value."
+    },
+    "creature_id": {
+     "value": 199095,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\"; missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      },
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Bloody Booty' latest rev 30921 (2008-05-10): objective 'Barbrix's Boot x 1'"
+      },
+      {
+       "source": "measurement:palisades-navprobe-20260927",
+       "locator": "navprobe cp.199095 complete len=327.6"
+      }
+     ],
+     "reasoning": "Barbrix (199095, TarapediaMissingNpcBatch) east of River-base Krimm, 12 m from TaRapedia's sighting (471, 170); he patrols in the original (GAP-BARBRIX-PATROL); navprobe cp.199095 complete len=327.6"
+    },
+    "action_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\"; missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "action_id is not read by an item-collected binding; the neutral value."
+    },
+    "destroying_hit_only": {
+     "value": false,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\"; missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "not read by an item-collected binding; the neutral value."
+    },
+    "equip_match": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\"; missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "not read by an item-collected binding; the neutral value."
+    },
+    "item_template_id": {
+     "value": 118803,
+     "tier": "original",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client entityclass 28451 MisPalisadesItemBaneboot (\"Barbrix's Boot\"); itemtemplate_itemclass 118803 -> 28451, the class's only template"
+      }
+     ],
+     "reasoning": "the client's item class for the objective's item and its only template."
+    },
+    "drop_chance": {
+     "value": 100.0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\"; missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      },
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Bloody Booty' latest rev 30921 (2008-05-10): objective 'Barbrix's Boot x 1'"
+      }
+     ],
+     "reasoning": "a unique proof item carried by one named boss (the 479/758 rule for single-source quest items): every kill by a player on the mission yields it. The original rate is unrecorded.",
+     "confidence": "low"
+    },
+    "item_set_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\"; missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "not read by an item-collected binding; the neutral value."
+    },
+    "target_state": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\"; missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "not read by an item-collected binding; the neutral value."
+    },
+    "counter_id": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\"; missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "the objective's first client counter slot (index 0; the client carries no counter text); item collection needs a counter."
+    }
+   },
+   "storage_fields": {
+    "comment": {
+     "value": "1795/1 Barbrix's Boot",
+     "role": "comment"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_objective_counter",
+   "key": {
+    "mission_id": 1795,
+    "objective_id": 1,
+    "counter_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "initial_value": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\"; missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      }
+     ],
+     "reasoning": "a collection starts at none held."
+    },
+    "target_value": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\"; missionconversation log 17993 \"Sgt. Mullen stationed at River-Base Krimm on Palisades wants you to kill the Thrax soldier named Barbrix and bring back his bloody boot as proof before the control point is taken by the Bane.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+      },
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Bloody Booty' latest rev 30921 (2008-05-10): objective 'Barbrix's Boot x 1'"
+      }
+     ],
+     "reasoning": "one item: the objective names a single datapad/boot."
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1812,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "credits": {
+     "value": 9000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: True' rev 25738 (2008-01-05) RewardXP='9000', unchanged to rev 34261 (2008-09-25)"
+      }
+     ],
+     "reasoning": "TaRapedia's experience amount, first written before Update 1.4 (2008-01-29) and carried unchanged into the latest revision; seeded labelled as the earlier W3 batches seeded TaRapedia amounts (OD-159, GAP-REWARD-ERA); the final-live amount is unrecorded. The shrine grants the Logos itself, so no item row (as 1652).",
+     "era": "pre-1.4",
+     "confidence": "low"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: True' rev 25738 (2008-01-05) RewardXP='9000', unchanged to rev 34261 (2008-09-25)"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1812,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "credits": {
+     "value": 1800,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: True' rev 25738 (2008-01-05) RewardCredits='1800', unchanged to rev 34261 (2008-09-25)"
+      }
+     ],
+     "reasoning": "TaRapedia's credits amount, first written before Update 1.4 (2008-01-29) and carried unchanged into the latest revision; seeded labelled as the earlier W3 batches seeded TaRapedia amounts (OD-159, GAP-REWARD-ERA); the final-live amount is unrecorded. The shrine grants the Logos itself, so no item row (as 1652).",
+     "era": "pre-1.4",
+     "confidence": "low"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: True' rev 25738 (2008-01-05) RewardCredits='1800', unchanged to rev 34261 (2008-09-25)"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1813,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "credits": {
+     "value": 9000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: Through' rev 25739 (2008-01-05) RewardXP='9000', unchanged to rev 34258 (2008-09-25)"
+      }
+     ],
+     "reasoning": "TaRapedia's experience amount, first written before Update 1.4 (2008-01-29) and carried unchanged into the latest revision; seeded labelled as the earlier W3 batches seeded TaRapedia amounts (OD-159, GAP-REWARD-ERA); the final-live amount is unrecorded. The shrine grants the Logos itself, so no item row (as 1652).",
+     "era": "pre-1.4",
+     "confidence": "low"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: Through' rev 25739 (2008-01-05) RewardXP='9000', unchanged to rev 34258 (2008-09-25)"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1813,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "credits": {
+     "value": 1800,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: Through' rev 25739 (2008-01-05) RewardCredits='1800', unchanged to rev 34258 (2008-09-25)"
+      }
+     ],
+     "reasoning": "TaRapedia's credits amount, first written before Update 1.4 (2008-01-29) and carried unchanged into the latest revision; seeded labelled as the earlier W3 batches seeded TaRapedia amounts (OD-159, GAP-REWARD-ERA); the final-live amount is unrecorded. The shrine grants the Logos itself, so no item row (as 1652).",
+     "era": "pre-1.4",
+     "confidence": "low"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Logos: Through' rev 25739 (2008-01-05) RewardCredits='1800', unchanged to rev 34258 (2008-09-25)"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1988,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "credits": {
+     "value": 20000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'A Spiritual Pilgrimage' rev 31548 (2008-07-29) RewardXP='20000', unchanged to rev 31585 (2008-08-01)"
+      }
+     ],
+     "reasoning": "TaRapedia's experience amount, first written 2008-07-29, after Update 1.4 and D10, for the D10 mission; unchanged in its later revision.",
+     "era": "post-1.4",
+     "confidence": "medium"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'A Spiritual Pilgrimage' rev 31548 (2008-07-29) RewardXP='20000', unchanged to rev 31585 (2008-08-01)"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1988,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "credits": {
+     "value": 3000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'A Spiritual Pilgrimage' rev 31548 (2008-07-29) RewardCredits='3000', unchanged to rev 31585 (2008-08-01)"
+      }
+     ],
+     "reasoning": "TaRapedia's credits amount, first written 2008-07-29, after Update 1.4 and D10, for the D10 mission; unchanged in its later revision.",
+     "era": "post-1.4",
+     "confidence": "medium"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'A Spiritual Pilgrimage' rev 31548 (2008-07-29) RewardCredits='3000', unchanged to rev 31585 (2008-08-01)"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1795,
+    "type": 3,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "credits": {
+     "value": 19000,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Bloody Booty' rev 21577 (2007-12-16) RewardXP='19,000', unchanged to rev 30921 (2008-05-10)"
+      }
+     ],
+     "reasoning": "TaRapedia's experience amount, first written before Update 1.4 (2008-01-29) and carried unchanged into the latest revision; seeded labelled as the earlier W3 batches seeded TaRapedia amounts (OD-159, GAP-REWARD-ERA); the final-live amount is unrecorded. The pre-1.4 item list (run 118866-118868) is not seeded.",
+     "era": "pre-1.4",
+     "confidence": "low"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Bloody Booty' rev 21577 (2007-12-16) RewardXP='19,000', unchanged to rev 30921 (2008-05-10)"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1795,
+    "type": 1,
+    "item_template_id": 0
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "credits": {
+     "value": 2850,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Bloody Booty' rev 21572 (2007-12-16) RewardCredits='2,850', unchanged to rev 30921 (2008-05-10)"
+      }
+     ],
+     "reasoning": "TaRapedia's credits amount, first written before Update 1.4 (2008-01-29) and carried unchanged into the latest revision; seeded labelled as the earlier W3 batches seeded TaRapedia amounts (OD-159, GAP-REWARD-ERA); the final-live amount is unrecorded. The pre-1.4 item list (run 118866-118868) is not seeded.",
+     "era": "pre-1.4",
+     "confidence": "low"
+    },
+    "quantity": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Bloody Booty' rev 21572 (2007-12-16) RewardCredits='2,850', unchanged to rev 30921 (2008-05-10)"
+      }
+     ],
+     "reasoning": "a currency or experience reward carries no item quantity (NpcMissionRewardType)"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1988,
+    "type": 5,
+    "item_template_id": 122719
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'A Spiritual Pilgrimage' rev 31548 (2008-07-29) to 31585 (2008-08-01) RewardItem: AccuMax Laser Pistol lvl 20 / Photonic Shotgun lvl 22 / Laser Rifle lvl 21"
+      }
+     ],
+     "reasoning": "an item reward carries no amount"
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'A Spiritual Pilgrimage' rev 31548 (2008-07-29) to 31585 (2008-08-01) RewardItem: AccuMax Laser Pistol lvl 20 / Photonic Shotgun lvl 22 / Laser Rifle lvl 21"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client itemclass.pyo itemTemplateItemClass 122719 -> Weapon_Avatar_Pistol_Laser_UNC_20_to_24 (class 27113, level 20); the resolver run research/20260927-palisades-dossiers/work/reward-items.json mission 1988 (tools/run_window_resolver.py, the 20260926-reward-items pipeline unchanged): one consecutive template run 122719-122721"
+      }
+     ],
+     "reasoning": "SelectableItem (type 5): TaRapedia 'AccuMax Laser Pistol lvl 20', the member of the one consecutive client template run that matches the post-1.4 list. One of each; the page gives no count.",
+     "era": "post-1.4"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1988,
+    "type": 5,
+    "item_template_id": 122720
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'A Spiritual Pilgrimage' rev 31548 (2008-07-29) to 31585 (2008-08-01) RewardItem: AccuMax Laser Pistol lvl 20 / Photonic Shotgun lvl 22 / Laser Rifle lvl 21"
+      }
+     ],
+     "reasoning": "an item reward carries no amount"
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'A Spiritual Pilgrimage' rev 31548 (2008-07-29) to 31585 (2008-08-01) RewardItem: AccuMax Laser Pistol lvl 20 / Photonic Shotgun lvl 22 / Laser Rifle lvl 21"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client itemclass.pyo itemTemplateItemClass 122720 -> Weapon_Avatar_Rifle_Laser_UNC_21_to_25 (class 27213, level 21); the resolver run research/20260927-palisades-dossiers/work/reward-items.json mission 1988 (tools/run_window_resolver.py, the 20260926-reward-items pipeline unchanged): one consecutive template run 122719-122721"
+      }
+     ],
+     "reasoning": "SelectableItem (type 5): TaRapedia 'AccuMax Laser Rifle lvl 21', the member of the one consecutive client template run that matches the post-1.4 list. One of each; the page gives no count.",
+     "era": "post-1.4"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 1988,
+    "type": 5,
+    "item_template_id": 122721
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'A Spiritual Pilgrimage' rev 31548 (2008-07-29) to 31585 (2008-08-01) RewardItem: AccuMax Laser Pistol lvl 20 / Photonic Shotgun lvl 22 / Laser Rifle lvl 21"
+      }
+     ],
+     "reasoning": "an item reward carries no amount"
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'A Spiritual Pilgrimage' rev 31548 (2008-07-29) to 31585 (2008-08-01) RewardItem: AccuMax Laser Pistol lvl 20 / Photonic Shotgun lvl 22 / Laser Rifle lvl 21"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client itemclass.pyo itemTemplateItemClass 122721 -> Weapon_Avatar_Shotgun_v1_Laser_UNC_22_to_26 (class 27311, level 22); the resolver run research/20260927-palisades-dossiers/work/reward-items.json mission 1988 (tools/run_window_resolver.py, the 20260926-reward-items pipeline unchanged): one consecutive template run 122719-122721"
+      }
+     ],
+     "reasoning": "SelectableItem (type 5): TaRapedia 'AccuMax Photonic Shotgun lvl 22', the member of the one consecutive client template run that matches the post-1.4 list. One of each; the page gives no count.",
+     "era": "post-1.4"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 2014,
+    "type": 5,
+    "item_template_id": 130322
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Crash Course' rev 35396 (2008-10-25) RewardItem: Olympia Hazmat Armor Vest / Titan Reflective Armor Vest / Olympia Motor Assist Armor Boots, each '(Experimental, min level 19)'"
+      }
+     ],
+     "reasoning": "an item reward carries no amount"
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Crash Course' rev 35396 (2008-10-25) RewardItem: Olympia Hazmat Armor Vest / Titan Reflective Armor Vest / Olympia Motor Assist Armor Boots, each '(Experimental, min level 19)'"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client itemclass.pyo itemTemplateItemClass 130322 -> Armor_T2_Hazmat_V06_ELT_Vest_19_to_23 (class 23666, level 19); the resolver run research/20260927-palisades-dossiers/work/reward-items.json mission 2014 (tools/run_window_resolver.py, the 20260926-reward-items pipeline unchanged): one consecutive template run 130322-130324"
+      }
+     ],
+     "reasoning": "SelectableItem (type 5): TaRapedia 'Olympia Hazmat Armor Vest (Experimental, min level 19)', the member of the one consecutive client template run that matches the post-1.4 list. TaRapedia calls it \"Experimental\"; the class is graded ELT (GAP-2014-REWARD-ITEM-GRADE). One of each; the page gives no count.",
+     "era": "post-1.4"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 2014,
+    "type": 5,
+    "item_template_id": 130323
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Crash Course' rev 35396 (2008-10-25) RewardItem: Olympia Hazmat Armor Vest / Titan Reflective Armor Vest / Olympia Motor Assist Armor Boots, each '(Experimental, min level 19)'"
+      }
+     ],
+     "reasoning": "an item reward carries no amount"
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Crash Course' rev 35396 (2008-10-25) RewardItem: Olympia Hazmat Armor Vest / Titan Reflective Armor Vest / Olympia Motor Assist Armor Boots, each '(Experimental, min level 19)'"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client itemclass.pyo itemTemplateItemClass 130323 -> Armor_T2_Reflective_V05_RAR_Vest_19_to_23 (class 19301, level 19); the resolver run research/20260927-palisades-dossiers/work/reward-items.json mission 2014 (tools/run_window_resolver.py, the 20260926-reward-items pipeline unchanged): one consecutive template run 130322-130324"
+      }
+     ],
+     "reasoning": "SelectableItem (type 5): TaRapedia 'Titan Reflective Armor Vest (Experimental, min level 19)', the member of the one consecutive client template run that matches the post-1.4 list. TaRapedia calls it \"Experimental\"; the class is graded RAR (GAP-2014-REWARD-ITEM-GRADE). One of each; the page gives no count.",
+     "era": "post-1.4"
+    }
+   }
+  },
+  {
+   "table": "npc_mission_reward",
+   "key": {
+    "id": 2014,
+    "type": 5,
+    "item_template_id": 130324
+   },
+   "slice": "W3",
+   "migration": "PalisadesDossierMissions",
+   "fields": {
+    "credits": {
+     "value": 0,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Crash Course' rev 35396 (2008-10-25) RewardItem: Olympia Hazmat Armor Vest / Titan Reflective Armor Vest / Olympia Motor Assist Armor Boots, each '(Experimental, min level 19)'"
+      }
+     ],
+     "reasoning": "an item reward carries no amount"
+    },
+    "quantity": {
+     "value": 1,
+     "tier": "inferred",
+     "citations": [
+      {
+       "source": "community_db:tarapedia-palisades-20260927",
+       "locator": "page 'Crash Course' rev 35396 (2008-10-25) RewardItem: Olympia Hazmat Armor Vest / Titan Reflective Armor Vest / Olympia Motor Assist Armor Boots, each '(Experimental, min level 19)'"
+      },
+      {
+       "source": "client_table:game.zip",
+       "locator": "generated/client itemclass.pyo itemTemplateItemClass 130324 -> Armor_T1_MotorAssist_V01_CMN_Boots_18_to_22 (class 15557, level 18); the resolver run research/20260927-palisades-dossiers/work/reward-items.json mission 2014 (tools/run_window_resolver.py, the 20260926-reward-items pipeline unchanged): one consecutive template run 130322-130324"
+      }
+     ],
+     "reasoning": "SelectableItem (type 5): TaRapedia 'Olympia Motor Assist Armor Boots (Experimental, min level 19)', the member of the one consecutive client template run that matches the post-1.4 list. The boots' class is levelled 18-22 while TaRapedia writes \"min level 19\", and the three classes are ELT/RAR/CMN grades while TaRapedia calls all three \"Experimental\" (GAP-2014-REWARD-ITEM-GRADE). One of each; the page gives no count.",
+     "era": "post-1.4"
+    }
+   }
   }
  ],
  "omitted": [
@@ -104285,6 +107152,83 @@
    "what": "a Juggernaut and Predators",
    "reason": "D11 removed them from Pravus Research; never seeded",
    "gap": "GAP-PRAVUS-PRION",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission",
+   "what": "1799 Grid Disruption, 1800 Info Repro, 1801 Big Risk and their placements, item sets and rule (dossier 1244100-1244109, 1244800-1244803, 1244900)",
+   "reason": "Skive Base holds no Bane in this world, so the objectives would be walk-ins (OD-154)",
+   "gap": "GAP-SKIVE-BASE-POPULATION",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission",
+   "what": "337 The Reformists",
+   "reason": "Kaven Corman (objective 2) stands only on a pre-D12 reading in the destroyed housing; a pre-rebuild position cannot stand in for D12 content (OD-153)",
+   "gap": "GAP-NEW-CUMBRIA-KAVEN",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission_prerequisite",
+   "what": "366 <- 1988 (post-D10 TaRapedia Requirement)",
+   "reason": "a change to a live mission, left for the owner",
+   "gap": "GAP-PALISADES-366-PREREQ-1988",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission_reward",
+   "what": "1795's pre-1.4 item list (run 118866-118868) and 1812/1813's Logos reward icons",
+   "reason": "pre-1.4 items are candidate-only; the shrine grants the Logos itself",
+   "gap": "GAP-REWARD-ERA",
+   "slice": "W3"
+  },
+  {
+   "table": "content_placement",
+   "what": "the 2014 companion \"Conner\" (a Corman Reformist, client name 10601)",
+   "reason": "class, stats and follow behaviour unrecorded; optional to completion",
+   "gap": "GAP-2014-CONNER-COMPANION",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission",
+   "what": "Palisades kill and creature-drop missions 342, 344, 351, 353, 354, 355, 363, 388, 405, 406, 409, 1103, 1139, 1804, 1805, 1808",
+   "reason": "the world holds no ordinary creature on Palisades",
+   "gap": "GAP-PALISADES-AMBIENT-POPULATION",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission",
+   "what": "361, 369, 389, 410, 622, 835, 1798 and 407",
+   "reason": "the giver or an objective NPC cannot be placed, or the giver is unrecorded",
+   "gap": "GAP-PALISADES-GIVER-UNPLACED",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission",
+   "what": "1817 Secret Extraction",
+   "reason": "Hutchison stands in the ruins and the mission hangs on the Grim Duty branch",
+   "gap": "GAP-GRIM-DUTY-BRANCH",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission",
+   "what": "375, 376, 387, 851, 1796 (objects), 386, 694, 1797, 1802 (escorts), 1803, 1816, 1806, 1807, 331, 1952, 1954-1957, 1809, 1810, 1423, 1137",
+   "reason": "objects, escorts, choice flags, flashpoint, ToO or chain steps with no recorded data",
+   "gap": "GAP-PALISADES-OBJECTIVE-OBJECTS",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission",
+   "what": "Warnet Caverns 393-396, 1791-1794; Devil's Den 378-381, 669, 671, 672; Treeback Camp 861, 865, 866, 868-870, 1019, 1787; Eloh Temples 414-417, 1989; Eloh Vale 1198, 1199, 1429",
+   "reason": "instance-bound; deferred to the Palisades operations batch",
+   "gap": "GAP-PALISADES-OPERATIONS-BATCH",
+   "slice": "W3"
+  },
+  {
+   "table": "npc_mission",
+   "what": "1630 (pre-D12 ToO) and 2006 Soyuz Salvage: Palisades",
+   "reason": "never seed: superseded at D12 (1809) and removed at D12",
+   "gap": "GAP-PALISADES-TOO",
    "slice": "W3"
   }
  ],
@@ -109442,6 +112386,766 @@
    ],
    "closes_with": "a pass probing those maps at 0.2 x 0.1 m",
    "surfaced_by": "DivideOperationsInstances 2026-09-27"
+  },
+  {
+   "id": "GAP-NEW-CUMBRIA-ARIZPE",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Receptive Liaison Arizpe (199085) stands in the destroyed pre-D12 Corman Research HQ; no post-D12 position source (TaRapedia 2008-10-25 roster names him without /loc; no footage cached). Affects seeded 1652/1744/1745 and proposed 1812/1813. OD-P1.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-NEW-CUMBRIA-ARIZPE"
+   ],
+   "closes_with": "a post-D12 reading or footage of Arizpe inside New Cumbria",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-NEW-CUMBRIA-KAVEN",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Kaven Corman (199090) stands in the destroyed Corman housing on a codex 2008-01 reading; blocks 337 objective 2. OD-P1.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-NEW-CUMBRIA-KAVEN"
+   ],
+   "closes_with": "a post-D12 reading of Kaven Corman; then seed 337 (with package 134 already on 199086)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-NEW-CUMBRIA-BRIGGS",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Sgt. Briggs (199091) stands in the destroyed eastern tents (codex 2008-01). OD-P1.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-NEW-CUMBRIA-BRIGGS"
+   ],
+   "closes_with": "a post-D12 reading of Sgt. Briggs",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-NEW-CUMBRIA-HUTCHISON",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Corporal Hutchison (510124) is marker-stacked on the \"Cumbria Research Facility\" region label in the destroyed area. OD-P1.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-NEW-CUMBRIA-HUTCHISON"
+   ],
+   "closes_with": "a post-D12 reading of Corporal Hutchison",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-ORTON-PACKAGE-134",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Package 134 (Orton) is bound to duplicate 510196 on Valverde Pools; Palisades Orton 199086 has none (PAL-DEF-5).",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-ORTON-PACKAGE-134"
+   ],
+   "closes_with": "closed on the package side by PalisadesDossierMissions (OD-158); 331 and 337 stay held for their own gaps",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-AMBIENT-POPULATION",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "The world seed holds no ordinary creature on map 1244: 36 spawnpools (13 service NPCs, 15 named NPCs, 8 upstream level-28 bosses) and 29 content placements (named NPCs). Every Palisades kill or creature-drop objective (Boargar, Tree Lurkers, Fithik, Warnets, Howlers, Hunters, Thrax Technicians, Bane squads) is unfinishable. The final client map carries no creature spawn points; D12 thinned Clearcut Field, Skive Base Entrance, Lake Elinor, Fithik Trench and Hightower Outpost without numbers.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-PALISADES-AMBIENT-POPULATION"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-SKIVE-BASE-POPULATION",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Skive Base (the Bane base) is empty in this world; 1799/1800/1801 would be walk-in objectives. OD-P2.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-SKIVE-BASE-POPULATION"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-CREATURE-STATS",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Gantic (199054) and Barbrix (199095) have action1 0 and 555 hp from TaRapedia-roster creation: no attack, no recorded health.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-PALISADES-CREATURE-STATS"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-LOGOS-DOORS",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "TaRapedia (A Spiritual Pilgrimage rev 31585) says the Man cave and the Knowledge gate are Logos doors (Transform, Life, Power, Control; Knowledge needs Man). The final map carries no door static and the emulator no Logos-door object: the gates are absent.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-PALISADES-LOGOS-DOORS"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-MAN-CAVE-NAVMESH",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "The Man shrine cave floor (y 64.5) is a navmesh island; no NPC can path there (players are not bound by the navmesh).",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-PALISADES-MAN-CAVE-NAVMESH"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-ELOH-TEMPLES-GATE",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "The D10 rule \"complete A Spiritual Pilgrimage to enter the Eloh Temples, in order Raging, Proud, Bowed, Protector\" needs a map-link gate on 1988 and 1989 (instance batch).",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-ELOH-TEMPLES-GATE"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-REWARDS-UNRECORDED",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "No reward record (no TaRapedia page) for 337 and several held missions.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-PALISADES-REWARDS-UNRECORDED"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-2014-CONNER-COMPANION",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "The Corman Reformist \"Conner\" (client name 10601 \"Corman Reformist\") who joins the player in 2014 is not modelled (optional companion; class, stats and follow behaviour unrecorded).",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-2014-CONNER-COMPANION"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-2014-REWARD-ZERO",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "TaRapedia records RewardXP=0 and RewardCredits=0 for Crash Course (2008-10-25); whether that is literal or unrecorded is unknown.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-2014-REWARD-ZERO"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-2014-AFTER-337",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "The 2014 opening follows 337's finishing; TaRapedia says Requirement=none. No gate proposed.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-2014-AFTER-337"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-BARBRIX-PATROL",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Barbrix \"beams down near (450;100) and often travels north towards the lake\" (TaRapedia 2008-05-10); stationary in the world.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-BARBRIX-PATROL"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-KRIMM-CP-NPC-PRESENCE",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Control-point NPCs (River-base Krimm, Fort Dew) should vanish while the Bane hold the point; 1795 \"must be completed before the Bane recapture\"; 1806/1807 need Bane-held state.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-KRIMM-CP-NPC-PRESENCE"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-1801-FLARE-ACCEPTOR",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "The flare is placed on an item-acceptor object (class 23150); the emulator has no item-acceptor usable, so the flare item is not consumed.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-1801-FLARE-ACCEPTOR"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-1801-STRIKE-TEAM",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "The dropship and strike team arriving after 1801, and radio mission 1802, are not modelled.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-1801-STRIKE-TEAM"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-1799-GENERATOR-CLASS",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Supplemental generator entity class unrecorded (analogue 3857).",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-1799-GENERATOR-CLASS"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-1799-GEN2-FLOOR",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Generator 2 (727.8,132.5,-809.1) has no navmesh floor at that height; TaRapedia y used.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-1799-GEN2-FLOOR"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-OBJECT-HP",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Hit points of destroyable mission objects unrecorded.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-PALISADES-OBJECT-HP"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-1800-TERMINAL-CLASS",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Bane data terminal class unrecorded (analogue 20631).",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-1800-TERMINAL-CLASS"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-GIVER-UNPLACED",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Giver or objective NPC not in the world and without a usable reading (Cpt. Myles, Sgt. Howell, Breanne Vonic Corman, Hunrambi, Kilimba, Kevlo, Sohrani, Brumley, Wohlgemuth, Olaera, Conway, Captain Marsh, Martillon, Buzzrup).",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-PALISADES-GIVER-UNPLACED"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-OBJECTIVE-OBJECTS",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Objective objects (clues, equipment, specimens, scarecrow spots, dog-tag corpses, treasures) are server entities with no recorded position.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-PALISADES-OBJECTIVE-OBJECTS"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-ESCORT",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Escort objectives (386, 389, 694, 1797, 1802) need escort NPCs/routes with no recorded data.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-PALISADES-ESCORT"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-CHOICE-FLAGS",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Player-flag choice objectives (331 obelisk, 369 branches) are not implemented.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-PALISADES-CHOICE-FLAGS"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-TOO",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Palisades ToO (1809, post-D12) needs the ToO system and nine bosses at recorded levels.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-PALISADES-TOO"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-FLASHPOINT",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Flashpoint 1952 and its rewards 1954-1957 need the flashpoint system.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-PALISADES-FLASHPOINT"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-OPERATIONS-BATCH",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Missions whose objectives are inside Warnet Caverns, Devil's Den, Treeback Camp, Eloh Temples or Eloh Vale: deferred to the operations batch.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-PALISADES-OPERATIONS-BATCH"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-ELOH-VALE-CHAIN",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "The Eloh Vale access chain (1423, 1137-1139, 1198/1199/1429) spans Divide and the Eloh Vale instance.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-ELOH-VALE-CHAIN"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-GRIM-DUTY-BRANCH",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Grim Duty (1803) abandon -> Following Orders (1816, kill Barbeau) or Secret Extraction (1817), and McShay's \"Barbeau is alive\" failure path.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-GRIM-DUTY-BRANCH"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-1137-GATE",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "1137 presupposes a failed Keymaster of Torcastra (356); gate unrecorded.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-1137-GATE"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-407-GIVER",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Healing the Herd giver unrecorded (no TaRapedia page); feeders are original statics.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-407-GIVER"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-345-PATROL-LEADERS",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Alpha/Delta/Foxtrot Patrol Leaders (names 2997-2999) unplaced; patrol routes unrecorded.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-345-PATROL-LEADERS"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-361-FLOWERS",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Temple Bloom pick spots unrecorded.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-361-FLOWERS"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-622-WAGER",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Credit wager, killing-blow check and timer not modelled.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-622-WAGER"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-1798-NO-TELEPORT",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "The teleport-forbidden delivery tracker is not modelled.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-1798-NO-TELEPORT"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-1805-DARES",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Stand-under-the-falls timer and jump dare not modelled.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-1805-DARES"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-AMBUSH",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Scripted ambush content unrecorded.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json gaps.GAP-PALISADES-AMBUSH"
+   ],
+   "closes_with": "the evidence the summary names (a post-D12 capture, reading or original data)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27 (research/20260927-palisades-dossiers)"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-368-KILL-TIMER",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Seeded 368 Searching for Acceptance completes objective 1 \"Kill Warnets\" (client counter \"Warnets killed\") and its \"allotted time\" through conversation package 44 alone, so the kill and the time limit are skipped (PAL-DEF-7; the GAP-W3-COUNTER-OBJECTIVES pattern). Palisades has no Warnets in this world. Left unchanged by OD-157.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json",
+    "src/Rasa.DBL/Migrations/WildernessData/PalisadesDossierMissionsRows.cs"
+   ],
+   "closes_with": "Palisades Warnets (GAP-PALISADES-AMBIENT-POPULATION), a kill binding and counter, and the timer length",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27"
+   ]
+  },
+  {
+   "id": "GAP-NEW-CUMBRIA-ALDRIN",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Commander Aldrin (510123) is marker-stacked on the 'Cumbria Research Facility' region label in the destroyed area. His only mission, 2006 Soyuz Salvage (D11), was removed at D12, but the D12.5 note says the facility's NPCs were relocated inside New Cumbria, and no source says Aldrin himself left; TaRapedia's Cumbria Research Facility page never lists him in any revision (15731 2007-11-21 to 35397 2008-10-25). He keeps spawning where he is (OD-153).",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json",
+    "src/Rasa.DBL/Migrations/WildernessData/PalisadesDossierMissionsRows.cs"
+   ],
+   "closes_with": "a post-D12 reading or footage showing whether Aldrin stood in New Cumbria",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-NAMED-BOSS-RESPAWN",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Executor Gantic's and Barbrix's respawn delay is unrecorded; both return 60 s after death, the OD-48/OD-55 delay (OD-160), so 2014 and 1795 stay finishable on the shared map.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json",
+    "src/Rasa.DBL/Migrations/WildernessData/PalisadesDossierMissionsRows.cs"
+   ],
+   "closes_with": "a capture of either boss respawning",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-366-PREREQ-1988",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "TaRapedia's post-D10 'Proving Justice' page (rev 32934, 2008-09-11) gives Requirement=[[A Spiritual Pilgrimage]], and 363 likewise; the dossier proposes a 366 <- 1988 prerequisite as a change to seeded 366. Not applied here: it changes a live mission and the D10 note says the Proving chains stay available; left for the owner.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json",
+    "src/Rasa.DBL/Migrations/WildernessData/PalisadesDossierMissionsRows.cs"
+   ],
+   "closes_with": "an owner decision on the 366 (and 363) prerequisite",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27"
+   ]
+  },
+  {
+   "id": "GAP-ORTON-199086-FLOOR",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Corporal Orton (199086) stands at (-844.0, 137.77, 603.0), where the navmesh path from the New Cumbria waypoint, trainer and armor vendor ends 5.6 m short at (-849.6, 137.85, 603.0), beside ArchCormanGreenhouseV01 (-836.9, 137.7, 608.6): he may stand in geometry (PAL-DEF-11). No seeded mission needs to reach him.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json",
+    "src/Rasa.DBL/Migrations/WildernessData/PalisadesDossierMissionsRows.cs"
+   ],
+   "closes_with": "a client check of the spot; if inside geometry, step him to the reachable end point (measured)",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-KRIMM-NPC-POSITIONS",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Richardson, Barrasso and Mullen (510129, 510134, 510135) stand 4-9 m from the \"Control Point: River-base Krimm\" marker in an upstream arrangement with no reading; only LaFontaine has one (TaRapedia 2008-01-19, within 0.5 m). Their positions are upstream analogues (PAL-DEF-8); 1795's giver is one of them.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json",
+    "src/Rasa.DBL/Migrations/WildernessData/PalisadesDossierMissionsRows.cs"
+   ],
+   "closes_with": "a dated reading of each NPC",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27"
+   ]
+  },
+  {
+   "id": "GAP-CYRIDA-READING",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Ranger Cyrida (510131) stands at (-45.5, 153.5, 47.6); the only post-D12 TaRapedia reading (rev 35719, 2008-11-23) is (37.9, 153.6, 47.6), 83 m east off the Hightower hilltop, probably a dropped minus sign (-37.9 would be 7.6 m away). Kept (PAL-DEF-9).",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json",
+    "src/Rasa.DBL/Migrations/WildernessData/PalisadesDossierMissionsRows.cs"
+   ],
+   "closes_with": "a second post-D12 reading",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27"
+   ]
+  },
+  {
+   "id": "GAP-PALISADES-BOSS-POOLS-LEVEL",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "The upstream \"<boss> - Palisades\" pools 520037 and 520039-520045 are level 28 (hp 3300) on a 15-24 zone with no level source, and Urm (520043) stands on a height the navmesh leaves 71.5 m short (PAL-DEF-6). Left for the ToO batch.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json",
+    "src/Rasa.DBL/Migrations/WildernessData/PalisadesDossierMissionsRows.cs"
+   ],
+   "closes_with": "the Palisades ToO batch with recorded boss levels",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27"
+   ]
+  },
+  {
+   "id": "GAP-MULLEN-LEVEL",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Sergeant Mullen's creature row (510135, MissionNpcCreaturePreloader) says level 10, the upstream default; TaRapedia's page (rev 27659, 2008-01-21) says 20. 1795 takes 20 under OD-155; the creature row is not changed.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json",
+    "src/Rasa.DBL/Migrations/WildernessData/PalisadesDossierMissionsRows.cs"
+   ],
+   "closes_with": "a post-1.4 reading of Mullen's level",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27"
+   ]
+  },
+  {
+   "id": "GAP-2014-REWARD-ITEM-GRADE",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "TaRapedia (rev 35396) lists 2014's three armor choices as '(Experimental, min level 19)'. The resolved run 130322-130324 has grades ELT, RAR and CMN, and the Motor Assist boots' class 15557 is levelled 18-22 (requirement 18). Whether 'Experimental' names a grade the client calls otherwise is unrecorded.",
+   "evidence": [
+    "research/20260927-palisades-dossiers/dossiers.json",
+    "src/Rasa.DBL/Migrations/WildernessData/PalisadesDossierMissionsRows.cs"
+   ],
+   "closes_with": "a capture of the 2014 reward window",
+   "surfaced_by": [
+    "PalisadesDossierMissions 2026-09-27"
+   ]
   }
  ],
  "non_content_settings": [
@@ -114843,6 +118547,359 @@
      "locator": "ArchBaneIndustrialEntranceV01 (class 6459) at 242, 202, -181 and at -144, 186, 280"
     }
    ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "PalisadesDossierMissions",
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1812,
+    "objective_id": 18
+   },
+   "field": "ordinal, is_required, revealed_on_accept",
+   "old": [
+    null,
+    null,
+    null
+   ],
+   "new": [
+    1,
+    true,
+    true
+   ],
+   "reason": "The client skeleton row (MissionClientObjectiveSkeleton) carries the text with all three server flags unknown; the mission is now defined, so the flags take the inferred values in its manifest row. Rolling the migration back restores NULL.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client missionobjective (1812,18) \"Acquire Logos Information: True\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "PalisadesDossierMissions",
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1813,
+    "objective_id": 19
+   },
+   "field": "ordinal, is_required, revealed_on_accept",
+   "old": [
+    null,
+    null,
+    null
+   ],
+   "new": [
+    1,
+    true,
+    true
+   ],
+   "reason": "The client skeleton row (MissionClientObjectiveSkeleton) carries the text with all three server flags unknown; the mission is now defined, so the flags take the inferred values in its manifest row. Rolling the migration back restores NULL.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client missionobjective (1813,19) \"Acquire Logos Information: Through\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "PalisadesDossierMissions",
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1988,
+    "objective_id": 1
+   },
+   "field": "ordinal, is_required, revealed_on_accept",
+   "old": [
+    null,
+    null,
+    null
+   ],
+   "new": [
+    1,
+    true,
+    true
+   ],
+   "reason": "The client skeleton row (MissionClientObjectiveSkeleton) carries the text with all three server flags unknown; the mission is now defined, so the flags take the inferred values in its manifest row. Rolling the migration back restores NULL.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client missionobjective (1988,1) \"Recover the Knowledge Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "PalisadesDossierMissions",
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1988,
+    "objective_id": 2
+   },
+   "field": "ordinal, is_required, revealed_on_accept",
+   "old": [
+    null,
+    null,
+    null
+   ],
+   "new": [
+    2,
+    true,
+    true
+   ],
+   "reason": "The client skeleton row (MissionClientObjectiveSkeleton) carries the text with all three server flags unknown; the mission is now defined, so the flags take the inferred values in its manifest row. Rolling the migration back restores NULL.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client missionobjective (1988,2) \"Recover the Man Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "PalisadesDossierMissions",
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1988,
+    "objective_id": 3
+   },
+   "field": "ordinal, is_required, revealed_on_accept",
+   "old": [
+    null,
+    null,
+    null
+   ],
+   "new": [
+    3,
+    true,
+    true
+   ],
+   "reason": "The client skeleton row (MissionClientObjectiveSkeleton) carries the text with all three server flags unknown; the mission is now defined, so the flags take the inferred values in its manifest row. Rolling the migration back restores NULL.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client missionobjective (1988,3) \"Recover the Planet Logos\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "PalisadesDossierMissions",
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 2014,
+    "objective_id": 1
+   },
+   "field": "ordinal, is_required, revealed_on_accept",
+   "old": [
+    null,
+    null,
+    null
+   ],
+   "new": [
+    1,
+    true,
+    true
+   ],
+   "reason": "The client skeleton row (MissionClientObjectiveSkeleton) carries the text with all three server flags unknown; the mission is now defined, so the flags take the inferred values in its manifest row. Rolling the migration back restores NULL.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client missionobjective (2014,1) \"Talk to Derac\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "PalisadesDossierMissions",
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 2014,
+    "objective_id": 2
+   },
+   "field": "ordinal, is_required, revealed_on_accept",
+   "old": [
+    null,
+    null,
+    null
+   ],
+   "new": [
+    2,
+    true,
+    false
+   ],
+   "reason": "The client skeleton row (MissionClientObjectiveSkeleton) carries the text with all three server flags unknown; the mission is now defined, so the flags take the inferred values in its manifest row. Rolling the migration back restores NULL.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client missionobjective (2014,2) \"Kill Gantic And Retrieve His Datapad\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "PalisadesDossierMissions",
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 2014,
+    "objective_id": 6
+   },
+   "field": "ordinal, is_required, revealed_on_accept",
+   "old": [
+    null,
+    null,
+    null
+   ],
+   "new": [
+    3,
+    true,
+    false
+   ],
+   "reason": "The client skeleton row (MissionClientObjectiveSkeleton) carries the text with all three server flags unknown; the mission is now defined, so the flags take the inferred values in its manifest row. Rolling the migration back restores NULL.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client missionobjective (2014,6) \"Return to Commander Matlin\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "PalisadesDossierMissions",
+   "table": "npc_mission_objective",
+   "key": {
+    "mission_id": 1795,
+    "objective_id": 1
+   },
+   "field": "ordinal, is_required, revealed_on_accept",
+   "old": [
+    null,
+    null,
+    null
+   ],
+   "new": [
+    1,
+    true,
+    true
+   ],
+   "reason": "The client skeleton row (MissionClientObjectiveSkeleton) carries the text with all three server flags unknown; the mission is now defined, so the flags take the inferred values in its manifest row. Rolling the migration back restores NULL.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client missionobjective (1795,1) \"Collect Barbrix's Boot\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "PalisadesDossierMissions",
+   "table": "npc_package",
+   "key": {
+    "id": 510196
+   },
+   "field": "row (package_id 134, comment \"Corporal Orton\")",
+   "old": [
+    134,
+    "Corporal Orton"
+   ],
+   "new": null,
+   "tier": "inferred",
+   "reason": "OD-158 (the dossier's OD-P6): package 134 belongs to the Palisades Corporal Orton (199086), who now carries it; the upstream duplicate 510196 on Valverde Pools (MissionNpcPackagePreloader) gives it up. The creature row stays with its CodexNpcCorrections flag; rolling back restores the package row.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client objectiveconversation (331,1,134) and (337,3,134); missionconversation log of 331 \"Corporal Orton from Cumbria Research ...\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+    },
+    {
+     "source": "community_db:tarapedia-palisades-20260927",
+     "locator": "page 'Corporal Orton' rev 27661 (2008-01-21): Palisades, 'near the camp with all the tents'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "PalisadesDossierMissions",
+   "table": "spawnpool",
+   "key": {
+    "id": 510196
+   },
+   "field": "creature_1_min_count, creature_1_max_count",
+   "old": [
+    1,
+    1
+   ],
+   "new": [
+    0,
+    0
+   ],
+   "tier": "inferred",
+   "reason": "The Valverde Pools duplicate of Corporal Orton (MissionNpcSpawnpoolPreloader, map 1304 at (-859.6, 791.54, 35.2)) stops drawing: the client puts Orton at Cumbria Research on Palisades, where 199086 stands. The pool and creature rows stay; rolling back restores 1/1 (OD-158).",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "generated/client missionconversation log of 331 \"Corporal Orton from Cumbria Research wants you to translate the symbols on the Eloh Obelisk ... to the North of the facility.\" (research/20260926-mission-catalog/mission-catalog.json (sha256 1a47dd8855f838db...))"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "PalisadesDossierMissions",
+   "table": "content_placement",
+   "key": {
+    "id": 199054
+   },
+   "field": "respawn_ms",
+   "old": 0,
+   "new": 60000,
+   "tier": "analogue",
+   "decision": "OD-160",
+   "reason": "Executor Gantic stands on the shared Palisades map and carries the only copy of his mission's proof item. With no respawn the first kill would leave the placement defeated until a restart (MapChannel.RecordContentPlacementDeath), and every later player could accept 2014 but not finish it. 60 s is the delay OD-48 and OD-55 use for shared-map mission creatures; the original respawn is unrecorded (GAP-PALISADES-NAMED-BOSS-RESPAWN). respawn_ms is an optional column, so the analogue is recorded here and on OD-160 rather than as a row field.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-palisades-20260927",
+     "locator": "page 'Executor Gantic' revs 35363-36760 (2008-10-25 to 2009-03-05)"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "PalisadesDossierMissions",
+   "table": "content_placement",
+   "key": {
+    "id": 199095
+   },
+   "field": "respawn_ms",
+   "old": 0,
+   "new": 60000,
+   "tier": "analogue",
+   "decision": "OD-160",
+   "reason": "Barbrix stands on the shared Palisades map and carries the only copy of his mission's proof item. With no respawn the first kill would leave the placement defeated until a restart (MapChannel.RecordContentPlacementDeath), and every later player could accept 1795 but not finish it. 60 s is the delay OD-48 and OD-55 use for shared-map mission creatures; the original respawn is unrecorded (GAP-PALISADES-NAMED-BOSS-RESPAWN). respawn_ms is an optional column, so the analogue is recorded here and on OD-160 rather than as a row field.",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-palisades-20260927",
+     "locator": "page 'Bloody Booty' latest rev 30921 (2008-05-10): Barbrix 'beams down near (450;100) and often travels north towards the lake'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "PalisadesDossierMissions",
+   "table": "teleporter",
+   "key": {
+    "id": 624
+   },
+   "field": "description",
+   "old": "I thnk Viands Village",
+   "new": "Waypoint: Viands Village",
+   "tier": "original",
+   "reason": "The upstream TeleporterPreloader text \"I thnk Viands Village\" is an emulator note, not client text. The client's own label for this waypoint is \"Waypoint: Viands Village\" (uimapmarker 133182640965832 at (-264.82, 176.62, -457.75), 3.2 m from teleporter 624 at (-265.54, 176.41, -454.66)), spelled correctly, in the form every other Palisades waypoint row uses. Server-side text only (DynamicObject.Comment); rolling back restores the upstream text.",
+   "citations": [
+    {
+     "source": "client_table:game.zip",
+     "locator": "uimapmarker factionedmarkers 133182640965832 \"Waypoint: Viands Village\" [-264.82, 176.62, -457.75] (research/20260926-later-zone-missions/work/markers-all.json; research/20260927-palisades-dossiers/work/markers-1244.txt line 61)"
+    }
+   ]
   }
  ],
  "owner_decisions": [
@@ -115905,6 +119962,110 @@
    "choice": "As the default: a drill is only a bomb target for 403 (held), the detonator item and the fuse are unrecorded, and a plantable bomb with nothing to complete is an invented use; their positions stay in the dossier (GAP-DIVIDE-403-DRILLS). Alternative: place them as inert scenery once a non-usable static shape exists.",
    "approved_on": "2026-09-27",
    "record": "docs/progression-preservation-plan.md#divide-operations-status"
+  },
+  {
+   "id": "OD-153",
+   "decision": "The old research facility NPCs standing in the D12 ruins (Arizpe, Kaven Corman, Briggs, Hutchison, Aldrin), who have no post-D12 position source",
+   "default": "Keep them where they are, labelled (no move to an analogue point); keep Arizpe; hold 337; stop Aldrin only if the evidence says he left",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default: Arizpe, Kaven, Briggs and Hutchison stay on their pre-D12 readings with GAP-NEW-CUMBRIA-*; 1812 and 1813 are given by Arizpe there; 337 is held. Aldrin keeps spawning: the D12.5 note removed his Soyuz missions and relocated the facility's NPCs, and no source says he left (GAP-NEW-CUMBRIA-ALDRIN). Alternative: move each to a labelled analogue point inside New Cumbria.",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#palisades-dossier-status",
+   "notes": [
+    "Palisades dossier (research/20260927-palisades-dossiers/dossiers.json) owner decision OD-P1."
+   ]
+  },
+  {
+   "id": "OD-154",
+   "decision": "Skive Base object missions 1799, 1800 and 1801 while the base holds no Bane",
+   "default": "Hold them",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default: held until Skive Base has defenders (GAP-SKIVE-BASE-POPULATION); the dossier's proposed rows (1244100-1244109, 1244800-1244803, 1244900) are not seeded.",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#palisades-dossier-status",
+   "notes": [
+    "Palisades dossier (research/20260927-palisades-dossiers/dossiers.json) owner decision OD-P2."
+   ]
+  },
+  {
+   "id": "OD-155",
+   "decision": "Mission level of 1812, 1813, 1988, 2014 and 1795",
+   "default": "The giver's level, the OD-100/OD-140 rule",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default, an analogue under GAP-MISSION-LEVEL: Arizpe 25, Brocail 15, Matlin 30 and Mullen 20, each from the giver's TaRapedia page (Mullen's world row still carries the upstream 10, GAP-MISSION-LEVEL/GAP-MULLEN-LEVEL). 2014's rewards say 'min level 19'; the alternative is 19. Nothing on the server gates on the value.",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#palisades-dossier-status",
+   "notes": [
+    "Palisades dossier (research/20260927-palisades-dossiers/dossiers.json) owner decision OD-P3."
+   ]
+  },
+  {
+   "id": "OD-156",
+   "decision": "Combat stats for Executor Gantic (199054) and Barbrix (199095)",
+   "default": "The OD-135 analogue attack stats if their missions need them to fight; otherwise leave them as they are",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "Left as they are (action1 0, 555 hp): the kill completes and the item drops without the boss fighting back, so no mission needs an attack; GAP-PALISADES-CREATURE-STATS records the unrecorded stats. Alternative: the OD-135 world-seed analogues (Thrax Overseer bosses, 1000 hp, action 41).",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#palisades-dossier-status",
+   "notes": [
+    "Palisades dossier (research/20260927-palisades-dossiers/dossiers.json) owner decision OD-P4."
+   ]
+  },
+  {
+   "id": "OD-157",
+   "decision": "Seeded 368 Searching for Acceptance, which skips its Warnet kill and time limit",
+   "default": "Do not change it in this batch; record the defect",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default: 368 stays as seeded; GAP-PALISADES-368-KILL-TIMER records the defect. Alternative: withdraw it from offer until Palisades Warnets exist.",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#palisades-dossier-status",
+   "notes": [
+    "Palisades dossier (research/20260927-palisades-dossiers/dossiers.json) owner decision OD-P5."
+   ]
+  },
+  {
+   "id": "OD-158",
+   "decision": "Package 134: move it to the Palisades Corporal Orton 199086 and retire the Valverde Pools duplicate 510196",
+   "default": "Yes, if the evidence is as the dossier states",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "Verified and applied: the client binds 134 to 331/1 and 337/3 (\"Speak with Corporal Orton\") and its 331 log says \"Corporal Orton from Cumbria Research\"; 510196 stands on map 1304 at a y/z-swapped point and 199086 had no package. npc_package 199086 -> 134, the 510196 package row removed and its pool 0/0; Down restores both.",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#palisades-dossier-status",
+   "notes": [
+    "Palisades dossier (research/20260927-palisades-dossiers/dossiers.json) owner decision OD-P6."
+   ]
+  },
+  {
+   "id": "OD-159",
+   "decision": "Pre-1.4 experience and credit amounts of 1812, 1813 and 1795",
+   "default": "Seed them labelled with their era",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default: seeded at tier inferred, era pre-1.4, confidence low (GAP-REWARD-ERA); 1988's amounts are post-1.4 and 2014 has none (TaRapedia 0/0, GAP-2014-REWARD-ZERO).",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#palisades-dossier-status",
+   "notes": [
+    "Palisades dossier (research/20260927-palisades-dossiers/dossiers.json) owner decision OD-P7."
+   ]
+  },
+  {
+   "id": "OD-160",
+   "decision": "Respawn of the two named bosses whose drop completes 2014 and 1795 on the shared Palisades map",
+   "default": "Respawn 60 s after death, the OD-48/OD-55 delay",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "Batch-agent choice (not one of the dossier's decisions): without a respawn the first kill leaves each boss defeated until a restart and every later player could accept but not finish. 60 s, recorded as an analogue on the change entries (GAP-PALISADES-NAMED-BOSS-RESPAWN). Alternative: hold 2014 and 1795 until a capture records the respawn.",
+   "approved_on": "2026-09-27",
+   "record": "docs/progression-preservation-plan.md#palisades-dossier-status",
+   "notes": [
+    "Raised by the PalisadesDossierMissions batch; no dossier counterpart."
+   ]
   }
  ]
 }

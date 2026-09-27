@@ -4773,3 +4773,66 @@ no later rework note names these instances), TaRapedia's revision histories and 
   1905, 792, 392 offerable, each context's placements per squad copy) and of `ContentSchemaMigrationTests` (rows,
   rollback), provider parity.
 
+
+## 2026-09-27 — Concordia Palisades: the dossier's finishable missions
+
+The Palisades mission dossier (`research/20260927-palisades-dossiers`, `README.md` and `dossiers.json`: 112 missions, the
+D10-D16.5 changes and the final map's New Cumbria geometry) found 8 missions seedable, all with gaps, not the 48 "ready"
+of the lost 2026-09-15 catalog. This batch seeds the five the dossier recommends, with its conservative defaults, as
+migration `PalisadesDossierMissions` (20260927050000). Decisions OD-153 to OD-159 are the dossier's OD-P1 to OD-P7,
+OD-160 is the batch's own; all agent-approved, pending owner review. No new creature, placement or content id is
+allocated: the dossier's reserved 1244xxx blocks were for the held Skive Base missions and stay free.
+
+- **Each mission was checked for what finishing it needs.** Every giver, the two bosses and the four surface shrines
+  stand on navmesh floor joined to a Palisades waypoint marker (re-checked in this tree,
+  `PalisadesDossierMissionsTests`); the proof items are the client's own mission item classes with one template each
+  (29949 -> 123352, 28451 -> 118803); the completion packages 136 and 1214 are the client's own rows for 2014. The Man
+  shrine (219) stands on the floor of the Horsetail Falls gorge, which is open to the sky (not underground) but a navmesh
+  island about 120 m across whose highest point is y 80, 60 m under the rim: no NPC could path there, the player moves
+  client-side, and the server applies no fall damage (`GAP-PALISADES-MAN-CAVE-NAVMESH`). The Logos doors TaRapedia
+  describes on the Man and Knowledge routes are neither in the final map nor in the emulator, so both are ungated
+  (`GAP-PALISADES-LOGOS-DOORS`). A named boss placement with no respawn stays defeated after its first kill until a
+  restart (`MapChannel.RecordContentPlacementDeath`), which would leave 2014 and 1795 unfinishable for everyone after
+  the first player, so Gantic and Barbrix return after 60 s, the OD-48/OD-55 delay (OD-160,
+  `GAP-PALISADES-NAMED-BOSS-RESPAWN`).
+- **1812 Logos: True and 1813 Logos: Through**: Receptive Liaison Arizpe to Arizpe, as 1652; LogosRecovered on the
+  world's logos rows 333 and 322, the client's logosstone constants on final-map Logos Bases. 9,000 experience and
+  1,800 credits each, TaRapedia's amounts first written 2008-01-05, labelled pre-1.4 (OD-159). Arizpe keeps his pre-D12
+  reading in the destroyed Research HQ (OD-153, `GAP-NEW-CUMBRIA-ARIZPE`).
+- **1988 A Spiritual Pilgrimage**: Warden Brocail to Brocail (the D10 live note, the client log); Knowledge 208, Man 219,
+  Planet 266. 20,000 experience, 3,000 credits and a choice of the AccuMax laser pistol, rifle and shotgun
+  (122719-122721, levels 20/21/22, TaRapedia's list exactly), all first written 2008-07-29, post-1.4. The D10 temple gate
+  itself is the instance batch's (`GAP-ELOH-TEMPLES-GATE`). TaRapedia's post-D10 Proving Justice page makes 366 wait on
+  1988; that change to a live mission is left for the owner (`GAP-PALISADES-366-PREREQ-1988`).
+- **2014 Crash Course** (added at D12.5): Base Cmdr. Matlin to Matlin. Derac Bensen Corman gets client package 136 and
+  Matlin 1214, the packages the client binds to 2014/1 and 2014/6; nothing carried either. 2014/2 is Executor Gantic's
+  Datapad from Gantic, who stands 18 m from the final map's crashed Bane dropship, at a drop chance of 100 (inferred, low).
+  Objectives 2 and 6 are revealed in the client's order, so Matlin cannot be done first. TaRapedia records 0 experience
+  and 0 credits, so no amount row is seeded (`GAP-2014-REWARD-ZERO`); the resolver's one run 130322-130324 is the armor
+  choice, though TaRapedia calls all three "Experimental, min level 19" and the classes are ELT, RAR and CMN with the
+  boots at 18 (`GAP-2014-REWARD-ITEM-GRADE`). The companion Conner is left out (`GAP-2014-CONNER-COMPANION`).
+- **1795 Bloody Booty**: Sergeant Mullen to Mullen; Barbrix's Boot from Barbrix. 19,000 experience and 2,850 credits,
+  pre-1.4 (OD-159); the pre-1.4 item list is not seeded. Mullen's position is upstream's (`GAP-PALISADES-KRIMM-NPC-POSITIONS`)
+  and his presence under Bane control is not modelled (`GAP-KRIMM-CP-NPC-PRESENCE`).
+- **Levels** are the giver's (OD-155, the OD-100/OD-140 rule), analogues: Arizpe 25, Brocail 15, Matlin 30, Mullen 20,
+  each from the NPC's TaRapedia page. Mullen's world row still carries the upstream 10 (`GAP-MULLEN-LEVEL`); 2014's
+  rewards imply 19. Gantic and Barbrix keep action 0 and 555 hp: the kill and the drop complete without them fighting
+  back, so no analogue attack is added (OD-156, `GAP-PALISADES-CREATURE-STATS`).
+- **Package 134** (OD-158, verified first): the client binds it to 331/1 and 337/3 "Speak with Corporal Orton", and 331's
+  log reads "Corporal Orton from Cumbria Research"; the world had it on the upstream duplicate 510196 on Valverde Pools,
+  at (-859.6, 791.54, 35.2), a New Cumbria point with y and z swapped. It now belongs to the Palisades Orton 199086, the
+  duplicate's package row is removed and its pool draws 0/0; Down restores both. Orton's own spot may be inside the
+  greenhouse (`GAP-ORTON-199086-FLOOR`); neither of his missions is seeded yet.
+- **Teleporter 624**'s upstream description "I thnk Viands Village" becomes the client's own label for the waypoint,
+  "Waypoint: Viands Village" (uimapmarker 133182640965832, 3.2 m away). Server-side text only.
+- **Held or unchanged**: 1799, 1800 and 1801 (Skive Base holds no Bane, OD-154); 337 (Kaven Corman stands only on a
+  pre-D12 reading in the ruins, OD-153); 368 keeps its skipped kill and timer (OD-157, `GAP-PALISADES-368-KILL-TIMER`);
+  Commander Aldrin keeps spawning, because the D12.5 note removed his Soyuz missions and relocated the facility's NPCs,
+  and no source says he left (`GAP-NEW-CUMBRIA-ALDRIN`); every mission the dossier holds (no ambient population, unplaced
+  givers, unrecorded objects, escorts and scripts, the operations batch's instances; recorded omissions). The dossier's
+  40 new gaps and ten of this batch's are in the manifest.
+- **Tests**: `PalisadesDossierMissionsTests` (the seeded set and the held one, store types, every row against its manifest
+  row, the changes and decisions, reachability on the Palisades navmesh, rollback, the deployed world's rows and free
+  ids), the Palisades block of `MissionContentLoadingTests` (the five offerable, bindings, transitions, rewards, the
+  bosses' 60 s respawn and drops only to a player on the mission) and of `ContentSchemaMigrationTests` (rows, rollback),
+  the reward templates in `RewardItemFixtures`, provider parity. Full suite 1523/1523.

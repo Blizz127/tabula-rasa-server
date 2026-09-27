@@ -1088,3 +1088,22 @@ Account: `docs/retail-accuracy.md`, "The Divide operations".
 | Tyler | stationary | walks 392 to the Field Medic | client log 527; TTH | inferred |
 | 403, 404, 1276, 384, 391, 397, 594, 356, 1860, 1861 | unseeded | held (OD-151, OD-152) | dossier gaps | gap |
 
+
+## Concordia Palisades: the dossier's finishable missions (2026-09-27)
+
+The Palisades mission dossier (`research/20260927-palisades-dossiers`), checked against the 1.16.5.0 client tables and
+map, TaRapedia's revision histories, the D10/D12.5 live notes and the repo navmesh. Tiers and gaps: the manifest rows and
+changes of `PalisadesDossierMissions` and OD-153 to OD-160. Account: `docs/retail-accuracy.md`, "Concordia Palisades".
+
+| behaviour | was | now | evidence | tier |
+| --- | --- | --- | --- | --- |
+| 1812, 1813 (Arizpe) | unseeded | shrines 333/322, 9,000 XP, 1,800 credits each (OD-159) | logosstone; TaRapedia 2008-01-05 | inferred, pre-1.4 amounts |
+| 1988 A Spiritual Pilgrimage | unseeded | Brocail; Knowledge, Man, Planet; 20,000 XP, 3,000 credits, AccuMax choice | D10 notes; client log; TaRapedia 2008-07-29 | inferred, post-1.4 |
+| 2014 Crash Course | unseeded | Matlin; Derac 136 -> Gantic's datapad -> Matlin 1214; armor choice, no amounts | D12.5 notes; objectiveconversation; TaRapedia 2008-10-25 | inferred; packages original |
+| 1795 Bloody Booty | unseeded | Mullen; Barbrix's Boot; 19,000 XP, 2,850 credits (OD-159) | client item class 28451; TaRapedia | inferred, pre-1.4 amounts |
+| Gantic, Barbrix | never respawned once killed | back after 60 s (OD-160); stats unchanged (OD-156) | OD-48/OD-55 delay | analogue |
+| package 134 | on the Valverde Pools duplicate 510196 | on the Palisades Orton 199086; duplicate's pool 0/0 (OD-158) | objectiveconversation 331/337; client log of 331 | inferred |
+| teleporter 624 text | "I thnk Viands Village" (upstream) | "Waypoint: Viands Village" | uimapmarker 133182640965832 | original |
+| mission levels | none | giver's level: 25, 25, 15, 30, 20 (OD-155) | TaRapedia NPC pages | analogue |
+| 368 | skips its Warnet kill and timer | unchanged (OD-157) | client objective 368/1 counter | gap |
+| 1799-1801, 337, 366 <- 1988, Aldrin | proposed | held / left (OD-153, OD-154) | dossier; D12.5 notes | gap |
