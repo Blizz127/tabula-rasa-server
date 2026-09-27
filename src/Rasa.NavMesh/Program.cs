@@ -96,6 +96,13 @@ namespace Rasa.NavMesh
 
             var terrainCuts = TerrainCuts.Load(cutsCsv);
 
+            var gridCsv = Path.Combine(AppContext.BaseDirectory, "data", "map_build_settings.csv");
+
+            if (!File.Exists(gridCsv))
+                gridCsv = Path.Combine("src", "Rasa.NavMesh", "data", "map_build_settings.csv");
+
+            var mapSettings = MapBuildSettings.Load(gridCsv);
+
             var stopwatch = Stopwatch.StartNew();
             Console.WriteLine($"Indexing mesh archives in {dataDirectory} ...");
             using var meshes = new MeshLibrary(dataDirectory, csv);
@@ -125,7 +132,12 @@ namespace Rasa.NavMesh
 
                 try
                 {
-                    var geometry = MapGeometry.Load(mapDirectory, meshes, settings.TerrainStep, settings.TerrainMaxSlope, null, terrainCuts.For(name));
+                    var mapBuild = mapSettings.For(name, settings);
+
+                    if (!ReferenceEquals(mapBuild, settings))
+                        Console.WriteLine($"  grid {mapBuild.CellSize} x {mapBuild.CellHeight} m from map_build_settings.csv");
+
+                    var geometry = MapGeometry.Load(mapDirectory, meshes, mapBuild.TerrainStep, mapBuild.TerrainMaxSlope, null, terrainCuts.For(name));
                     Console.WriteLine($"  terrain {geometry.TerrainTriangles:n0} tris{(geometry.TerrainTrianglesCut > 0 ? $" ({geometry.TerrainTrianglesCut:n0} cut out by terrain_cuts.csv)" : "")}; {geometry.EntitiesWithCollision:n0} entities with collision ({geometry.EntityTriangles:n0} tris), "
                                       + $"{geometry.EntitiesWithoutCollision:n0} without, {geometry.EntitiesWithoutMesh:n0} with no mesh; "
                                       + $"bounds ({geometry.BoundsMin.X:0}, {geometry.BoundsMin.Y:0}, {geometry.BoundsMin.Z:0}) - ({geometry.BoundsMax.X:0}, {geometry.BoundsMax.Y:0}, {geometry.BoundsMax.Z:0})");
@@ -139,7 +151,7 @@ namespace Rasa.NavMesh
                     if (writeObj)
                         geometry.WriteObj(Path.Combine(output, name + ".obj"));
 
-                    var navMesh = NavMeshBuilder.Build(geometry, settings, Console.WriteLine);
+                    var navMesh = NavMeshBuilder.Build(geometry, mapBuild, Console.WriteLine);
                     var path = NavMeshFile.PathFor(output, name);
                     NavMeshFile.Write(path, navMesh);
                     Console.WriteLine($"  wrote {path} ({new FileInfo(path).Length / 1024:n0} KB) in {mapWatch.Elapsed.TotalSeconds:0.0} s");

@@ -228,7 +228,18 @@ namespace Rasa.Test.Reconstruction
                 "creature:id:1430001-1430099",
                 "content_placement:id:1430100-1430499",
                 "content_area:id:1430500-1430599",
-                "npc_mission:id:323-323"
+                "npc_mission:id:323-323",
+                // DivideOperationsInstances (2026-09-27): the blocks the Divide instance dossier reserved for Minos Caverns,
+                // Timora Mines and Torcastra Prison, and the new creatures' npc_package rows (keyed by creature id).
+                "creature:id:1347001-1347099",
+                "creature:id:1348001-1348099",
+                "creature:id:1349001-1349099",
+                "content_placement:id:1347100-1347499",
+                "content_placement:id:1348100-1348499",
+                "content_placement:id:1349100-1349499",
+                "content_area:id:1347500-1347599",
+                "npc_package:id:1347001-1347099",
+                "npc_package:id:1349001-1349099"
             }, scope);
 
             var gate = root.GetProperty("non_content_settings").EnumerateArray()

@@ -4722,3 +4722,54 @@ to OD-139, agent-approved and pending owner review. The only footage is one run 
   types; every row against its manifest row; rollback), `DestroyablePlacementTests.DestroyedCounter`, the Pravus blocks
   of `MissionContentLoadingTests` (593/575/323/924 offerable, the withheld rows, the keypass drop only from the entrance
   guards) and `ContentSchemaMigrationTests`, and provider parity.
+
+## 2026-09-27 — The Divide operations: Minos and Timora joined, their NPCs placed, four missions
+
+The Divide instance dossier (`research/20260926-instance-dossiers-divide`: Minos Caverns 1347, Timora Mines 1348,
+Torcastra Prison 1349), seeded after the two navmesh defects it found were diagnosed and fixed. Migration
+`DivideOperationsInstances` (20260927040000); evidence `docs/evidence/divide-operations-instances-20260927.json` (the
+diagnosis of each split, the experiments, every probe before and after); decisions OD-145 to OD-152, agent-approved and
+pending owner review. The sources are Ten Ton Hammer's three walkthroughs (2007-10-18, 2007-10-24, 2007-11-28, pre-D11;
+no later rework note names these instances), TaRapedia's revision histories and the final client's tables and maps.
+
+- **Minos Caverns was a sampling defect, not terrain.** The map has no terrain archive, so a terrain cut cannot apply. The
+  cave is laid from cavern tiles whose collision floors overlap at the joints: at -2, 24, 61 the ramp tile's floor runs
+  0.5-1.2 m under the next tile's, and the walkable strip across the joint is about 2 m wide, which the 0.6 m agent
+  radius eroded away at 0.4 m cells. At 0.2 x 0.1 m cells (a per-map setting, `src/Rasa.NavMesh/data/map_build_settings.csv`)
+  the entrance, Horlo's branch, Tyler's canyon and the Bane base are one mesh, with the agent unchanged; a larger climb or
+  a smaller radius also joined parts of it and was rejected (OD-148). Kept as original geometry: the Logos Those pit, a
+  13 m drop from the canyon ("Follow the trail leading down (just jump)"); a Bane control room whose four sides are tunnel
+  caps; the logos analyzer's own footprint. The canyon itself is walkable both ways, as TTH's "Head back up the trail" has
+  it, so Tyler walks the 392 escort (551 m to the Field Medic).
+- **Timora Mines was the Pravus defect, at one door.** The hillside heightmap crosses the Fuel Egress chunnel entrance at
+  242, 202, -181, 0.8-2.4 m over its floor. Cutting the whole Bane industrial family, as Pravus does, also cut under the
+  awning of the same entrance model at -144, 186, 280 and split Kearney's hall from the mine, so a terrain cut can now
+  name one placement (`mesh_prefix@x:z`): 22 triangles, one island from the arrival to the Command Center, every other
+  island unchanged (OD-149). Torcastra was connected; its "tower top 3.4 m off" was the entity's own height, the terrain
+  under the tower floor. The floor is on the mesh; the console stands in its jamb, 3.9 m from connected floor.
+- **NPCs.** Kearney (TTH /loc), Pastre ("behind Kearney") and Hamilton (the Research Ward tube) were emulator pools on
+  the hospital and vendor markers; the pools stop drawing and each stands as a placement, one per squad copy. Hamilton
+  carried the prisoner computer bank's package 1527; he now carries his own 1526 (the kill-or-escort lines), and his
+  tube (client class 7197 Stasis Chamber) stands with him as a destroyable (hit points an analogue, OD-150). New:
+  Field Ranger Morrow and Field Ranger Sanchez, Scout Horlo (package 2380), Lt. Cisco at the prison entrance (1156),
+  Overseer Torqua (TaRapedia's post-D11 level 19) and Ranger Ferme (193). Names are the client's; bodies, health,
+  attacks and the unrecorded levels are world analogues (OD-145), and the AFS NPCs wear Kearney's or Captain Velns'
+  shipped clothing, since a swapset body renders bare without it.
+- **Missions.** 340 Report to Field Ranger Kearney (Cmd. Sgt. Simpson to Kearney), 1905 Central Bound Patrol (Kearney
+  to Sanchez after 340; its escort objective optional and unrevealed while the soldiers are unrecorded, OD-146), 792
+  Climbing the Corporate Ladder (Pastre; the Warden in the Command Center, two Overseers at the Fuel Bore Cavern label,
+  the Wardmaster in his bunker; class 10504 and level 16 analogues) and 392 Cave Extraction (Tyler; offered without 383,
+  which is not seeded, OD-147; 14,000 XP and 2,100 credits, pre-1.4). 340 and 1905 have no reward source and pay
+  nothing; 340 keeps its pre-split finishing text (client data). MissingMissionGivers' hold on 340 for the escort split
+  is lifted: the dossier resolved it (340 is Simpson's dispatch, 1905 Kearney's continuance).
+- **Held.** 403 and its drills (the pit drill and the pumps are unplaced, the detonator and fuse unrecorded; OD-152),
+  404, 1276 (Jayjack is not in the world, the Eloh projector's speaker unrecorded), 384, 391, 397, 594, 356 (it follows
+  594), 1860 (neither the map chest nor the cipher crate has an evidenced class) and 1861 (it follows 1860; the
+  rendezvous is unrecorded), so no post-1.4 reward item is seeded (OD-151). Q'uoa keeps package 2345: his own is not
+  evidenced (`GAP-QUOA-PACKAGE`). No ambient population.
+- **Tests.** `DivideOperationsInstancesTests` (the rebuilt meshes join what was apart and keep the original drops apart,
+  every position on floor its arrival reaches, the build inputs, the held content, store types, every row against its
+  manifest row, rollback, the deployed world's rows and free ids), the Divide block of `MissionContentLoadingTests` (340,
+  1905, 792, 392 offerable, each context's placements per squad copy) and of `ContentSchemaMigrationTests` (rows,
+  rollback), provider parity.
+

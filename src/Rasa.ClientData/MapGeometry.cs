@@ -41,10 +41,11 @@ namespace Rasa.ClientData
         /// <param name="terrainStep">heightmap samples per terrain quad edge (1 = every metre)</param>
         /// <param name="terrainMaxSlope">terrain triangles steeper than this many degrees are dropped (see <see cref="TerrainHeightmap.AppendTriangles"/>)</param>
         /// <param name="skip">classes whose geometry must not go in (null for none)</param>
-        /// <param name="terrainCut">meshes the terrain must not run through (null for none): a terrain triangle with one
-        /// of their floors straight under it and one of their ceilings straight over it is left out (see <see cref="EnclosureIndex"/>)</param>
+        /// <param name="terrainCut">placed meshes the terrain must not run through (null for none), asked with the mesh file
+        /// name and the entity's position: a terrain triangle with one of their floors straight under it and one of their
+        /// ceilings straight over it is left out (see <see cref="EnclosureIndex"/>)</param>
         public static MapGeometry Load(string mapDirectory, MeshLibrary meshes, int terrainStep, float terrainMaxSlope = 90f, Func<int, string, bool> skip = null,
-            Func<string, bool> terrainCut = null)
+            Func<string, Vector3, bool> terrainCut = null)
         {
             var name = Path.GetFileName(mapDirectory);
             var mapPath = Path.Combine(mapDirectory, name + ".map");
@@ -100,13 +101,13 @@ namespace Rasa.ClientData
         }
 
         /// <summary>The collision of the placed terrain-cut meshes alone, or null when the map places none.</summary>
-        private static EnclosureIndex CutIndex(MapFile map, MeshLibrary meshes, Func<int, string, bool> skip, Func<string, bool> terrainCut)
+        private static EnclosureIndex CutIndex(MapFile map, MeshLibrary meshes, Func<int, string, bool> skip, Func<string, Vector3, bool> terrainCut)
         {
             var cut = new MapGeometry();
 
             foreach (var entity in map.Entities)
             {
-                if (!meshes.TryGetMeshName(entity.ClassId, out var meshName) || !terrainCut(meshName) ||
+                if (!meshes.TryGetMeshName(entity.ClassId, out var meshName) || !terrainCut(meshName, entity.Position) ||
                     (skip != null && skip(entity.ClassId, meshName)))
                     continue;
 

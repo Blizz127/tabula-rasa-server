@@ -21,8 +21,8 @@ dotnet run -c Release --project src\Rasa.NavMesh -- --client "C:\Games\Tabula Ra
 Options: `--map <name>` (repeatable) builds only those maps; `--threads N`; `--terrain-step 2`
 (heightmap samples per terrain quad; 1 uses every metre and quadruples the terrain triangles);
 `--cell 0.4`, `--radius 0.6`, `--climb 0.9`, `--slope 50` change the Recast parameters;
-`--obj` also writes the input geometry as `<map>.obj` for a mesh viewer. `data/terrain_cuts.csv` is read on every
-build (see below).
+`--obj` also writes the input geometry as `<map>.obj` for a mesh viewer. `data/terrain_cuts.csv` and
+`data/map_build_settings.csv` are read on every build (see below).
 
 A 2 km zone takes two to three minutes on four cores and produces an 11 MB `.nav`. Rebuild when
 `entity_meshes.csv`, the build parameters, or the tool's geometry handling change; the client
@@ -64,11 +64,26 @@ floor floating in the tunnel. The client walks players through, so the terrain i
 whose centroid has one of their floors straight under it and one of their ceilings straight over it; the build log
 says how many (273 on Pravus). The list is per map on purpose: over every placed mesh the same test also fires under
 rock overhangs, trees and pond surfaces, where the terrain is real ground, and on Pravus it cut the AFS camp off from
-the Frontlines. A map not in the list builds exactly as before. Only Pravus is listed; the Bane Conscript Facility
-carries the same ramp and Timora Mines, Torcastra Prison and the Wardenbot Factory show terrain inside tunnels and
-buildings, unprobed (`GAP-NAVMESH-TERRAIN-CUTS`, `docs/evidence/pravus-research-instance-20260927.json`). Crater
+the Frontlines. A map not in the list builds exactly as before. Pravus and Timora Mines are listed. Torcastra Prison
+also has terrain inside tunnels but its probes are all joined; the Bane Conscript Facility carries the same ramp and the
+Wardenbot Factory shows terrain inside buildings, unprobed (`GAP-NAVMESH-TERRAIN-CUTS`,
+`docs/evidence/pravus-research-instance-20260927.json`). Crater
 Lake's islands (the Corman HQ's upper floors, the greenhouse) are not this defect: its floors are above the terrain,
 and cutting the terrain inside its `arch_` meshes leaves both probes where they were.
+
+A prefix may name one placement, `mesh_prefix@x:z` (the entity within 1 m of x, z). Timora Mines needs it: the hillside
+crosses the Fuel Egress chunnel entrance at 242, 202, -181, but the same entrance model at -144, 186, 280 has its awning
+over open ground, and cutting there opens a hole in the apron that split Kearney's hall from the mine. Scoped to the one
+placement the cut takes 22 triangles and changes no other island (`docs/evidence/divide-operations-instances-20260927.json`).
+
+## A finer grid for one map
+
+`src/Rasa.NavMesh/data/map_build_settings.csv` (`map,cell_size,cell_height,reason`) builds a listed map on a finer voxel
+grid; the agent (radius, height, climb, slope) stays the same, so the geometry is only sampled more closely. Minos Caverns
+is listed at 0.2 x 0.1 m: the cave has no terrain and is laid from cavern tiles whose collision floors overlap at the
+joints, leaving walkable strips about 2 m wide that the 0.6 m agent radius erodes away at 0.4 m cells. At the default
+grid the cave fell into islands the client walks straight through. The build log says when a map's grid comes from the
+file. Other tile-built interiors were not re-probed at the finer grid (`GAP-NAVMESH-MAP-GRID`).
 
 ## Polygons under the terrain
 

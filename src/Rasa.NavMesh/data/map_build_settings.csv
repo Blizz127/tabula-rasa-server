@@ -1,0 +1,2 @@
+map,cell_size,cell_height,reason
+adv_foreas_concordia_divide_minoscaverns,0.2,0.1,"the cavern tiles' collision floors overlap at their joints (at -2,24,61 the ramp8 tile's floor runs 0.5-1.2 m under the next tile's); the walkable strip through several joints is about 2 m wide, which the 0.6 m agent radius erodes away at 0.4 x 0.2 m cells. At 0.2 x 0.1 m the entrance, Horlo's branch, Tyler's canyon and the Bane base are one mesh"

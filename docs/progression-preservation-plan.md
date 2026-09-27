@@ -522,6 +522,27 @@ Seeded on 2026-09-27 from the wilderness instance dossiers (`research/20260926-i
   check (enter a copy, take 593 and 575, collect the keypass, reach the chamber, destroy the capsule, clear a dish) is
   still to do.
 
+## Divide operations status
+
+Seeded on 2026-09-27 from the Divide instance dossier (`research/20260926-instance-dossiers-divide`): Minos Caverns 1347,
+Timora Mines 1348, Torcastra Prison 1349. Account: `docs/retail-accuracy.md`, 2026-09-27 "The Divide operations".
+
+- **Navmesh:** Minos Caverns is one mesh at a 0.2 x 0.1 m grid (`src/Rasa.NavMesh/data/map_build_settings.csv`; its
+  cavern tiles' joints were narrower than the default grid resolves), Timora Mines' Fuel Egress block is joined by a
+  terrain cut scoped to its one chunnel entrance (`terrain_cuts.csv`, `mesh_prefix@x:z`). Torcastra was connected. Kept
+  as original geometry: the Logos Those pit (a drop), Minos' capped Bane control room, the tower console's jamb.
+- **Built:** Kearney, Pastre and Hamilton as placements at their sources' positions (pools 510118-510120 at 0/0),
+  Hamilton's own package 1526 and his stasis tube; Morrow, Sanchez, the Wardmaster, two Overseers and the Warden,
+  Scout Horlo, Lt. Cisco at the entrance, Overseer Torqua and Ranger Ferme (`DivideOperationsInstances`); Tyler walks 392.
+  Missions 340, 1905 (objective 1 optional and unrevealed), 792 and 392. Decisions: OD-145 creature analogues and bodies;
+  OD-146 1905 without its escort party; OD-147 392 without 383; OD-148 the Minos grid; OD-149 the scoped Timora cut;
+  OD-150 the tube's hit points; OD-151 1860/1861 held; OD-152 the 403 drills unplaced. All agent-approved, pending owner
+  review.
+- **Open:** 403, 404, 1276, 384, 391, 397, 594, 356, 1860, 1861 and 383; the escort party of 1905; the containers of
+  1860; the gatekeeper, gate, timer and garrisons of 594; the computer bank of 356; Ferme's guards and cell; the ambient
+  populations; the new NPCs' real gear. Owner client check (take 340 from Simpson, report to Kearney, walk 1905 to
+  Sanchez, kill the three Timora targets for Pastre, escort Tyler to the medic) is still to do.
+
 ## S4 (Capture the Flag) status
 
 - Mission 1994 is seeded by `BootcampS4CaptureTheFlag` (SQLite and MySQL, frozen rows in

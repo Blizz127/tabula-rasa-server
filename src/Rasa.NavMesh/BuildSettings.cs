@@ -7,6 +7,8 @@ namespace Rasa.NavMesh
     /// </summary>
     public sealed class BuildSettings
     {
+        public BuildSettings Clone() => (BuildSettings)MemberwiseClone();
+
         public float CellSize = 0.4f;
         public float CellHeight = 0.2f;
         public float AgentHeight = 2.0f;

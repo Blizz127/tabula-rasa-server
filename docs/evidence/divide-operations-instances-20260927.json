@@ -1,0 +1,299 @@
+{
+ "schema": "rasa-divide-operations-instances/1",
+ "date": "2026-09-27",
+ "batch": "DivideOperationsInstances",
+ "sources": {
+  "dossier": "research/20260926-instance-dossiers-divide/dossiers.json (sha256 c78e65567341678016cbfb24f8a0337a5e512f3ab5f1cb7dcb8937c6e4450df3)",
+  "client": "Tabula Rasa 1.16.5.0 (vps-private-artifacts-20260926/rasa-client-1.16.5.0), maps minoscaverns sha256 49962533434cb7bae7cc990d4d95d8340121f9d4ee974ca3f1aeef1ccac063e7, timoramines sha256 4cbd2812914c653ea8286851fcb811ef70fd1a77b54ce4528ca58531f16d5601, torcastraprison sha256 9f300ba5b0eeca08dc256844b3cb41a1acc9d27d867bac54d48f5fe6e7cefe47",
+  "tools": "Rasa.NavMesh of this tree (--map, --obj); a probe tool on Rasa.Navigation (GroundHeight, Nearest, FindPath from the reference point; polygon islands by Detour link flood fill); a column tool listing every collision surface on a vertical line through the --obj geometry"
+ },
+ "navmesh": {
+  "minos": {
+   "before": "navmesh/adv_foreas_concordia_divide_minoscaverns.nav sha256 e23249aecb15a7433d9981b31b04f3bb5c68200f0b82f076dd562a2a81f8d74d: 1,426 polygons; islands of 745 (the Bane base and upper tunnels, x -27..312), 199 (Tyler's canyon, y -31..-1), 98 (the sealed control room), 53, 45 (the entrance and medic, z 63..125), 43, 24 (Horlo's branch, x -58..-32) and 20 smaller",
+   "cause": "The map has no terrain archive (0 terrain triangles): the cave is laid from cavern tiles (TerraTunnel* classes 2625-2834) on an 8/16/24 m grid. At the joints their collision floors overlap. At -2, 24, 61 (TerraTunnelStraight21Ramp7 2829 at -2,26,56 meeting TerraTunnelStraight21 2631 at -2,34,104) the column through the geometry reads: a downward face at 23.05, the ramp's floor at 23.6-24.0, the next tile's floor at 24.3-25.4, the ceiling at 30.1-31. Under the upper floor the ramp's has less than the 2 m agent height; the upper floor is 1.1-1.5 m above the ramp's last row except across x -2.5..-0.5, where it is 0.46 m. That strip, about 2 m wide, is the walkway, and the 0.6 m agent radius (two whole 0.4 m cells a side) eroded it away; the Horlo branch joint (-30, 27.4, 22) is the same shape. Terrain cuts cannot apply: there is no terrain.",
+   "experiments": {
+    "--climb 1.5": "joins the entrance and the Bane base, not Horlo or the canyon",
+    "--climb 2.0": "joins almost everything; rejected, it would let creatures step 2 m ledges the client's walls do not allow",
+    "--radius 0.3": "joins most; rejected, it changes the agent",
+    "--cell 0.3 --cell-height 0.15": "partial (Horlo and the canyon apart)",
+    "--cell 0.2 (height 0.2)": "Horlo apart",
+    "--cell 0.2 --cell-height 0.1": "everything the dossier probed except the three original features below"
+   },
+   "fix": "src/Rasa.NavMesh/data/map_build_settings.csv lists the map at 0.2 x 0.1 m cells (OD-148); agent parameters unchanged. 3,048 polygons, 113 tiles of 25.6 m; the arrival reaches Horlo (160.0 m), the Bane area start (293.0 m), Karik/Zola (485.5 m), the Galactic Map chest (313.6 m) and Tyler (571.0 m); Tyler reaches the Field Medic (551.0 m). sha256 b61c8f4738bc75755dda31a4aac24f356f20073895cc248c7cd68e903db02c78",
+   "original_geometry_kept": [
+    "the Logos Those pit (26.13, -32.5, -51.12): the path ends at (33.7, -19.2, -49.5), a 13 m drop 15 m away - TTH's 'Follow the trail leading down (just jump)'",
+    "the Bane control room (arch_bane_industrial_room_control_24m_v14 at 57, 12, 166.75): tunnel caps (arch_bane_industrial_tunnel_cap_01_32m) close all four sides, no door",
+    "the logos analyzer (172, 2, -96): its own collision; walkable floor 3.1 m away"
+   ]
+  },
+  "timora": {
+   "before": "navmesh/adv_foreas_concordia_divide_timoramines.nav sha256 c7c3784eeeef6800a2d6b4ea54a338ea26a743dc66951c18a9bbb949e5e90bb8: the mine (3,525 polygons, x -427..250) and the Fuel Egress / Command Center block (877, x 229..508) apart; closest polygons 5.0 m apart at x 250-255, z -175..-188",
+   "cause": "The terrain-through-interior defect of Pravus Research: at x 252-253 the hillside heightmap crosses the chunnel entrance at 242, 202, -181 (ArchBaneIndustrialEntranceV01) at 205.9 and 204.3 m, 2.4 and 0.8 m above the tunnel floor at 203.55 (terrain triangles marked in the column tool). Resolution was ruled out: at 0.2 x 0.1 m cells the block stays apart.",
+   "fix": "terrain_cuts.csv lists arch_bane_industrial_chunnel_entrance_v01@242:-181 (OD-149): 22 terrain triangles cut. The whole arch_bane_industrial_ family (198 cut) also cut under the awning of the same entrance at -144, 186, 280 and split Kearney's hall from the mine, so the cut is scoped to the placement (TerrainCuts mesh_prefix@x:z, 1 m). After: one island of 4,403 polygons (3,525 + 877 + 1), every other island unchanged; the Warden is 1,768.5 m from the arrival. sha256 80874262e9427416b30b981ba082f8875cd625df1f42f0af9aacdf8761f3c315"
+  },
+  "torcastra": {
+   "result": "Not rebuilt (connected). The tower floor (-80, 122.06, -156) is reachable (959.5 m); the dossier's '3.4 m off' was the entity's 119.26, the terrain under that floor. The console (7463/7464 at -80.18, 121.57, -144.28) stands in the service jamb coupler, 3.9 m from connected floor; the roof (139-143 m) has no walkable approach."
+  }
+ },
+ "probes_reference": {
+  "minos": "arrival (-15.822, 29.5111, 122.6093), the instance door's arrival point",
+  "timora": "arrival (-120.049, 205.6074, 546.935)",
+  "torcastra": "arrival (-304.0, 13.75, 286.75)"
+ },
+ "probes": {
+  "placement.1347100": {
+   "surface": 29.657,
+   "nearest": "(-47.00,29.66,19.00)",
+   "path": "complete len=160.0 end=(-47.0,29.66,19.0) gap=0.0",
+   "floor": 29.381
+  },
+  "placement.199006": {
+   "surface": -30.503,
+   "nearest": "(58.00,-30.50,-49.00)",
+   "path": "complete len=571.0 end=(58.0,-30.50,-49.0) gap=0.0",
+   "floor": -30.779
+  },
+  "area.1347500": {
+   "surface": 30.915,
+   "nearest": "(-1.00,30.91,112.29)",
+   "path": "complete len=18.1 end=(-1.0,30.91,112.3) gap=0.0",
+   "floor": 30.639
+  },
+  "escort.392.tyler_to_medic": {
+   "surface": 30.915,
+   "nearest": "(-1.00,30.91,112.29)",
+   "path": "complete len=551.0 end=(-1.0,30.91,112.3) gap=0.0",
+   "floor": 30.639
+  },
+  "check.bane_area_start": {
+   "surface": 4.434,
+   "nearest": "(148.70,4.43,50.10)",
+   "path": "complete len=293.0 end=(148.7,4.43,50.1) gap=0.0",
+   "floor": 4.158
+  },
+  "check.karik_zola": {
+   "surface": 3.771,
+   "nearest": "(296.90,3.77,113.90)",
+   "path": "complete len=485.5 end=(296.9,3.77,113.9) gap=0.0",
+   "floor": 3.495
+  },
+  "check.galactic_map_chest": {
+   "surface": 3.725,
+   "nearest": "(159.00,3.73,70.00)",
+   "path": "complete len=313.6 end=(159.0,3.73,70.0) gap=0.0",
+   "floor": 3.449
+  },
+  "check.logos_those": {
+   "surface": -32.541,
+   "nearest": "(26.13,-32.54,-51.12)",
+   "path": "PARTIAL len=426.6 end=(33.7,-19.23,-49.5) gap=15.4",
+   "floor": -32.817
+  },
+  "check.logos_analyzer": {
+   "surface": 1.671,
+   "nearest": "(172.00,1.67,-96.00)",
+   "path": "PARTIAL len=530.4 end=(173.7,2.27,-93.6) gap=3.1",
+   "floor": 1.395
+  },
+  "check.sealed_control_room": {
+   "surface": 12.904,
+   "nearest": "(57.00,12.90,166.75)",
+   "path": "PARTIAL len=15.5 end=(-0.9,32.57,120.1) gap=76.9",
+   "floor": 12.628
+  },
+  "placement.1348100": {
+   "surface": 205.741,
+   "nearest": "(-136.90,205.74,518.20)",
+   "path": "complete len=36.1 end=(-136.9,205.74,518.2) gap=0.0",
+   "floor": 205.465
+  },
+  "placement.1348101": {
+   "surface": 205.741,
+   "nearest": "(-143.39,205.74,515.06)",
+   "path": "complete len=43.3 end=(-143.4,205.74,515.1) gap=0.0",
+   "floor": 205.465
+  },
+  "placement.1348102": {
+   "surface": 205.741,
+   "nearest": "(-133.25,205.74,512.80)",
+   "path": "complete len=37.3 end=(-133.2,205.74,512.8) gap=0.0",
+   "floor": 205.465
+  },
+  "placement.1348103": {
+   "surface": 145.741,
+   "nearest": "(56.60,145.74,50.00)",
+   "path": "complete len=746.8 end=(56.6,145.74,50.0) gap=0.0",
+   "floor": 145.465
+  },
+  "placement.1348120": {
+   "surface": 218.176,
+   "nearest": "(-241.90,218.18,289.30)",
+   "path": "complete len=309.6 end=(-241.9,218.18,289.3) gap=0.0",
+   "floor": 217.9
+  },
+  "placement.1348121": {
+   "surface": 165.706,
+   "nearest": "(178.47,165.71,-7.78)",
+   "path": "complete len=930.9 end=(178.5,165.71,-7.8) gap=0.0",
+   "floor": 165.43
+  },
+  "placement.1348122": {
+   "surface": 166.115,
+   "nearest": "(182.32,166.11,-7.20)",
+   "path": "complete len=927.7 end=(182.3,166.11,-7.2) gap=0.0",
+   "floor": 165.839
+  },
+  "placement.1348123": {
+   "surface": 231.753,
+   "nearest": "(470.50,231.75,-200.06)",
+   "path": "complete len=1768.5 end=(470.5,231.75,-200.1) gap=0.0",
+   "floor": 231.477
+  },
+  "check.fuel_egress_ramp": {
+   "surface": 202.941,
+   "nearest": "(282.90,202.94,-245.60)",
+   "path": "complete len=1534.4 end=(282.9,202.94,-245.6) gap=0.0",
+   "floor": 202.665
+  },
+  "check.master_pump": {
+   "surface": 204.859,
+   "nearest": "(312.20,204.86,-267.50)",
+   "path": "complete len=1581.6 end=(312.2,204.86,-267.5) gap=0.0",
+   "floor": 204.583
+  },
+  "check.warden_building": {
+   "surface": 232.009,
+   "nearest": "(414.80,232.01,-206.04)",
+   "path": "complete len=1711.5 end=(414.8,231.96,-206.0) gap=0.1",
+   "floor": 231.733
+  },
+  "check.kearney_to_sanchez": {
+   "surface": 145.741,
+   "nearest": "(56.60,145.74,50.00)",
+   "path": "complete len=711.3 end=(56.6,145.74,50.0) gap=0.0",
+   "floor": 145.465
+  },
+  "check.cipher_crate": {
+   "surface": 220.641,
+   "nearest": "(-417.00,220.64,283.00)",
+   "path": "complete len=498.9 end=(-417.0,220.64,283.0) gap=0.0",
+   "floor": 220.365
+  },
+  "check.eloh_projector": {
+   "surface": 180.919,
+   "nearest": "(-48.00,180.92,-56.00)",
+   "path": "complete len=1380.9 end=(-48.0,180.92,-56.0) gap=0.0",
+   "floor": 180.643
+  },
+  "placement.1349100": {
+   "surface": 13.672,
+   "nearest": "(-268.40,13.67,308.11)",
+   "path": "complete len=49.9 end=(-268.4,13.67,308.1) gap=0.0",
+   "floor": 13.396
+  },
+  "placement.1349102": {
+   "surface": 99.672,
+   "nearest": "(-137.00,99.67,-550.00)",
+   "path": "complete len=1260.6 end=(-137.0,99.67,-550.0) gap=0.0",
+   "floor": 99.396
+  },
+  "placement.1349103": {
+   "surface": 99.672,
+   "nearest": "(-137.00,99.67,-550.00)",
+   "path": "complete len=1260.6 end=(-137.0,99.67,-550.0) gap=0.0",
+   "floor": 99.396
+  },
+  "placement.1349104": {
+   "surface": 70.473,
+   "nearest": "(124.00,70.47,-101.00)",
+   "path": "complete len=731.0 end=(124.0,70.47,-101.0) gap=0.0",
+   "floor": 70.197
+  },
+  "placement.1349105": {
+   "surface": 101.85,
+   "nearest": "(-72.50,101.85,-694.10)",
+   "path": "complete len=1441.4 end=(-72.5,101.85,-694.1) gap=0.0",
+   "floor": 101.574
+  },
+  "check.command_tower_floor": {
+   "surface": 122.057,
+   "nearest": "(-80.00,122.06,-156.00)",
+   "path": "complete len=959.5 end=(-80.0,122.06,-156.0) gap=0.0",
+   "floor": 121.781
+  },
+  "check.tower_console_7463": {
+   "surface": 121.872,
+   "nearest": "(-80.18,121.87,-143.49)",
+   "path": "PARTIAL len=968.7 end=(-82.4,121.67,-147.5) gap=3.9",
+   "floor": 121.596
+  },
+  "check.tower_roof": {
+   "surface": 143.272,
+   "nearest": "(-80.00,143.27,-153.09)",
+   "path": "PARTIAL len=962.3 end=(-80.0,121.91,-153.1) gap=21.4",
+   "floor": 142.996
+  }
+ },
+ "probes_before_rebuild": {
+  "minos.placement.1347100": "PARTIAL len=68.2 end=(-5.5,25.47,61.7) gap=59.7",
+  "minos.placement.199006": "PARTIAL len=65.9 end=(-0.7,24.47,63.3) gap=138.1",
+  "minos.area.1347500": "complete len=18.1 end=(-1.0,31.02,112.3) gap=0.0",
+  "minos.escort.392.tyler_to_medic": "PARTIAL len=211.3 end=(38.1,-3.53,-11.5) gap=134.3",
+  "minos.check.bane_area_start": "PARTIAL len=58.8 end=(3.3,27.87,71.7) gap=148.8",
+  "minos.check.karik_zola": "PARTIAL len=41.7 end=(3.7,31.27,89.3) gap=295.5",
+  "minos.check.galactic_map_chest": "PARTIAL len=58.8 end=(3.3,27.87,71.7) gap=157.5",
+  "minos.check.logos_those": "PARTIAL len=65.9 end=(-0.7,24.47,63.3) gap=130.6",
+  "minos.check.logos_analyzer": "PARTIAL len=63.9 end=(2.5,25.87,65.7) gap=235.4",
+  "minos.check.sealed_control_room": "PARTIAL len=15.2 end=(-1.5,32.87,120.1) gap=77.4",
+  "timora.placement.1348100": "complete len=36.1 end=(-136.9,205.74,518.2) gap=0.0",
+  "timora.placement.1348101": "complete len=43.3 end=(-143.4,205.74,515.1) gap=0.0",
+  "timora.placement.1348102": "complete len=37.3 end=(-133.2,205.74,512.8) gap=0.0",
+  "timora.placement.1348103": "complete len=746.8 end=(56.6,145.74,50.0) gap=0.0",
+  "timora.placement.1348120": "complete len=309.6 end=(-241.9,218.18,289.3) gap=0.0",
+  "timora.placement.1348121": "complete len=930.9 end=(178.5,165.71,-7.8) gap=0.0",
+  "timora.placement.1348122": "complete len=927.7 end=(182.3,166.11,-7.2) gap=0.0",
+  "timora.placement.1348123": "PARTIAL len=1459.4 end=(251.2,203.64,-182.5) gap=221.8",
+  "timora.check.fuel_egress_ramp": "PARTIAL len=1457.7 end=(247.6,203.74,-184.8) gap=70.3",
+  "timora.check.master_pump": "PARTIAL len=1457.7 end=(247.6,203.74,-184.8) gap=104.9",
+  "timora.check.warden_building": "PARTIAL len=1460.8 end=(250.8,203.54,-187.6) gap=167.5",
+  "timora.check.kearney_to_sanchez": "complete len=711.3 end=(56.6,145.74,50.0) gap=0.0",
+  "timora.check.cipher_crate": "complete len=498.9 end=(-417.0,220.64,283.0) gap=0.0",
+  "timora.check.eloh_projector": "complete len=1380.9 end=(-48.0,180.92,-56.0) gap=0.0"
+ },
+ "creatures": {
+  "1347001": "Scout Horlo",
+  "1348001": "Field Ranger Morrow",
+  "1348002": "Field Ranger Sanchez",
+  "1348003": "Timora Wardmaster",
+  "1348004": "Timora Overseer (both placements)",
+  "1348005": "Timora Warden",
+  "1349001": "Lt. Cisco",
+  "1349002": "Overseer Torqua",
+  "1349003": "Ranger Ferme"
+ },
+ "held": {
+  "missions": {
+   "403": "GAP-TIMORA-PUMPS, GAP-TIMORA-DRILL-PIT, GAP-DIVIDE-403-DRILLS",
+   "404": "GAP-TIMORA-FUEL-LAKE, GAP-DIVIDE-GIVERS-OUTSIDE (Simpson is placed, the lake ignition is not)",
+   "1276": "giver Jayjack not in the world, GAP-TIMORA-ELOH-INFO-CLASS, GAP-TIMORA-AMBUSH",
+   "384": "GAP-MINOS-WARNET-NEST-CLASS/POSITIONS",
+   "391": "GAP-BOOLE-LOCATION",
+   "397": "giver O'Toole not in the world, GAP-TORCASTRA-FERME-GUARDS, GAP-TORCASTRA-CELL-BLOCK-WARDEN",
+   "594": "GAP-DIVIDE-356-594-HELD",
+   "356": "GAP-DIVIDE-356-594-HELD",
+   "1860": "GAP-DIVIDE-1860-1861-HELD",
+   "1861": "GAP-DIVIDE-1860-1861-HELD"
+  },
+  "content": [
+   "Karik/Zola (383)",
+   "the Galactic Map chest and Map Cipher crate",
+   "Corporal Foster (384, on the Divide)",
+   "the drills and pumps",
+   "the Eloh projector speaker",
+   "Cisco's plaza stand",
+   "the bunker areas",
+   "Torqua's 119013 drop",
+   "ambient populations"
+  ]
+ }
+}

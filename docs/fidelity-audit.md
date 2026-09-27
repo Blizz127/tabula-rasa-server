@@ -1071,3 +1071,20 @@ navmesh. Tiers and gaps: the manifest rows of `PravusResearchInstance`, OD-135 t
 | destroy counters | a destroying hit completed the objective | it advances the objective's counter | client counter "Infestation Remaining" | inferred |
 | 575/1-2 and 323 client rows | would complete on the first conversation | withheld | objectiveconversation texts | inferred |
 
+## Divide operations: Minos Caverns, Timora Mines, Torcastra Prison (2026-09-27)
+
+The Divide instance dossier, checked against the 1.16.5.0 client and maps and the rebuilt navmeshes. Tiers and gaps: the
+manifest rows of `DivideOperationsInstances`, OD-145 to OD-152 and `docs/evidence/divide-operations-instances-20260927.json`.
+Account: `docs/retail-accuracy.md`, "The Divide operations".
+
+| behaviour | was | now | evidence | tier |
+| --- | --- | --- | --- | --- |
+| Minos navmesh | 27 islands; entrance, Horlo, canyon, Bane base apart | one mesh at 0.2 x 0.1 m (OD-148) | client map collision; probes | measured |
+| Timora navmesh | Fuel Egress / Command Center an island | joined (terrain cut at one chunnel entrance, OD-149) | client map and terrain; probes | measured |
+| Kearney, Pastre, Hamilton | pools on hospital/vendor markers | placements at TTH /locs; pools 0/0 | TTH 13803, 15113 | inferred / measured |
+| Hamilton's package | 1527 (the computer bank) | 1526 | objectiveconversation 356/4, 356/11 | original |
+| Timora and Torcastra NPCs, bosses | absent | Morrow, Sanchez, three bosses, Horlo, Cisco, Torqua, Ferme (OD-145) | client names; TTH; TaRapedia | names original; bodies and stats analogue |
+| 340, 1905, 792, 392 | unseeded | offerable (1905/1 held, OD-146; 392 without 383, OD-147) | client tables; TTH; TaRapedia | inferred, 392 pre-1.4 amounts |
+| Tyler | stationary | walks 392 to the Field Medic | client log 527; TTH | inferred |
+| 403, 404, 1276, 384, 391, 397, 594, 356, 1860, 1861 | unseeded | held (OD-151, OD-152) | dossier gaps | gap |
+

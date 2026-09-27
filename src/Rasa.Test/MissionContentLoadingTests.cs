@@ -969,6 +969,8 @@ namespace Rasa.Test
                 references.Classes.UnionWith(new uint[] { 26714, 29365, 21961, 7870, 24586 });
                 // PravusResearchInstance: the Production Fueling Capsule 9272 and the Living Infestation 6225.
                 references.Classes.UnionWith(new uint[] { 9272, 6225 });
+                // DivideOperationsInstances: Hamilton's stasis tube 7197 UsableInertDestBaneStasisChamber.
+                references.Classes.Add(7197);
                 // Placement respawn (2026-09-16): the Mires species clusters rely on it, and the validator treats it
                 // as implemented, so the capability is asserted here rather than described in a gap.
                 // S2 crate item set 19858, with the uncommon armour of BootcampCrateUncommonGear.
@@ -1181,6 +1183,60 @@ namespace Rasa.Test
                 keypassCollector.Player.Missions[575] = means;
                 CollectionAssert.AreEqual(new uint[] { 11505 }, content.RollMissionItemDrops(keypassCollector, new Creature { DbId = 1430010 }, () => 0.999).ToArray());
                 Assert.AreEqual(0, content.RollMissionItemDrops(keypassCollector, new Creature { DbId = 1430002 }, () => 0.0).Count(), "only the entrance guards carry the keypass");
+
+                // DivideOperationsInstances (2026-09-27): 340, 1905, 792 and 392 load offerable. 340 and 1905/2 complete through the
+                // client's rows on Kearney's package 158; 1905's escort objective stays optional and unrevealed (OD-146) and the
+                // mission follows 340; 792 counts kills of the three Timora bosses; 392 waits on the Field Medic area with Tyler
+                // walking and pays TaRapedia's pre-1.4 amounts, without the unseeded 383 (OD-147).
+                foreach (var missionId in new uint[] { 340, 1905, 792, 392 })
+                {
+                    Assert.IsFalse(validation.MissionGaps.ContainsKey(missionId), $"mission {missionId}: {string.Join(" | ", validation.MissionGaps.GetValueOrDefault(missionId) ?? Array.Empty<string>())}");
+                    CollectionAssert.AreEqual(Array.Empty<string>(), missions.LoadedMissions[missionId].DefinitionGaps(), $"mission {missionId}");
+                    Assert.IsTrue(missions.LoadedMissions[missionId].IsDispensable, $"mission {missionId}");
+                    Assert.AreEqual(0, missions.LoadedMissions[missionId].OfferedSelectableRewards.Count + missions.LoadedMissions[missionId].OfferedFixedItems.Count, $"mission {missionId} pays no item");
+                }
+                var reportToKearney = missions.LoadedMissions[340];
+                Assert.AreEqual((199950u, 510118u), (reportToKearney.MissionGiver, reportToKearney.MissionReciver));
+                Assert.IsTrue(reportToKearney.HasObjectiveConversation(2, 158, 1));
+                Assert.AreEqual(0, reportToKearney.Bindings.Count);
+                Assert.AreEqual((0L, 0L), ((long)reportToKearney.RewardExperience, (long)reportToKearney.RewardCredits));
+                var centralBound = missions.LoadedMissions[1905];
+                Assert.AreEqual((510118u, 1348002u), (centralBound.MissionGiver, centralBound.MissionReciver));
+                Assert.IsTrue(centralBound.HasObjectiveConversation(2, 158, 1));
+                Assert.AreEqual(((bool?)false, (bool?)false), (centralBound.Objectives[1].IsRequired, centralBound.Objectives[1].RevealedOnAccept));
+                Assert.AreEqual((340u, (byte)4), (centralBound.Prerequisites.Single().RequiredMissionId, centralBound.Prerequisites.Single().RequiredState));
+                var corporateLadder = missions.LoadedMissions[792];
+                Assert.AreEqual((510119u, 510119u), (corporateLadder.MissionGiver, corporateLadder.MissionReciver));
+                CollectionAssert.AreEquivalent(new[] { (1u, 1348005u), (2u, 1348004u), (3u, 1348003u) },
+                    corporateLadder.Bindings.Select(binding => (binding.ObjectiveId, binding.CreatureId)).ToArray());
+                Assert.IsTrue(corporateLadder.Bindings.All(binding => (ObjectiveBindingKind)binding.Kind == ObjectiveBindingKind.Kill));
+                CollectionAssert.AreEquivalent(new[] { (1u, 1), (2u, 2), (3u, 1) },
+                    corporateLadder.Counters.Select(pair => (pair.Key, pair.Value.Single().TargetValue)).ToArray());
+                var caveExtraction = missions.LoadedMissions[392];
+                Assert.AreEqual((199006u, 199006u), (caveExtraction.MissionGiver, caveExtraction.MissionReciver));
+                Assert.AreEqual((1u, ObjectiveBindingKind.AreaEntered, 1347500u),
+                    caveExtraction.Bindings.Select(binding => (binding.ObjectiveId, (ObjectiveBindingKind)binding.Kind, binding.AreaId)).Single());
+                Assert.AreEqual((14000L, 2100L), ((long)caveExtraction.RewardExperience, (long)caveExtraction.RewardCredits));
+                Assert.AreEqual(0, caveExtraction.Prerequisites.Count);
+                foreach (var held in new uint[] { 403, 404, 1276, 384, 391, 397, 594, 356, 1860, 1861 })
+                    Assert.IsFalse(missions.LoadedMissions.ContainsKey(held), $"mission {held} is held");
+                // Every squad copy of each operation materializes its placements; nothing waits on a presence condition.
+                foreach (var context in new uint[] { 1347, 1348, 1349 })
+                {
+                    Assert.AreEqual(MapInstancing.PerSquad, validation.Catalog.InstancingFor(context));
+                    Assert.IsFalse(validation.WithheldContexts.Contains(context), $"context {context}");
+                }
+                var minos = ContentMaterializer.PlacementsToSpawn(validation, 1347).ToDictionary(placement => placement.Id);
+                CollectionAssert.IsSubsetOf(new uint[] { 199006, 1347100 }, minos.Keys.ToArray());
+                Assert.AreEqual(((byte)ContentPlacementBehavior.Escort, 392u), (minos[199006].Behavior, minos[199006].EscortMissionId));
+                var timora = ContentMaterializer.PlacementsToSpawn(validation, 1348).ToDictionary(placement => placement.Id);
+                CollectionAssert.AreEquivalent(new uint[] { 1348100, 1348101, 1348102, 1348103, 1348120, 1348121, 1348122, 1348123 }, timora.Keys.ToArray());
+                Assert.AreEqual(510118u, timora[1348100].CreatureId);
+                Assert.IsTrue(new uint[] { 1348120, 1348121, 1348122, 1348123 }.All(id => timora[id].Behavior == (byte)ContentPlacementBehavior.CreatureAi));
+                var torcastra = ContentMaterializer.PlacementsToSpawn(validation, 1349).ToDictionary(placement => placement.Id);
+                CollectionAssert.AreEquivalent(new uint[] { 1349100, 1349102, 1349104, 1349105 }, torcastra.Keys.ToArray());
+                CollectionAssert.AreEquivalent(new uint[] { 1349103 }, ContentMaterializer.UsablesToSpawn(validation, 1349).Select(placement => placement.Id).ToArray());
+                Assert.IsTrue(minos.Values.Concat(timora.Values).Concat(torcastra.Values).All(placement => placement.PresentConditionId == 0));
 
                 // Capture the Flag: both bindings, the boss counter, both indicators and the prerequisite are attached live.
                 var captureTheFlag = missions.LoadedMissions[1994];
