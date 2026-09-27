@@ -5023,3 +5023,25 @@ pages (full TaRapedia revision histories, Ellatha lists) and hashes: `research/2
   against its manifest change, the decisions and gaps, the migrated world loaded through `LogosRepository` and the
   creature table, rollback exact, the deployed world's rows) and the `ContentSchemaMigrationTests` block (the swapped
   shrines and levels, rollback and re-apply). Full suite 1529/1529.
+
+## 2026-09-27 15:19 UTC — Deploy: development da8b161 on banshee-ax41
+
+The second deploy of the day, with the owner's approval ("merge and deploy"). It adds the DIT reference fixes
+(`LogosGiveNegativeSwap`, `TarapediaBossLevels`) and the Divide/Concordia Palisades ambient populations
+(`ConcordiaAmbientPopulations`) on top of the 06:07 UTC deploy of 53b3fcb. The procedure was the same.
+
+- **Backups** (`~/backups/rasa-net/predeploy-20260927T150954Z/` on ax41): the three databases via `sqlite3 .backup`
+  (integrity_check ok), compose files, appsettings, the working-tree tarball, the deployed bundle, and the DIT
+  overlay. The overlay's hunks and files are identical to the morning's; only the index lines and one hunk offset
+  differ. Rollback tags: `rasa_net_game:rollback-20260927b` (2c86c498fd39, the dit-20260927 image) and
+  `rasa_net_auth:rollback-20260927b` (61da4d3c7573); `docker-compose.dit.yml.before-20260927b` keeps the previous pin.
+- **Images**: base `rasa_net_game:latest` / `rasa_net_auth` b0753d047f0d from `git archive da8b161` (no DIT);
+  `rasa_net_game:dit-20260927b` eedce7a6bd48 from the checkout (branch `deploy-20260927b`) with the overlay applied
+  (6 files, +38 lines), 0 compiler errors.
+- **Startup (15:19 UTC)**: the world database is at 160 migrations, through `20260927070100_TarapediaBossLevels`;
+  153 `npc_mission` rows; 16 content rules, 573 rows, 0 gaps; navmeshes for 75 of 75 maps; the 22 new spawnpools
+  (1148200–1148213, 1244200–1244207) are present. Auth advertises 65.109.31.181, the ports are listening, and
+  `dit/status.json` is enabled and fresh with `/app/dit` mounted. Missions 321, 955 and 969 are still withheld, as
+  before.
+- **Not yet verified**: no client login, so the new populations and the eight newly finishable missions have not
+  been played in the real client.
