@@ -22,7 +22,9 @@
         {
             pr.ReadTuple();
             OptionId = (UserOption)pr.ReadUInt();
-            Value = pr.ReadUnicodeString();
+            // The client sends an unbound key (and any cleared option) as the empty unicode string, 0x50,
+            // which ReadUnicodeString returns as null; user_option.value is NOT NULL, so keep it empty.
+            Value = pr.ReadUnicodeString() ?? string.Empty;
         }
 
         public void Write(PythonWriter pw)
