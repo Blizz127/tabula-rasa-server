@@ -51,6 +51,10 @@ namespace Rasa.Data
         /// <item>323 Pirate Radio, objectives 309, 310 and 311, package 106 (Information Spec. Johnson, the giver):
         /// reminder rows only (texts 20000052, 20000055, 20000058, "So, what did you manage to find?"). The objectives
         /// count the destroyed Living Infestations on each dish (PravusResearchInstance).</item>
+        /// <item>368 Searching for Acceptance, objective 1, package 44 (Ranger Kogari, the giver): completion text 2741
+        /// "Killing the Warnet filth is by no means a small feat." Loaded, it closed "Kill Warnets" in the conversation that
+        /// gives the mission, so the kill was never asked for (the Palisades dossier's defect, OD-157). The objective counts
+        /// five Warnet kills instead (ConcordiaAmbientPopulations, OD-168); objective 2 still completes on Kogari.</item>
         /// </list>
         /// </summary>
         private static readonly HashSet<(uint MissionId, uint ObjectiveId, uint NpcPackageId)> ContentBound = new()
@@ -59,7 +63,8 @@ namespace Rasa.Data
             (575u, 2u, 420u),
             (323u, 309u, 106u),
             (323u, 310u, 106u),
-            (323u, 311u, 106u)
+            (323u, 311u, 106u),
+            (368u, 1u, 44u)
         };
 
         public static bool IsRedirect(uint missionId, uint objectiveId, uint npcPackageId)

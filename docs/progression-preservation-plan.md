@@ -562,6 +562,26 @@ Seeded on 2026-09-27 from the Palisades mission dossier (`research/20260927-pali
   including the Man shrine in the Horsetail Falls gorge; 2014 from Matlin via Derac and Gantic; 1795 from Mullen via
   Barbrix) is still to do.
 
+## Concordia ambient populations status
+
+Seeded on 2026-09-27 under the owner's OD-161 (footage first, then text, then labelled stand-ins): the overworld Divide
+1148 and Concordia Palisades 1244. Account: `docs/retail-accuracy.md`, 2026-09-27 "The Divide and Concordia Palisades:
+ambient populations"; evidence `docs/evidence/concordia-ambient-populations-20260927.json`.
+
+- **Built:** 12 creature rows (1148001-1148007, 1244001-1244005) and 22 pools (1148200-1148213, 1244200-1244207):
+  Divide Xanx (cave, nests, TaRapedia's 371 spot), Thrax Privates/PFCs with Caretakers (Front Lines by dropship, Bane
+  Forward Command, Hydro Plant), Filchers, Warnets at two nests, two Class IV Stalkers; Palisades Boargar at the Eloh
+  obelisk, Warnets east of Hightower, Fithik in Uherum Pass and Fithik Trench, Hunters at Skive Base, Thrax Technicians
+  in Clearcut Field; area 1244500; Mayes' package 172. Missions 358, 371, 372, 774, 755, 342 and 1808 defined; 368 counts
+  its five Warnets (`ConcordiaAmbientPopulations`). Decisions OD-161 (owner) and OD-162 to OD-170 (agent, pending owner
+  review).
+- **Open:** creature levels, health and attacks (analogues), most pool sizes and the respawn, the Filcher and Hightower
+  spots, Divide Hominis Machina and Amoeboids (so 1582 stays held), Predators, 368's timer, 1808's Start/Middle/End, the
+  Uherum navmesh island, Palisades species without a place (Tree Lurkers, Howlers, Lightbenders, the Lake Elinor nests,
+  the Bane squads of 363 and 355) and every mission whose giver is missing. Downloads that would tighten it are listed
+  in `GAP-CONCORDIA-FOOTAGE-DOWNLOADS`. Owner client check (358 at Sebastian, 371 -> 372 via Kerr and Mayes, 774 -> 755
+  via Kibner and Sherman, 342 at Yorma Brown, 1808 at Tayros, 368 at Kogari) is still to do.
+
 ## S4 (Capture the Flag) status
 
 - Mission 1994 is seeded by `BootcampS4CaptureTheFlag` (SQLite and MySQL, frozen rows in
@@ -2390,6 +2410,16 @@ its evidence tier.
 | OD-158 Package 134: move it to the Palisades Corporal Orton 199086 and retire the Valverde Pools duplicate 510196 (2026-09-27, agent, pending owner review, dossier OD-P6) | Verified and applied: the client binds 134 to 331/1 and 337/3 ("Speak with Corporal Orton") and its 331 log says "Corporal Orton from Cumbria Research"; 510196 stands on map 1304 at a y/z-swapped point and 199086 had no package. npc_package 199086 -> 134, the 510196 package row removed and its pool 0/0; Down restores both. |
 | OD-159 Pre-1.4 experience and credit amounts of 1812, 1813 and 1795 (2026-09-27, agent, pending owner review, dossier OD-P7) | Seed them labelled with their era. Seeded at tier inferred, era pre-1.4, confidence low (GAP-REWARD-ERA); 1988's amounts are post-1.4 and 2014 has none (TaRapedia 0/0, GAP-2014-REWARD-ZERO). |
 | OD-160 Respawn of the two named bosses whose drop completes 2014 and 1795 on the shared Palisades map (2026-09-27, agent, pending owner review) | Batch-agent choice (not one of the dossier's decisions): without a respawn the first kill leaves each boss defeated until a restart and every later player could accept but not finish. 60 s, recorded as an analogue on the change entries (GAP-PALISADES-NAMED-BOSS-RESPAWN). Alternative: hold 2014 and 1795 until a capture records the respawn. |
+| OD-161 Ambient creature populations beyond the Wilderness (2026-09-27, owner) | The owner's decision in the session of 2026-09-27: put ambient creature/enemy populations into the zones beyond the Wilderness, retail-accurate; build each from original footage or screenshots (observed/measured) where it exists, then text (inferred), and only then labelled analogue stand-ins so the content functions. AGENTS.md applies in full. First batch: the Divide and Concordia Palisades (ConcordiaAmbientPopulations). |
+| OD-162 Levels of the Divide and Palisades ambient creatures (2026-09-27, agent, pending owner review) | The floor of the zone's recorded mob band, one level per species: Divide 12 (TaRapedia 'Mob Levels=12-18'), Palisades 15 (the level of seeded 368). No target frame's level is legible (GAP-CONCORDIA-AMBIENT-LEVELS). Alternative: hold the populations until a legible frame. |
+| OD-163 Health, attacks and movement of the new creatures (2026-09-27, agent, pending owner review) | The world seed's counterpart of the same class (the OD-135 convention), first attack only; the Class IV Stalker takes 199812's 600 hp and attack 2 (GAP-CONCORDIA-CREATURE-STATS). |
+| OD-164 Pool sizes, places and respawn where footage and text give none (2026-09-27, agent, pending owner review) | Labelled analogues: 3 per single-species pool (4 for the Boargar herd, 2 Technicians), the Filchers at the trench waypoints and the Crossroads label, 368's Warnets on the first valley floor east of Hightower, respown_time 20 (OD-136); the second Stalker borrows the first's 15 minutes (GAP-CONCORDIA-POOL-COUNTS, -PLACES, -RESPAWN). Alternative: hold 358 and 368. |
+| OD-165 371 Dissections: Part II while 370 is held (2026-09-27, agent, pending owner review) | Offer 371 without its prerequisite (the OD-139 rule): 370's giver Medic Markis is not in the world (GAP-DIVIDE-371-PREREQUISITE). Alternative: hold 371 and 372. |
+| OD-166 774 The Tallest and its Class IV Stalkers, so that 755 Careless keeps its post-1.4 prerequisite (2026-09-27, agent, pending owner review) | Seed 774 with TaRapedia's two Stalkers (beneath the Foxtrot bridge every 15 minutes; near the Bane Forward Base); scraps drop on every kill (inferred, the 758/787 rule). Alternative: hold both. |
+| OD-167 Mission levels of 371, 372, 774, 755, 342 and 1808 (2026-09-27, agent, pending owner review) | The zones' seeded missions' levels, Divide 10 and Palisades 15, instead of OD-155's giver level (Yorma Brown's 50 is itself an out-of-band analogue); 358 takes TaRapedia's 'Requirement=Level 12' (inferred). Alternative: the giver levels. |
+| OD-168 368 Searching for Acceptance's kill (2026-09-27, agent, pending owner review) | Count five Palisades Warnet kills and withhold Kogari's objective-1 row (text 2741) in MissionRedirectConversations; the five-minute timer stays held, a timed failure needing a retry path (GAP-PALISADES-368-KILL-TIMER). Supersedes OD-157 for the kill. |
+| OD-169 1808 Clear Your Uherum's traverse (2026-09-27, agent, pending owner review) | 'Traverse Uherum Pass' completes on reaching the east mouth (area 1244500 at the original entrance piece); the client's bodiless Start/Middle/End are optional and unrevealed (GAP-1808-TRAVERSE). Alternative: hold 1808. |
+| OD-170 342 Noise Pollution's pre-D12 Boargar reading east of the fortification line (2026-09-27, agent, pending owner review) | Use it: TaRapedia rev 11642 (2007-10-23) puts the Boargar beside the Eloh obelisk the final map still carries, north of the New Cumbria perimeter and outside the destroyed facility; no D12 note names the area (GAP-PALISADES-342-OBELISK-ERA). Alternative: hold 342. |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

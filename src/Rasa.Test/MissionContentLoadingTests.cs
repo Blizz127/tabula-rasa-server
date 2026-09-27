@@ -981,6 +981,8 @@ namespace Rasa.Test
                 references.Items.Add(11505);
                 // PalisadesDossierMissions: Executor Gantic's Datapad and Barbrix's Boot.
                 references.Items.UnionWith(new uint[] { 123352, 118803 });
+                // ConcordiaAmbientPopulations: Xanx Skin Sample 435, Hominis Machina Scraping 436, Caretaker Fluid 2526, Stalker Scraps 2537.
+                references.Items.UnionWith(new uint[] { 435, 436, 2526, 2537 });
                 // Kill bindings name world-seed creatures: the Wilderness hub's Proctor Fulgor (76) and Arioch Xanx
                 // (77). The real runtime resolves those through CreatureManager.LoadedCreatures; this migrated test
                 // world carries only the content's own rows, so the two ids the bindings use are declared here.
@@ -1304,6 +1306,57 @@ namespace Rasa.Test
                 CollectionAssert.AreEqual(new uint[] { 118803 }, content.RollMissionItemDrops(bootHunter, new Creature { DbId = 199095 }, () => 0.999).ToArray());
                 var bystander = new Client(null, new ClientPacketHandler()) { Player = new Manifestation() };
                 Assert.AreEqual(0, content.RollMissionItemDrops(bystander, new Creature { DbId = 199054 }, () => 0.0).Count(), "no mission, no datapad");
+
+                // ConcordiaAmbientPopulations (2026-09-27): the Divide and Palisades missions the new populations make finishable
+                // load offerable - 358 counts Filchers, 371/372/774/755 collect samples from the new creatures and Rotting Sal,
+                // 342 counts Boargar and Shahrbaraz, 1808 counts Fithik and ends at the Uherum Pass east mouth - and 368 now
+                // counts five Warnets instead of closing "Kill Warnets" in Kogari's first conversation.
+                foreach (var missionId in new uint[] { 358, 371, 372, 774, 755, 342, 1808, 368 })
+                {
+                    Assert.IsFalse(validation.MissionGaps.ContainsKey(missionId), $"mission {missionId}: {string.Join(" | ", validation.MissionGaps.GetValueOrDefault(missionId) ?? Array.Empty<string>())}");
+                    CollectionAssert.AreEqual(Array.Empty<string>(), missions.LoadedMissions[missionId].DefinitionGaps(), $"mission {missionId}");
+                    Assert.IsTrue(missions.LoadedMissions[missionId].IsDispensable, $"mission {missionId}");
+                    Assert.AreEqual(0, missions.LoadedMissions[missionId].OfferedSelectableRewards.Count + missions.LoadedMissions[missionId].OfferedFixedItems.Count, $"mission {missionId} pays no item");
+                }
+                var filcherFrenzy = missions.LoadedMissions[358];
+                Assert.AreEqual((199000u, 199000u), (filcherFrenzy.MissionGiver, filcherFrenzy.MissionReciver));
+                Assert.AreEqual((1u, ObjectiveBindingKind.Kill, 1148005u), filcherFrenzy.Bindings.Select(binding => (binding.ObjectiveId, (ObjectiveBindingKind)binding.Kind, binding.CreatureId)).Single());
+                Assert.AreEqual(10, filcherFrenzy.Counters[1].Single().TargetValue);
+                Assert.AreEqual((14000L, 2100L), ((long)filcherFrenzy.RewardExperience, (long)filcherFrenzy.RewardCredits));
+                var dissectionsTwo = missions.LoadedMissions[371];
+                Assert.AreEqual((510116u, 199052u), (dissectionsTwo.MissionGiver, dissectionsTwo.MissionReciver));
+                Assert.IsTrue(dissectionsTwo.HasObjectiveConversation(2, 171, 1));
+                Assert.IsTrue(dissectionsTwo.HasObjectiveConversation(3, 172, 1));
+                CollectionAssert.AreEqual(new uint[] { 2 }, dissectionsTwo.Transitions[1]);
+                CollectionAssert.AreEqual(new uint[] { 3 }, dissectionsTwo.Transitions[2]);
+                Assert.AreEqual(0, dissectionsTwo.Prerequisites.Count, "370 is not seeded (OD-165)");
+                var dissectionsThree = missions.LoadedMissions[372];
+                Assert.IsTrue(dissectionsThree.HasObjectiveConversation(3, 172, 1));
+                Assert.AreEqual(371u, dissectionsThree.Prerequisites.Single().RequiredMissionId);
+                Assert.AreEqual(774u, missions.LoadedMissions[755].Prerequisites.Single().RequiredMissionId);
+                foreach (var (missionId, objectiveId, creature, item) in new[] { (371u, 1u, 1148001u, 435u), (372u, 1u, 520017u, 436u), (774u, 2u, 1148007u, 2537u), (755u, 2u, 1148004u, 2526u) })
+                    Assert.AreEqual((objectiveId, ObjectiveBindingKind.ItemCollected, creature, item),
+                        missions.LoadedMissions[missionId].Bindings.Select(binding => (binding.ObjectiveId, (ObjectiveBindingKind)binding.Kind, binding.CreatureId, binding.ItemTemplateId)).Single(), $"mission {missionId}");
+                var noisePollution = missions.LoadedMissions[342];
+                CollectionAssert.AreEquivalent(new[] { (1u, 1244001u), (2u, 520044u) },
+                    noisePollution.Bindings.Select(binding => (binding.ObjectiveId, binding.CreatureId)).ToArray());
+                var uherum = missions.LoadedMissions[1808];
+                CollectionAssert.AreEquivalent(new[] { (1u, ObjectiveBindingKind.Kill), (2u, ObjectiveBindingKind.AreaEntered) },
+                    uherum.Bindings.Select(binding => (binding.ObjectiveId, (ObjectiveBindingKind)binding.Kind)).ToArray());
+                Assert.AreEqual(20, uherum.Counters[1].Single().TargetValue);
+                var acceptance = missions.LoadedMissions[368];
+                Assert.IsFalse(acceptance.HasObjectiveConversation(1, 44, 1), "Kogari's 'Kill Warnets' row is withheld");
+                Assert.IsTrue(acceptance.HasObjectiveConversation(2, 44, 1));
+                Assert.AreEqual((1u, ObjectiveBindingKind.Kill, 1244002u), acceptance.Bindings.Select(binding => (binding.ObjectiveId, (ObjectiveBindingKind)binding.Kind, binding.CreatureId)).Single());
+                Assert.AreEqual(5, acceptance.Counters[1].Single().TargetValue);
+                foreach (var held in new uint[] { 370, 346, 348, 326, 688, 373, 374, 1582, 344, 406 })
+                    Assert.IsFalse(missions.LoadedMissions.ContainsKey(held), $"mission {held} is held");
+                var sampler = new Client(null, new ClientPacketHandler()) { Player = new Manifestation() };
+                var xanx = new PlayerMission { MissionId = 371, State = MissionState.Active };
+                xanx.Objectives[1] = MissionObjectiveState.Incomplete;
+                sampler.Player.Missions[371] = xanx;
+                CollectionAssert.AreEqual(new uint[] { 435 }, content.RollMissionItemDrops(sampler, new Creature { DbId = 1148001 }, () => 0.0).ToArray());
+                Assert.AreEqual(0, content.RollMissionItemDrops(sampler, new Creature { DbId = 1148001 }, () => 0.999).Count(), "a 50% drop misses on a high roll");
 
                 // Capture the Flag: both bindings, the boss counter, both indicators and the prerequisite are attached live.
                 var captureTheFlag = missions.LoadedMissions[1994];

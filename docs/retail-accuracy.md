@@ -4837,6 +4837,76 @@ allocated: the dossier's reserved 1244xxx blocks were for the held Skive Base mi
   bosses' 60 s respawn and drops only to a player on the mission) and of `ContentSchemaMigrationTests` (rows, rollback),
   the reward templates in `RewardItemFixtures`, provider parity. Full suite 1523/1523.
 
+## 2026-09-27 — The Divide and Concordia Palisades: ambient populations and the missions they make finishable
+
+Owner decision OD-161 (2026-09-27, this session): put ambient creature populations into the zones beyond the
+Wilderness, retail-accurate, built from original footage first, then text, then labelled stand-ins. This first batch
+covers the Divide (1148) and Concordia Palisades (1244), the two zones with the most missions held for want of
+creatures, as migration `ConcordiaAmbientPopulations` (20260927060000). Every field's tier and citation is in the
+manifest; readings, probes and sources in `docs/evidence/concordia-ambient-populations-20260927.json`; the research
+record (TaRapedia histories, the Divide map decode, footage readings, probes) is `research/20260927-seed-populations`.
+Decisions OD-162 to OD-170 are the batch's, agent-approved, pending owner review.
+
+- **Species are the zones' own.** The final client's Targets of Opportunity name them: Divide 1582 "Kill 40 Xanx",
+  "Kill 200 Thrax soldiers", "20 Hominis Machina", "50 Amoeboids"; Palisades 1809, the D12 version, "Kill 200 Fithik"
+  and "Kill 40 Hunters", with 1630's "Kill 5 Stalkers" gone. The mission logs name the rest (Filchers, Caretakers,
+  Warnets, the Class IV Stalker, Cumbria Boargar, the Uherum Fithik, Thrax Technicians).
+- **Footage.** Two Divide recordings survive locally: zuMHH5CxRj0 (FireEagleEyes, uploaded 2007-12-24; only the DIT
+  pass's cited stills) and 3nZ7eca_vRA (Lankist, 2007-11-09; the video). Read again from the stills (footage events
+  DV1-001 to DV2-002): Xanx Venomspitters (client name 464), Thrax Infantry Privates (7676) and Privates First Class
+  (7677), a Bane dropship landing Thrax on the battlefield, three Thrax at once at a Bane base. No level digit is legible
+  at 480x360, even in a 5x crop, and no fight can be placed on the map. So footage supplies the rank names, the Front
+  Lines squad's dropship arrival and the Bane-base group of three; nothing else is `observed`. The Divide is not known to
+  have been rebuilt, so the 2007 recordings stand with their dates. No post-D12 Palisades footage is cached.
+- **Places** come from text and the final map: the Xanx cave (Brady's cave "along the cliff wall, just past the hive
+  area", TaRapedia's "Xanx cave" beside Queen Stazzle's trench, the map's only cavern there with its crystal room),
+  TaRapedia's post-D11 Xanx reading for 371 (-57.7, 99.9, 199.5), the six Xanx nests of the final map, the client's
+  Front Lines, Bane Forward Command and Hydro-Plant labels (TaRapedia's Caretakers "all around the Hydro Plant Base"),
+  two Warnet nests located by Queen Stazzle's dated sightings (`measured`, +/-10 m), TaRapedia's two Class IV Stalkers
+  (beneath the Foxtrot bridge "every 15 minutes", and near the Bane Forward Base), 342's Boargar beside the Eloh obelisk,
+  the Uherum Pass tunnel pieces, Fithik Trench and Skive Base labels (351 and 353's logs), and TaRapedia's Thrax
+  Technician spawn in Clearcut Field. The Filchers ("scattered throughout the zone") and 368's Warnets ("down in the
+  eastern valley") have no spot, so they stand at the trench waypoints, the Crossroads label and the first valley floor
+  east of Hightower as analogues (OD-164). Heights are the navmesh floor minus 0.276 m and every pool is reached from
+  its zone's main waypoint (`ConcordiaAmbientPopulationsTests`).
+- **Seeded populations**: creatures 1148001-1148007 and 1244001-1244005 (classes inferred from the world's own rows of
+  each species; levels the zones' band floors, Divide 12 and Palisades 15, OD-162; health, attacks and movement the
+  world seed's counterparts, OD-163); 14 Divide pools 1148200-1148213 (37 creatures) and 8 Palisades pools
+  1244200-1244207 (23), respawning 2 s after they are cleared (the world seed's 20, OD-164) except the Stalkers (15
+  minutes).
+
+  | zone | pools (creatures) | pool position | species slots | count slots |
+  | --- | --- | --- | --- | --- |
+  | Divide | 14 (37) | 2 measured, 9 inferred, 3 analogue | 2 observed (6 creatures), 15 inferred (31) | 1 observed, 11 inferred, 5 analogue |
+  | Palisades | 8 (23) | 7 inferred, 1 analogue | 8 inferred (23) | 1 inferred, 7 analogue |
+
+  Every pool height is `measured` (probed floor); every creature level, health, attack and speed is `analogue`; the
+  rank names are `original` client names (Divide 5 of 7 rows, Palisades 2 of 5). The Front Lines pool's dropship arrival
+  is `observed`.
+
+- **Missions now finishable**: Divide 358 Filcher Frenzy (Lt. Sebastian; ten Filchers; level 12 from TaRapedia's
+  "Requirement=Level 12"), 371 Dissections: Part II (Kerr to Mayes; five Xanx Skin Samples 435, drop 50% as OD-61;
+  Mayes gets client package 172; offered without 370, whose giver is not in the world, OD-165), 372 Dissections: Part III
+  (Mayes; the Hominis Machina Scraping 436 from Rotting Sal, 30% from TaRapedia's "3 to 4 kills"), 774 The Tallest
+  (Kibner; two Stalker Scraps 2537 from the Class IV Stalkers) and 755 Careless (Sherman; eight Caretaker Fluid 2526,
+  50%; its post-1.4 prerequisite on 774 kept, OD-166); Palisades 342 Noise Pollution (Yorma Brown; eight Boargar and
+  Shahrbaraz; the obelisk reading is pre-D12 but outside the destroyed facility, OD-170) and 1808 Clear Your Uherum
+  (Tayros; twenty Fithik, the traverse completing at the east mouth, Start/Middle/End optional, OD-169). 368 Searching for
+  Acceptance now counts five Warnets and its objective-1 row on Kogari is withheld (`MissionRedirectConversations`,
+  OD-168); its five-minute timer stays held because a timed failure needs a retry path. Levels 10 (Divide) and 15
+  (Palisades), as the zones' seeded missions (OD-167). Amounts are TaRapedia readings first written before Update 1.4,
+  labelled; no item reward (every list is pre-1.4).
+- **Held**: Hominis Machina and Amoeboid groups (no place), Predators (no final-era evidence), 1582, 370, 346, 348, 326,
+  688, 373, 374 (givers or targets missing), and every Palisades mission with another blocker (344, 351, 353-355, 363,
+  388, 405, 406, 409, 1103, 1139, 1804, 1805). Rotting Sal's upstream pool stays 25 m from TaRapedia's post-D11 readings
+  (`GAP-DIVIDE-ROTTING-SAL-POSITION`). The west half of Uherum Pass is a navmesh island (`GAP-UHERUM-NAVMESH`).
+- **Would tighten this** (owner approval; `GAP-CONCORDIA-FOOTAGE-DOWNLOADS`): Raisuly #10-#13 (Nsz75UOlZz0,
+  mYnUQERP4W4, IDAug5iUa9c, Ez7Vb6vdjl0; 1080p, post-D12, levels 22-25, zones unconfirmed) and zuMHH5CxRj0 in full.
+- **Tests**: `ConcordiaAmbientPopulationsTests` (floor and reachability, per-zone species, held content, store types,
+  every row against its manifest row, rollback), the Concordia block of `MissionContentLoadingTests` (the eight offerable,
+  bindings, prerequisites, 368's withheld row, the drop roll) and of `ContentSchemaMigrationTests` (rows, rollback),
+  provider parity, the manifest scope. Full suite 1529/1529.
+
 ## 2026-09-27 UTC — Deploy: development 53b3fcb on banshee-ax41
 
 Development 53b3fcb (squad instancing, instance travel, Crater Lake, Pravus, the Divide operations and Palisades,

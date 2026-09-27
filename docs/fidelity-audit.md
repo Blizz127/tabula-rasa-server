@@ -1124,3 +1124,20 @@ Tiers and gaps: the manifest changes of `LogosGiveNegativeSwap` and `TarapediaBo
 | later boot camp | confirmed, intended | D11 set | unchanged | final client mission tables; bootcamp-client-evidence | original |
 | Crucible = 1993 | confirmed | client names throughout | unchanged; catalog and survey labels wrong (research) | gamecontext 1993 "Ligo - Crucible" | original |
 | 765 reference missions | research | — | 755 in the client (14 misspelt), 10 retired | client mission tables; TaRapedia | — |
+## The Divide and Concordia Palisades: ambient populations (2026-09-27)
+
+Built under OD-161 from two 2007 Divide recordings (cited stills), TaRapedia's dated revisions, the BradyGames guide,
+Queen Stazzle's sightings and the 1.16.5.0 map and tables. Tiers and gaps: the manifest rows and changes of
+`ConcordiaAmbientPopulations` and OD-161 to OD-170. Account: `docs/retail-accuracy.md`, "The Divide and Concordia
+Palisades".
+
+| behaviour | was | now | evidence | tier |
+| --- | --- | --- | --- | --- |
+| Divide ambient creatures | none (vendors, NPCs, upstream bosses only) | 14 pools, 37 creatures: Xanx, Thrax Privates/PFCs, Caretakers, Filchers, Warnets, Class IV Stalkers | ToO 1582; zuMHH5CxRj0, 3nZ7eca_vRA stills; TaRapedia; Brady; final map | species inferred (2 slots observed), places inferred/measured, 3 analogue |
+| Palisades ambient creatures | none | 8 pools, 23 creatures: Boargar, Warnets, Fithik, Hunters, Thrax Technicians; no Stalkers | ToO 1809; client logs 351/353; TaRapedia; final map | inferred; Hightower spot analogue |
+| creature levels, stats, speeds | - | band floors 12/15; world-seed counterparts (OD-162, OD-163) | TaRapedia 'Mob Levels=12-18'; seeded 368 | analogue |
+| pool counts and respawn | - | footage/text sizes where recorded, else 3/4/2; respown_time 20; Stalkers 15 min | 3nZ7eca_vRA 3:00; TaRapedia The Tallest | observed 1, inferred, analogue (OD-164) |
+| 358, 371, 372, 774, 755 (Divide) | unseeded | defined; kill count or sample drops from the new creatures and Rotting Sal | client objectives; TaRapedia | inferred; pre-1.4 amounts |
+| 342, 1808 (Palisades) | unseeded | defined; Boargar + Shahrbaraz; twenty Fithik and the east mouth | client objectives; TaRapedia | inferred (OD-169, OD-170) |
+| 368 | skipped its Warnet kill in Kogari's first conversation | counts five Warnets; row withheld; timer still held | client 368/1 counter; TaRapedia; Brady | inferred (OD-168) |
+| Hominis Machina, Amoeboids, Predators, 1582 | - | held | no place / no final-era source | gap |

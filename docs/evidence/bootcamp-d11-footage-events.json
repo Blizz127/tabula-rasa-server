@@ -68,6 +68,20 @@
    "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559",
    "verification_sha256": "97a231ec90f635701614c7b42ecb71b9689f7c6e2bd54f01c88f99a51963bb8d",
    "note": "Pravus Research footage read at 1 fps by the 2026-09-26 Wilderness instance dossier (dossiers.json is the reading, work/source_sha256.txt the source hashes); P1-001, P1-003, P1-009, P1-014 and P1-018 re-read from their frames by the PravusResearchInstance batch."
+  },
+  {
+   "segment": "DV1",
+   "video_id": "zuMHH5CxRj0",
+   "transcript_sha256": "32620d73f4ec8b7c8562acbcb8ab12a9577bfbd09cbd276d01d2590c9ce6310e",
+   "verification_sha256": "1f9c83f810e0dd295dee8f84c71a5c16005a301beb700e674de2c19e47249c25",
+   "note": "Divide footage read by the ConcordiaAmbientPopulations batch from the DIT retail pass's cited stills (research/20260927-seed-populations/work/footage-readings.json and footage-verification.json)."
+  },
+  {
+   "segment": "DV2",
+   "video_id": "3nZ7eca_vRA",
+   "transcript_sha256": "32620d73f4ec8b7c8562acbcb8ab12a9577bfbd09cbd276d01d2590c9ce6310e",
+   "verification_sha256": "1f9c83f810e0dd295dee8f84c71a5c16005a301beb700e674de2c19e47249c25",
+   "note": "Divide footage read by the ConcordiaAmbientPopulations batch from the DIT retail pass's cited stills (research/20260927-seed-populations/work/footage-readings.json and footage-verification.json)."
   }
  ],
  "events": [
@@ -1821,6 +1835,99 @@
    "description": "Chamber kills at 50-58 base XP arrive every 2-3 s from t 456 to 510 (20 or more), still continuing at t 540-557 when the video ends (dossier chat reading, sheets/cbot_*).",
    "status": "confirmed",
    "transcript_sha256": "6050ab20fc386d7b8b4da0a773c91b65c882cd1103e3ade31361d0cf6a8b2559"
+  },
+  {
+   "segment": "DV1",
+   "event_id": "DV1-001",
+   "t": 96.0,
+   "category": "npc",
+   "text": "Xanx Venomspitter",
+   "description": "Target frame over a large crab-like beast the player stands inside; zone label Concordia Divide. The only client creature name that fits the blurred text is 464 'Xanx Venomspitter'. (still zuMHH5CxRj0_0136.jpg)",
+   "status": "corrected",
+   "transcript_sha256": "32620d73f4ec8b7c8562acbcb8ab12a9577bfbd09cbd276d01d2590c9ce6310e",
+   "corrected_text": "Xanx Venomspitter"
+  },
+  {
+   "segment": "DV1",
+   "event_id": "DV1-002",
+   "t": 144.0,
+   "category": "event",
+   "text": "Bane dropship over the battlefield with an orange drop cone, about 40 m ahead of the running player",
+   "description": "The drop the fight with Thrax infantry at 2:30-2:48 follows (DIT notes). (still zuMHH5CxRj0_0224.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "32620d73f4ec8b7c8562acbcb8ab12a9577bfbd09cbd276d01d2590c9ce6310e"
+  },
+  {
+   "segment": "DV1",
+   "event_id": "DV1-003",
+   "t": 282.0,
+   "category": "npc",
+   "text": "Xanx Venomspitter",
+   "description": "A large red spider-crab on a grassy hillside; the target frame again reads as 464. (still zuMHH5CxRj0_0442.jpg)",
+   "status": "corrected",
+   "transcript_sha256": "32620d73f4ec8b7c8562acbcb8ab12a9577bfbd09cbd276d01d2590c9ce6310e",
+   "corrected_text": "Xanx Venomspitter"
+  },
+  {
+   "segment": "DV1",
+   "event_id": "DV1-004",
+   "t": 336.0,
+   "category": "npc",
+   "text": "Thrax Infantry Private",
+   "description": "Target frame on a Thrax soldier on a hill slope at 20-30 m (client name 7676). (still zuMHH5CxRj0_0536.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "32620d73f4ec8b7c8562acbcb8ab12a9577bfbd09cbd276d01d2590c9ce6310e"
+  },
+  {
+   "segment": "DV1",
+   "event_id": "DV1-005",
+   "t": 429.0,
+   "category": "npc",
+   "text": "Xanx Venomspitter",
+   "description": "Lightning Arc on a Xanx at about 20 m in a dead forest. (still zuMHH5CxRj0_0709.jpg)",
+   "status": "corrected",
+   "transcript_sha256": "32620d73f4ec8b7c8562acbcb8ab12a9577bfbd09cbd276d01d2590c9ce6310e",
+   "corrected_text": "Xanx Venomspitter"
+  },
+  {
+   "segment": "DV1",
+   "event_id": "DV1-006",
+   "t": 534.0,
+   "category": "npc",
+   "text": "Thrax Infantry Private",
+   "description": "Thrax infantry under fire beside an AFS outpost with a blue force-field gate and a waypoint beam. (still zuMHH5CxRj0_0854.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "32620d73f4ec8b7c8562acbcb8ab12a9577bfbd09cbd276d01d2590c9ce6310e"
+  },
+  {
+   "segment": "DV1",
+   "event_id": "DV1-007",
+   "t": 549.0,
+   "category": "npc",
+   "text": "Thrax Infantry Private (two Thrax on screen, one dead)",
+   "description": "A grenade on two Thrax infantry at about 8 m. (still zuMHH5CxRj0_0909.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "32620d73f4ec8b7c8562acbcb8ab12a9577bfbd09cbd276d01d2590c9ce6310e"
+  },
+  {
+   "segment": "DV2",
+   "event_id": "DV2-001",
+   "t": 36.0,
+   "category": "npc",
+   "text": "Thrax Infantry Private First Class",
+   "description": "World label and target frame over a Thrax at about 40 m on red Bane creep (client name 7677); zone label Concordia Divide. The target frame's level digits are not legible even in the 5x crop. (still 3nZ7eca_vRA_0036.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "32620d73f4ec8b7c8562acbcb8ab12a9577bfbd09cbd276d01d2590c9ce6310e"
+  },
+  {
+   "segment": "DV2",
+   "event_id": "DV2-002",
+   "t": 180.0,
+   "category": "group",
+   "text": "three Thrax figures on Bane hexagonal flooring at a Bane base, beside another player, one corpse",
+   "description": "A group of three Thrax at a Bane base (the DIT pass reads 'groups of 3-4 Thrax near hive door' over 2:48-3:06). (still 3nZ7eca_vRA_0300.jpg)",
+   "status": "confirmed",
+   "transcript_sha256": "32620d73f4ec8b7c8562acbcb8ab12a9577bfbd09cbd276d01d2590c9ce6310e"
   }
  ],
  "dropped": []

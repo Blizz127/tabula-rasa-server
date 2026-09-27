@@ -239,7 +239,12 @@ namespace Rasa.Test.Reconstruction
                 "content_placement:id:1349100-1349499",
                 "content_area:id:1347500-1347599",
                 "npc_package:id:1347001-1347099",
-                "npc_package:id:1349001-1349099"
+                "npc_package:id:1349001-1349099",
+                // ConcordiaAmbientPopulations (2026-09-27): the Divide and Palisades ambient creatures, keyed by map as the
+                // dossiers reserved them, and the Uherum Pass exit area.
+                "creature:id:1148001-1148099",
+                "creature:id:1244001-1244099",
+                "content_area:id:1244500-1244599"
             }, scope);
 
             var gate = root.GetProperty("non_content_settings").EnumerateArray()

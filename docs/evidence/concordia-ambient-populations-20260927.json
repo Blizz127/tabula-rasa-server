@@ -1,0 +1,327 @@
+{
+ "schema": "rasa-concordia-ambient-populations/1",
+ "date": "2026-09-27",
+ "batch": "ConcordiaAmbientPopulations (branch seed-populations-1)",
+ "decision": "OD-161 (owner, 2026-09-27): footage first, then text, then labelled stand-ins",
+ "sources": {
+  "research": "/home/blizz/backups/rasa-net/research/20260927-seed-populations",
+  "footage_readings": "/home/blizz/backups/rasa-net/research/20260927-seed-populations/work/footage-readings.json (sha256 32620d73f4ec8b7c8562acbcb8ab12a9577bfbd09cbd276d01d2590c9ce6310e)",
+  "footage_verification": "/home/blizz/backups/rasa-net/research/20260927-seed-populations/work/footage-verification.json (sha256 1f9c83f810e0dd295dee8f84c71a5c16005a301beb700e674de2c19e47249c25)",
+  "divide_map": "Tabula Rasa 1.16.5.0 data/maps/adv_foreas_concordia_divide/adv_foreas_concordia_divide.map sha256 f73142fc0b30630ec777f833d659337e5a89aff693e0ebdfd3318617a3b73171",
+  "palisades_map": "research/20260927-palisades-dossiers/work/maps/palisades.json (map sha256 899180a7a717fb686b33d042de437c87edc1b6af328c6b80f59c14b4d915a917)",
+  "tarapedia": "/home/blizz/backups/rasa-net/research/20260927-seed-populations/work/tarapedia (fetched 2026-09-27) and research/20260927-palisades-dossiers/work/tarapedia, research/20260926-world-defects/work/tarapedia",
+  "brady": "research/20260927-zone-footage-search/search/brady_djvu.txt sha256 f74446a2eaf5fde25154080a4081fe8098e3356ba44c8a7ca0d3e484994c1b21",
+  "secondary": "research/20260927-dit-tr-videos (DIGEST.md section 2, ref/enemies.json, ref/missions.json) and research/20260927-ambient-population-survey were used as leads only; every claim is cited to its primary source."
+ },
+ "navmesh": {
+  "adv_foreas_concordia_divide.nav": "c5e9a352fcf78cb0c2f1a313dbd5d442da8c355564a4dbfce3b9e22983516ede",
+  "adv_foreas_concordia_palisades.nav": "a2e2c6a90b73d8ee7e6a100662b9cff84d36a3029fce8f7fc6264d507354207f",
+  "reference_points": {
+   "Divide": "Waypoint: Foreas Base (-33.55, 116.18, 564.44)",
+   "Palisades": "Waypoint: Hightower Outpost (-72.45, 147.59, 70.52)"
+  },
+  "probe_output": "research/20260927-seed-populations/work/probes/p4.out (sha256 7f0c2b9a765e204905f8ad9ab3768f8312f18a986c2f46d6a3bf2b9eb08ba5db)",
+  "defects": [
+   "Uherum Pass west half (x 72-176) is an island (GAP-UHERUM-NAVMESH)"
+  ]
+ },
+ "probes": {
+  "1148200": {
+   "surface": "97.910",
+   "floor": "97.634",
+   "nearest": "(725.00,97.91,0.00) d=0.00",
+   "levels": "[82.8,93.52,97.91,109.1]",
+   "underground": "False",
+   "path": "complete len=1130.5 end=(725.0,97.91,0.0) endGap=0.0"
+  },
+  "1148201": {
+   "surface": "96.995",
+   "floor": "96.719",
+   "nearest": "(740.00,96.99,-20.00) d=0.01",
+   "levels": "[82.8,92.77,96.99]",
+   "underground": "False",
+   "path": "complete len=1154.2 end=(740.0,96.99,-20.0) endGap=0.0"
+  },
+  "1148202": {
+   "surface": "100.252",
+   "floor": "99.976",
+   "nearest": "(-57.70,100.25,199.50) d=0.00",
+   "levels": "[100.25,101.16]",
+   "underground": "False",
+   "path": "complete len=386.7 end=(-57.7,100.25,199.5) endGap=0.0"
+  },
+  "1148203": {
+   "surface": "77.108",
+   "floor": "76.832",
+   "nearest": "(494.90,77.11,733.30) d=0.00",
+   "levels": "[77.11]",
+   "underground": "False",
+   "path": "complete len=942.6 end=(494.9,77.11,733.3) endGap=0.0"
+  },
+  "1148204": {
+   "surface": "69.851",
+   "floor": "69.575",
+   "nearest": "(-0.29,69.85,-232.48) d=0.00",
+   "levels": "[46.4,69.85]",
+   "underground": "False",
+   "path": "complete len=868.2 end=(-0.3,69.85,-232.5) endGap=0.0"
+  },
+  "1148205": {
+   "surface": "115.917",
+   "floor": "115.641",
+   "nearest": "(8.95,115.92,-642.49) d=0.00",
+   "levels": "[81.8,106.07,106.2,115.92]",
+   "underground": "False",
+   "path": "complete len=1298.2 end=(8.9,115.92,-642.5) endGap=0.0"
+  },
+  "1148206": {
+   "surface": "58.219",
+   "floor": "57.943",
+   "nearest": "(-260.80,58.22,118.25) d=0.00",
+   "levels": "[46.98,55.2,58.22]",
+   "underground": "False",
+   "path": "complete len=570.4 end=(-260.8,58.22,118.2) endGap=0.0"
+  },
+  "1148207": {
+   "surface": "85.060",
+   "floor": "84.784",
+   "nearest": "(-121.87,85.06,-355.63) d=0.00",
+   "levels": "[85.06,85.08]",
+   "underground": "False",
+   "path": "complete len=1025.1 end=(-121.9,85.06,-355.6) endGap=0.0"
+  },
+  "1148208": {
+   "surface": "69.851",
+   "floor": "69.575",
+   "nearest": "(-0.29,69.85,-232.48) d=0.00",
+   "levels": "[46.4,69.85]",
+   "underground": "False",
+   "path": "complete len=868.2 end=(-0.3,69.85,-232.5) endGap=0.0"
+  },
+  "1148209": {
+   "surface": "116.612",
+   "floor": "116.336",
+   "nearest": "(383.25,116.61,334.46) d=0.00",
+   "levels": "[116.05,116.61,117.61]",
+   "underground": "False",
+   "path": "complete len=665.9 end=(383.2,116.61,334.5) endGap=0.0"
+  },
+  "1148210": {
+   "surface": "65.720",
+   "floor": "65.444",
+   "nearest": "(689.00,65.72,248.80) d=0.00",
+   "levels": "[63.6,65.72,66.3]",
+   "underground": "False",
+   "path": "complete len=1118.6 end=(689.0,65.72,248.8) endGap=0.0"
+  },
+  "1148211": {
+   "surface": "60.040",
+   "floor": "59.764",
+   "nearest": "(706.00,60.04,212.50) d=0.00",
+   "levels": "[60.04,60.57,64.05]",
+   "underground": "False",
+   "path": "complete len=1016.5 end=(706.0,60.04,212.5) endGap=0.0"
+  },
+  "1148212": {
+   "surface": "52.669",
+   "floor": "52.393",
+   "nearest": "(5.00,52.67,-5.00) d=0.00",
+   "levels": "[52.67,55.2]",
+   "underground": "False",
+   "path": "complete len=610.6 end=(5.0,52.67,-5.0) endGap=0.0"
+  },
+  "1148213": {
+   "surface": "82.749",
+   "floor": "82.473",
+   "nearest": "(-58.00,82.75,-432.00) d=0.00",
+   "levels": "[82.75]",
+   "underground": "False",
+   "path": "complete len=1062.8 end=(-58.0,82.75,-432.0) endGap=0.0"
+  },
+  "1244200": {
+   "surface": "179.081",
+   "floor": "178.805",
+   "nearest": "(-602.30,179.08,824.60) d=0.00",
+   "levels": "[179.08]",
+   "underground": "False",
+   "path": "complete len=985.5 end=(-602.3,179.08,824.6) endGap=0.0"
+  },
+  "1244201": {
+   "surface": "113.511",
+   "floor": "113.235",
+   "nearest": "(60.00,113.51,50.00) d=0.00",
+   "levels": "[107.05,113.51]",
+   "underground": "False",
+   "path": "complete len=151.1 end=(60.0,113.51,50.0) endGap=0.0"
+  },
+  "1244202": {
+   "surface": "139.689",
+   "floor": "139.413",
+   "nearest": "(240.00,139.69,-760.00) d=0.00",
+   "levels": "[139.69,211.24]",
+   "underground": "False",
+   "path": "complete len=1343.8 end=(240.0,139.69,-760.0) endGap=0.0"
+  },
+  "1244203": {
+   "surface": "140.868",
+   "floor": "140.592",
+   "nearest": "(296.00,140.87,-708.00) d=0.00",
+   "levels": "[140.87,187.26,193.65,197.85,199.05]",
+   "underground": "False",
+   "path": "complete len=1255.7 end=(296.0,140.87,-708.0) endGap=0.0"
+  },
+  "1244204": {
+   "surface": "131.199",
+   "floor": "130.923",
+   "nearest": "(336.00,131.20,-660.00) d=0.00",
+   "levels": "[131.2,158.32,158.78,160.85,161.05]",
+   "underground": "False",
+   "path": "complete len=1179.4 end=(336.0,131.20,-660.0) endGap=0.0"
+  },
+  "1244205": {
+   "surface": "81.758",
+   "floor": "81.482",
+   "nearest": "(233.83,81.76,-297.72) d=0.00",
+   "levels": "[81.76,87.05]",
+   "underground": "False",
+   "path": "complete len=580.5 end=(233.8,81.76,-297.7) endGap=0.0"
+  },
+  "1244206": {
+   "surface": "132.990",
+   "floor": "132.714",
+   "nearest": "(668.38,132.99,-689.20) d=0.01",
+   "levels": "[132.99,133.05]",
+   "underground": "False",
+   "path": "complete len=1228.0 end=(668.4,132.99,-689.2) endGap=0.0"
+  },
+  "1244207": {
+   "surface": "122.646",
+   "floor": "122.370",
+   "nearest": "(411.00,122.65,-554.00) d=0.00",
+   "levels": "[122.65]",
+   "underground": "False",
+   "path": "complete len=1038.0 end=(411.0,122.65,-554.0) endGap=0.0"
+  },
+  "1244500": {
+   "surface": "128.176",
+   "floor": "127.900",
+   "nearest": "(392.00,128.18,-616.00) d=0.00",
+   "levels": "[128.18,128.22,129.74]",
+   "underground": "False",
+   "path": "complete len=1099.3 end=(392.0,128.18,-616.0) endGap=0.0"
+  },
+  "uh_w": {
+   "surface": "165.507",
+   "floor": "165.231",
+   "nearest": "(24.00,165.51,-736.00) d=0.00",
+   "levels": "[165.51,181.25,192.7]",
+   "underground": "False",
+   "path": "complete len=843.6 end=(24.0,165.51,-736.0) endGap=0.0"
+  },
+  "kerr": {
+   "surface": "117.000",
+   "floor": "116.724",
+   "nearest": "(19.10,117.00,538.40) d=0.00",
+   "levels": "[117,123.8,137.8]",
+   "underground": "False",
+   "path": "PARTIAL len=65.6 end=(13.1,117.00,539.4) endGap=6.1"
+  },
+  "mayes": {
+   "surface": "117.000",
+   "floor": "116.724",
+   "nearest": "(-11.70,117.00,544.70) d=0.00",
+   "levels": "[117,124.07,132.8,137.8]",
+   "underground": "False",
+   "path": "complete len=50.3 end=(-11.7,117.00,544.7) endGap=0.0"
+  },
+  "sherman": {
+   "surface": "81.417",
+   "floor": "81.141",
+   "nearest": "(480.10,81.42,-366.10) d=0.28",
+   "levels": "[81.42,89.2]",
+   "underground": "False",
+   "path": "complete len=1118.6 end=(480.1,81.42,-366.1) endGap=0.0"
+  },
+  "kibner": {
+   "surface": "85.200",
+   "floor": "84.924",
+   "nearest": "(115.30,85.20,-63.70) d=0.30",
+   "levels": "[85.2]",
+   "underground": "False",
+   "path": "complete len=695.6 end=(115.3,85.20,-63.7) endGap=0.0"
+  },
+  "seb": {
+   "surface": "119.442",
+   "floor": "119.166",
+   "nearest": "(-48.00,119.44,434.00) d=0.44",
+   "levels": "[52.69,116,119.44,122.1,144.6]",
+   "underground": "False",
+   "path": "complete len=131.4 end=(-48.0,119.44,434.0) endGap=0.0"
+  },
+  "rsal": {
+   "surface": "48.433",
+   "floor": "48.157",
+   "nearest": "(-50.00,48.43,-120.00) d=0.00",
+   "levels": "[48.43,49.21]",
+   "underground": "False",
+   "path": "complete len=734.4 end=(-50.0,48.43,-120.0) endGap=0.0"
+  },
+  "yorma": {
+   "surface": "140.446",
+   "floor": "140.170",
+   "nearest": "(-789.18,140.45,766.40) d=1.62",
+   "levels": "[140.45,151.93,152.85]",
+   "underground": "False",
+   "path": "complete len=1055.5 end=(-789.2,140.45,766.4) endGap=1.6"
+  },
+  "tayros": {
+   "surface": "172.525",
+   "floor": "172.249",
+   "nearest": "(-155.40,172.52,-719.80) d=0.02",
+   "levels": "[172.52]",
+   "underground": "False",
+   "path": "complete len=967.8 end=(-155.4,172.52,-719.8) endGap=0.0"
+  },
+  "kogari": {
+   "surface": "153.646",
+   "floor": "153.370",
+   "nearest": "(-42.00,153.65,40.40) d=1.64",
+   "levels": "[107.05,137.45,145.05,148.84,153.65,156.85]",
+   "underground": "False",
+   "path": "complete len=46.2 end=(-42.0,153.65,40.4) endGap=1.6"
+  },
+  "shahr": {
+   "surface": "179.122",
+   "floor": "178.846",
+   "nearest": "(-594.00,179.12,821.00) d=0.18",
+   "levels": "[179.12]",
+   "underground": "False",
+   "path": "complete len=983.3 end=(-594.0,179.12,821.0) endGap=0.0"
+  }
+ },
+ "pools": {
+  "warnet_nests": "Queen Stazzle's sightings 'by nest 1/26/08' (689, 249) and 'near a nest 04/01/08' (706, 212.5), TaRapedia rev 33067; nests within 10 m",
+  "footage_counts": "Thrax: three at once at a Bane base (DV2-002); Xanx: one or two at a time (DV1-003, DV1-005)"
+ },
+ "footage": {
+  "DV1": "zuMHH5CxRj0 (FireEagleEyes, 2007-12-24) - stills only",
+  "DV2": "3nZ7eca_vRA (Lankist, 2007-11-09) - cached video",
+  "limits": "no legible level; no fight placeable on the map; both pre-D11 (the Divide is not known to have been rebuilt)",
+  "recommended_downloads": [
+   "Nsz75UOlZz0 (Raisuly #10)",
+   "IDAug5iUa9c (Raisuly #12)",
+   "mYnUQERP4W4 (Raisuly #11)",
+   "Ez7Vb6vdjl0 (Raisuly #13)",
+   "zuMHH5CxRj0 (full video)"
+  ]
+ },
+ "held": [
+  "Hominis Machina and Amoeboid groups on the Divide",
+  "Divide Predators",
+  "370 Dissections, 346 Cleansing the Toxins, 348 Taking Care of the Caretakers, 326 Makin' Bacon, 688 The Daily Grind (Divide)",
+  "373 There's a Hominus Among Us, 374 Predator Prey, 1582 Divide Targets of Opportunity",
+  "368's five-minute time limit (TaRapedia TimeLimit=5 minutes)",
+  "344, 351, 353, 354, 355, 363, 388, 405, 406, 409, 1103, 1139, 1804, 1805 (Palisades)",
+  "the item lists of 358, 371, 372, 774, 342 and 1808"
+ ]
+}
