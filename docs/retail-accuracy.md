@@ -5171,3 +5171,33 @@ Decisions OD-177 to OD-181 are the batch's, agent-approved, pending owner review
 - Tests: `FootageAmbientPopulationsTests` (navmesh floor and paths, species per zone, the replacements, what stays out,
   store types, manifest rows and change entries, rollback), the Footage blocks of `MissionContentLoadingTests` (1067
   offerable, drops) and `ContentSchemaMigrationTests` (rows, rollback), provider parity, manifest scope.
+
+## 2026-09-27 23:00 UTC (18:00 CDT) — Deploy: Release runtime, footage populations and DIT population code on banshee-ax41
+
+The owner was offline (no established game or auth connections, no pings, no DIT leader); the Devbox Coordinator
+relayed the go for one combined post-logoff deploy of development aa329dd.
+
+- **Release runtime**: Game and Auth are now published Release builds on `mcr.microsoft.com/dotnet/runtime:5.0`,
+  started as `dotnet src/Rasa.Game/Rasa.Game.dll` / `dotnet src/Rasa.Auth/Rasa.Auth.dll`, with `mem_limit` 4g
+  (Game) and 512m (Auth) from `docker-compose.yml`. The image is 398 MB (was 3.75 GB). Just after startup, Game used
+  1.89 GiB of 4 GiB and Auth 37 MiB of 512 MiB.
+- **Content**: migration `20260927080000_FootageAmbientPopulations` (the world database is at 161 migrations): 154
+  `npc_mission` rows, 864 spawnpools loaded including the 25 new Palisades/Plains/Mires pools, 16 content rules with
+  577 rows and 0 gaps, navmeshes 75/75. Missions 321, 955 and 969 are still withheld.
+- **DIT overlay**: the population overlay (`~/scratch/tr-fixes/population`, copied to
+  `~/backups/rasa-net/research/20260927-dit-population`) on top of party chat and map-link follow, still 9 hook
+  files, built into `rasa_net_game:dit-20260927g` (e8c8ac28a2fa). The population switch stays off (no
+  `dit/population` file): that code is a level 4–35 world population, not the 2-bot Bootcamp pilot the owner asked
+  for, which DIT is building separately. The full suite with the world database, on aa329dd plus this overlay,
+  gave 1606/1606.
+- **Backups**: `~/backups/rasa-net/predeploy-20260927T225934Z/` holds the three databases (integrity_check ok), the
+  Debug-runtime `docker-compose.yml` (`docker-compose.yml.debug-runtime`), `docker-compose.dit.yml`, appsettings and
+  the previous overlay. The running Auth image had already been removed by the host cleanup, so
+  `rasa_net_auth:rollback-20260927g` is the 4eb62cd73539 Debug base, which runs Auth the same way.
+- **Rollback**: restore the Debug-runtime `docker-compose.yml`, re-pin `rasa_net_game:dit-20260927f` (0d66f45a0e5a)
+  in `docker-compose.dit.yml` (the old copy is `docker-compose.dit.yml.before-20260927g`), and tag
+  `rasa_net_auth:rollback-20260927g` as `rasa_net_auth:latest`. Then relaunch auth and game. The Debug images don't
+  contain the published DLL path, so the compose file must be rolled back too. To undo the migration, restore the
+  backed-up `rasaworld.db`.
+- **Not yet verified in play**: the new creatures on Palisades, Plains and Mires (spawners run only while a player is
+  on the map).
