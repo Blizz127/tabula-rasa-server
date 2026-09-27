@@ -575,6 +575,40 @@
    "era": "final_live",
    "member": "research/20260927-palisades-dossiers/work/probes/out1.txt (sha256 36a45b912dd2fca0320cdbddc715e49b9bd876fbcd61cbd9b3a42b4afbccb25c)",
    "note": "tools/navprobe (Rasa.Navigation) on navmesh/adv_foreas_concordia_palisades.nav (sha256 a2e2c6a90b73d8ee7e6a100662b9cff84d36a3029fce8f7fc6264d507354207f, built from the 1.16.5.0 client map): ground height, levels and a path from the nearest client waypoint marker; floor = surface - 0.276 m. Re-checked in this tree by PalisadesDossierMissionsTests."
+  },
+  "community_db:tarapedia-dit-review-20260927": {
+   "kind": "community_db",
+   "era": "unknown",
+   "url": "https://tabularasa.fandom.com",
+   "locator": "research/20260927-dit-discrepancies/work/tarapedia/*.json (MediaWiki API, full revision histories with content of the twelve boss pages, Cavalon, 'Give (logos)' and 'Negative (logos)', fetched 2026-09-27; sha256 in work/SHA256SUMS)",
+   "note": "Community transcription. Each level or /loc is cited with the revision that first states it and the page's latest revision; twelve of the fourteen readings were first written before D11 (2008-08-15)."
+  },
+  "community_db:giddygamer-logos-alpha-20071126": {
+   "kind": "community_db",
+   "era": "pre_d11",
+   "sha256": "8c2a85feef644563faaca4429e12649ac4139926639eeab8bc9387ddc1f46f39",
+   "path": "/home/blizz/backups/rasa-net/research/20260927-dit-tr-videos/ref/sources/gg_logos_alpha.pdf",
+   "note": "Giddy Gamer 'Logos Elements - alpha' rev 2007/11/26 (https://www.giddygamer.com/tabula/content/logos/logos_alpha.pdf, fetched by the DIT project 2026-09-27): name, zone, /loc as x alt y, notes, giver, XP, credits, difficulty. Independent of TaRapedia."
+  },
+  "client_map:adv_foreas_concordia_divide-20260927": {
+   "kind": "client_map",
+   "era": "final_live",
+   "sha256": "f73142fc0b30630ec777f833d659337e5a89aff693e0ebdfd3318617a3b73171",
+   "member": "Tabula Rasa 1.16.5.0/data/maps/adv_foreas_concordia_divide/adv_foreas_concordia_divide.map",
+   "locator": "research/20260927-dit-discrepancies/work/maps/adv_foreas_concordia_divide.txt (every static entity: classId|entityId|x|y|z|quaternion|scale|flags, dumped with Rasa.ClientData.MapFile by tools/Program.cs; sha256 22a2b4ef5bf02a66730a727a4c1921d0701a2d33e58fe930e51d15351a25c9e9)"
+  },
+  "client_table:gamecontext-20260927": {
+   "kind": "client_table",
+   "era": "final_live",
+   "member": "Tabula Rasa 1.16.5.0/data/game.zip generated/client/gamecontext.pyo (sha256 21171550354785d1cd8d85fa74e2d92a0729a4e04b7ca8ccfd25390a95e3ad36)",
+   "locator": "research/20260926-instancing-mechanics/work/mine/gamecontext.tsv (decoded rows) and mapwindow.dis lines 4687-4765 (fields 4 and 5 are the map window's suggestedMinLevel / suggestedMaxLevel, shown as '[min - max]')"
+  },
+  "community_db:ellatha-logos-maps-20260927": {
+   "kind": "community_db",
+   "era": "unknown",
+   "url": "https://www.ellatha.com/tr/Divide_Maps_Logos.asp",
+   "locator": "research/20260927-dit-discrepancies/work/ellatha/Divide_Maps_Logos.asp.html (sha256 8482c140cf52499810bfddb402e3bd36b785632bcda3612b3991e8cb9c49212b) and ElohVale_Maps_Logos.asp.html, fetched 2026-09-27",
+   "note": "DaOpa's per-zone logos lists, undated. The Eloh Vale list has These at the post-D11 map 2084's pedestal, so the lists were kept at least into the D11 era; each shrine is named, not dated."
   }
  },
  "scope": [
@@ -113146,6 +113180,74 @@
    "surfaced_by": [
     "PalisadesDossierMissions 2026-09-27"
    ]
+  },
+  {
+   "id": "GAP-DIVIDE-GIVE-NEGATIVE-FINAL",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "LogosGiveNegativeSwap puts Give (15) in the Benefactor Valley cave and Negative (33) on the hilltop north of Foxtrot Outpost, from TaRapedia (verified 2007-12-31, pages unchanged through 2008-09-29), Giddy Gamer (2007-11-26), the client map's cavern and pool at the cave pedestal, and TaRapedia's bug note that the hilltop Negative shrine displayed Give's glyph from 2007-12 until a fix noted 2008-08-24 (which explains Ellatha's and the seed's opposite reading). No final-era capture shows either shrine or its glyph.",
+   "evidence": [
+    "research/20260927-dit-discrepancies/work/tarapedia/Give__logos_.json",
+    "research/20260927-dit-discrepancies/work/tarapedia/Negative__logos_.json",
+    "research/20260927-dit-discrepancies/work/maps/adv_foreas_concordia_divide.txt",
+    "research/20260927-dit-discrepancies/work/ellatha/Divide_Maps_Logos.asp.html"
+   ],
+   "closes_with": "final-era footage or a capture of either Divide shrine with its name",
+   "surfaced_by": [
+    "LogosGiveNegativeSwap 2026-09-27 (DIT reference review)"
+   ]
+  },
+  {
+   "id": "GAP-UPSTREAM-BOSS-LEVELS",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Upstream's boss rows with no level source keep its per-zone value: Incline 520022 Alpha Class Recon Predator and 520023 Overseer Nyxroq (42; suggested range 24-27), Plains 520047 Cracked Tooth and 520050 The Red Kraken (40; 21-25), Marshes 520028-520030 and 520032-520035 (38; 36-38), Pools 520057 Iceram, 520060 Lililax, 520062 Overseer Prysiam (35; 33-36), Plateau 520051-520054 (32; 30-33), Ashen Desert 520002-520007 (44; 40-43 and 42-43), Crucible 520013 Executioner Derge and 520014 Thrax Commander (47; 38-41), Thunderhead 520063 Painrox and 520064 Tiamox (45; 42-45), Howling Maw 520020/520021 (48) and Abyss 520001 (46). Their TaRapedia pages give no level. Palisades and Divide bosses are in GAP-PALISADES-BOSS-POOLS-LEVEL and GAP-DIVIDE-BOSS-LEVELS.",
+   "evidence": [
+    "research/20260927-dit-discrepancies/work/levels.txt",
+    "research/20260927-dit-discrepancies/work/tarapedia/bosses1.json",
+    "research/20260927-dit-discrepancies/work/tarapedia/bosses2.json",
+    "src/Rasa.DBL/Services/Preloader/BossCreaturePreloader.cs"
+   ],
+   "closes_with": "a capture or dated page recording each boss's level",
+   "surfaced_by": [
+    "TarapediaBossLevels 2026-09-27 (DIT reference review)"
+   ]
+  },
+  {
+   "id": "GAP-UPSTREAM-BOSS-HP",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Every upstream boss row carries max_hp = 100 x level + 500, an emulator rule. The twelve TarapediaBossLevels rows keep the value computed from upstream's old level (OD-172), so e.g. Thrall Bruunk (26) has 4700 and Seymour (42) 4300. No source records a boss's health.",
+   "evidence": [
+    "src/Rasa.DBL/Services/Preloader/BossCreaturePreloader.cs",
+    "src/Rasa.DBL/Migrations/WildernessData/TarapediaBossLevelsRows.cs"
+   ],
+   "closes_with": "captured health of a named boss, or the original server's creature template rule",
+   "surfaced_by": [
+    "TarapediaBossLevels 2026-09-27 (DIT reference review)"
+   ]
+  },
+  {
+   "id": "GAP-WILDERNESS-BOSS-LEVELS-PRE-D11",
+   "status": "open",
+   "slices": [
+    "W3"
+   ],
+   "summary": "Ellatha's undated boss list (early-2008 pages) gives Archfiend 13, Atropos 14, Horntail 13 and Old Scratch 14 where the world carries 15 (creatures 75, 78, 79, 80), and Tizzik Gi 2 against the D11 boot camp's 10 (GAP-S4-BOSS). The Wilderness and the boot camp were rebuilt in D11 (2008-08-15), so these pre-D11 readings are not applied; Arioch 15, the four Overseers 6/6/6/10, Fithik Hive Monarch 10, Excavator Xang 11 and Lt. Casper 9 already agree.",
+   "evidence": [
+    "research/20260926-instances/work/guides/ell_boss_parsed.json",
+    "research/20260927-dit-discrepancies/work/levels.txt"
+   ],
+   "closes_with": "final-era footage showing these bosses' nameplates",
+   "surfaced_by": [
+    "DIT reference review 2026-09-27"
+   ]
   }
  ],
  "non_content_settings": [
@@ -118900,6 +119002,552 @@
      "locator": "uimapmarker factionedmarkers 133182640965832 \"Waypoint: Viands Village\" [-264.82, 176.62, -457.75] (research/20260926-later-zone-missions/work/markers-all.json; research/20260927-palisades-dossiers/work/markers-1244.txt line 61)"
     }
    ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "LogosGiveNegativeSwap",
+   "table": "logos",
+   "key": {
+    "id": 15
+   },
+   "field": "pos_x",
+   "old": 184.17969,
+   "new": 745.16797,
+   "tier": "inferred",
+   "reason": "Give stood on the hilltop pedestal north of Foxtrot Outpost that TaRapedia and Giddy Gamer give to Negative; it moves to the Benefactor Valley cave pedestal both sources give to Give, at the pedestal-top height the world seed carried for that pedestal. Coordinates are the client pedestal's (original); which Logos stands on it is inferred from two independent 2007-08 transcriptions and the cavern and pool at that pedestal in the client map. Class 7296 (the Give stone) is unchanged. No final-era capture (GAP-DIVIDE-GIVE-NEGATIVE-FINAL). Ellatha's undated list names the shrines the other way round, as the seed did; TaRapedia records that from 2007-12 until the fix noted on 2008-08-24 the hilltop shrine displayed Give's glyph while granting Negative, which accounts for that reading. The post-fix state is taken.",
+   "citations": [
+    {
+     "source": "client_map:adv_foreas_concordia_divide-20260927",
+     "locator": "ArchElohLogosDispenserBase (25593) at (745.24, 97.85, -5.21), 2.8 m below the row, inside a cavern: TerraForeasCavern stalagmites/roots/crystals and VfxForeasCavesCeilingShiftDust within 11-25 m, WaterForeasPond32mDirty 10 m away; the other pedestal at (184.09, 120.22, 137.75) stands among ArchForeanTorchV01, wicker, pottery and VfxForeasFirebug, no cavern entity within 40 m. The map names no stone for either."
+    },
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "'Give (logos)' LocX/LocZ/LocY = 746/98/-4, Area Benefactor Valley, 'Located within the upper part of the Xanx cave', from rev 9153 (2007-09-04) through rev 34470 (2008-09-29, latest); Verified = 2007-12-31"
+    },
+    {
+     "source": "community_db:giddygamer-logos-alpha-20071126",
+     "locator": "'Give Con Div 700 85 65 take an army if <15 Noonan 7500 1500 S++'; 'Negative Con Div 185 120 150 hilltop east of trenches Noonan 7000 1400 S'"
+    },
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "'Logos: Give' walkthrough (DIT cache wk/Logos:_Give.wiki): 'The cave is full of Xanx. One path (to the right) leads down into a pool. There's a path to the left ... up to get this Logos.'"
+    },
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "'Negative (logos)' rev 21379 (2007-12-16, Zarevak) adds {{bug|The shrine displays symbol for Logos element [[Give (logos)|Give]]|year=2007|month=12}}; rev 24877 (2008-01-01, Dashiva) 'ver, bug still present'; rev 32061 (2008-08-24, Zarevak) removes it: 'wrong displayed logos symbol bug was fixed...'"
+    },
+    {
+     "source": "community_db:ellatha-logos-maps-20260927",
+     "locator": "Divide Logos Locations: 'Give 182 137', 'Negative 742 8.8' - the world seed's assignment, the glyph the hilltop shrine showed while the TaRapedia bug stood"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "LogosGiveNegativeSwap",
+   "table": "logos",
+   "key": {
+    "id": 15
+   },
+   "field": "pos_y",
+   "old": 122.953125,
+   "new": 100.58594,
+   "tier": "inferred",
+   "reason": "Give stood on the hilltop pedestal north of Foxtrot Outpost that TaRapedia and Giddy Gamer give to Negative; it moves to the Benefactor Valley cave pedestal both sources give to Give, at the pedestal-top height the world seed carried for that pedestal. Coordinates are the client pedestal's (original); which Logos stands on it is inferred from two independent 2007-08 transcriptions and the cavern and pool at that pedestal in the client map. Class 7296 (the Give stone) is unchanged. No final-era capture (GAP-DIVIDE-GIVE-NEGATIVE-FINAL). Ellatha's undated list names the shrines the other way round, as the seed did; TaRapedia records that from 2007-12 until the fix noted on 2008-08-24 the hilltop shrine displayed Give's glyph while granting Negative, which accounts for that reading. The post-fix state is taken.",
+   "citations": [
+    {
+     "source": "client_map:adv_foreas_concordia_divide-20260927",
+     "locator": "ArchElohLogosDispenserBase (25593) at (745.24, 97.85, -5.21), 2.8 m below the row, inside a cavern: TerraForeasCavern stalagmites/roots/crystals and VfxForeasCavesCeilingShiftDust within 11-25 m, WaterForeasPond32mDirty 10 m away; the other pedestal at (184.09, 120.22, 137.75) stands among ArchForeanTorchV01, wicker, pottery and VfxForeasFirebug, no cavern entity within 40 m. The map names no stone for either."
+    },
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "'Give (logos)' LocX/LocZ/LocY = 746/98/-4, Area Benefactor Valley, 'Located within the upper part of the Xanx cave', from rev 9153 (2007-09-04) through rev 34470 (2008-09-29, latest); Verified = 2007-12-31"
+    },
+    {
+     "source": "community_db:giddygamer-logos-alpha-20071126",
+     "locator": "'Give Con Div 700 85 65 take an army if <15 Noonan 7500 1500 S++'; 'Negative Con Div 185 120 150 hilltop east of trenches Noonan 7000 1400 S'"
+    },
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "'Logos: Give' walkthrough (DIT cache wk/Logos:_Give.wiki): 'The cave is full of Xanx. One path (to the right) leads down into a pool. There's a path to the left ... up to get this Logos.'"
+    },
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "'Negative (logos)' rev 21379 (2007-12-16, Zarevak) adds {{bug|The shrine displays symbol for Logos element [[Give (logos)|Give]]|year=2007|month=12}}; rev 24877 (2008-01-01, Dashiva) 'ver, bug still present'; rev 32061 (2008-08-24, Zarevak) removes it: 'wrong displayed logos symbol bug was fixed...'"
+    },
+    {
+     "source": "community_db:ellatha-logos-maps-20260927",
+     "locator": "Divide Logos Locations: 'Give 182 137', 'Negative 742 8.8' - the world seed's assignment, the glyph the hilltop shrine showed while the TaRapedia bug stood"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "LogosGiveNegativeSwap",
+   "table": "logos",
+   "key": {
+    "id": 15
+   },
+   "field": "pos_z",
+   "old": 137.64453,
+   "new": -5.2539062,
+   "tier": "inferred",
+   "reason": "Give stood on the hilltop pedestal north of Foxtrot Outpost that TaRapedia and Giddy Gamer give to Negative; it moves to the Benefactor Valley cave pedestal both sources give to Give, at the pedestal-top height the world seed carried for that pedestal. Coordinates are the client pedestal's (original); which Logos stands on it is inferred from two independent 2007-08 transcriptions and the cavern and pool at that pedestal in the client map. Class 7296 (the Give stone) is unchanged. No final-era capture (GAP-DIVIDE-GIVE-NEGATIVE-FINAL). Ellatha's undated list names the shrines the other way round, as the seed did; TaRapedia records that from 2007-12 until the fix noted on 2008-08-24 the hilltop shrine displayed Give's glyph while granting Negative, which accounts for that reading. The post-fix state is taken.",
+   "citations": [
+    {
+     "source": "client_map:adv_foreas_concordia_divide-20260927",
+     "locator": "ArchElohLogosDispenserBase (25593) at (745.24, 97.85, -5.21), 2.8 m below the row, inside a cavern: TerraForeasCavern stalagmites/roots/crystals and VfxForeasCavesCeilingShiftDust within 11-25 m, WaterForeasPond32mDirty 10 m away; the other pedestal at (184.09, 120.22, 137.75) stands among ArchForeanTorchV01, wicker, pottery and VfxForeasFirebug, no cavern entity within 40 m. The map names no stone for either."
+    },
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "'Give (logos)' LocX/LocZ/LocY = 746/98/-4, Area Benefactor Valley, 'Located within the upper part of the Xanx cave', from rev 9153 (2007-09-04) through rev 34470 (2008-09-29, latest); Verified = 2007-12-31"
+    },
+    {
+     "source": "community_db:giddygamer-logos-alpha-20071126",
+     "locator": "'Give Con Div 700 85 65 take an army if <15 Noonan 7500 1500 S++'; 'Negative Con Div 185 120 150 hilltop east of trenches Noonan 7000 1400 S'"
+    },
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "'Logos: Give' walkthrough (DIT cache wk/Logos:_Give.wiki): 'The cave is full of Xanx. One path (to the right) leads down into a pool. There's a path to the left ... up to get this Logos.'"
+    },
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "'Negative (logos)' rev 21379 (2007-12-16, Zarevak) adds {{bug|The shrine displays symbol for Logos element [[Give (logos)|Give]]|year=2007|month=12}}; rev 24877 (2008-01-01, Dashiva) 'ver, bug still present'; rev 32061 (2008-08-24, Zarevak) removes it: 'wrong displayed logos symbol bug was fixed...'"
+    },
+    {
+     "source": "community_db:ellatha-logos-maps-20260927",
+     "locator": "Divide Logos Locations: 'Give 182 137', 'Negative 742 8.8' - the world seed's assignment, the glyph the hilltop shrine showed while the TaRapedia bug stood"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "LogosGiveNegativeSwap",
+   "table": "logos",
+   "key": {
+    "id": 33
+   },
+   "field": "pos_x",
+   "old": 745.16797,
+   "new": 184.17969,
+   "tier": "inferred",
+   "reason": "Negative stood on the cave pedestal the sources give to Give; it moves to the hilltop pedestal north of Foxtrot Outpost, 'hilltop east of trenches', at the height the world seed carried for it. Class 12691 (the Negative stone) is unchanged. No final-era capture (GAP-DIVIDE-GIVE-NEGATIVE-FINAL). Ellatha's undated list names the shrines the other way round, as the seed did; TaRapedia records that from 2007-12 until the fix noted on 2008-08-24 the hilltop shrine displayed Give's glyph while granting Negative, which accounts for that reading. The post-fix state is taken.",
+   "citations": [
+    {
+     "source": "client_map:adv_foreas_concordia_divide-20260927",
+     "locator": "ArchElohLogosDispenserBase (25593) at (745.24, 97.85, -5.21), 2.8 m below the row, inside a cavern: TerraForeasCavern stalagmites/roots/crystals and VfxForeasCavesCeilingShiftDust within 11-25 m, WaterForeasPond32mDirty 10 m away; the other pedestal at (184.09, 120.22, 137.75) stands among ArchForeanTorchV01, wicker, pottery and VfxForeasFirebug, no cavern entity within 40 m. The map names no stone for either."
+    },
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "'Negative (logos)' LocX/LocZ/LocY = 183.6/120.5/139.5 from rev 11493 (2007-10-20), 184/121/138 from rev 21379 (2007-12-16) through rev 34480 (2008-09-29, latest), 'North of Foxtrot Outpost'; Verified = 2007-12-31"
+    },
+    {
+     "source": "community_db:giddygamer-logos-alpha-20071126",
+     "locator": "'Give Con Div 700 85 65 take an army if <15 Noonan 7500 1500 S++'; 'Negative Con Div 185 120 150 hilltop east of trenches Noonan 7000 1400 S'"
+    },
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "'Negative (logos)' rev 21379 (2007-12-16, Zarevak) adds {{bug|The shrine displays symbol for Logos element [[Give (logos)|Give]]|year=2007|month=12}}; rev 24877 (2008-01-01, Dashiva) 'ver, bug still present'; rev 32061 (2008-08-24, Zarevak) removes it: 'wrong displayed logos symbol bug was fixed...'"
+    },
+    {
+     "source": "community_db:ellatha-logos-maps-20260927",
+     "locator": "Divide Logos Locations: 'Give 182 137', 'Negative 742 8.8' - the world seed's assignment, the glyph the hilltop shrine showed while the TaRapedia bug stood"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "LogosGiveNegativeSwap",
+   "table": "logos",
+   "key": {
+    "id": 33
+   },
+   "field": "pos_y",
+   "old": 100.58594,
+   "new": 122.953125,
+   "tier": "inferred",
+   "reason": "Negative stood on the cave pedestal the sources give to Give; it moves to the hilltop pedestal north of Foxtrot Outpost, 'hilltop east of trenches', at the height the world seed carried for it. Class 12691 (the Negative stone) is unchanged. No final-era capture (GAP-DIVIDE-GIVE-NEGATIVE-FINAL). Ellatha's undated list names the shrines the other way round, as the seed did; TaRapedia records that from 2007-12 until the fix noted on 2008-08-24 the hilltop shrine displayed Give's glyph while granting Negative, which accounts for that reading. The post-fix state is taken.",
+   "citations": [
+    {
+     "source": "client_map:adv_foreas_concordia_divide-20260927",
+     "locator": "ArchElohLogosDispenserBase (25593) at (745.24, 97.85, -5.21), 2.8 m below the row, inside a cavern: TerraForeasCavern stalagmites/roots/crystals and VfxForeasCavesCeilingShiftDust within 11-25 m, WaterForeasPond32mDirty 10 m away; the other pedestal at (184.09, 120.22, 137.75) stands among ArchForeanTorchV01, wicker, pottery and VfxForeasFirebug, no cavern entity within 40 m. The map names no stone for either."
+    },
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "'Negative (logos)' LocX/LocZ/LocY = 183.6/120.5/139.5 from rev 11493 (2007-10-20), 184/121/138 from rev 21379 (2007-12-16) through rev 34480 (2008-09-29, latest), 'North of Foxtrot Outpost'; Verified = 2007-12-31"
+    },
+    {
+     "source": "community_db:giddygamer-logos-alpha-20071126",
+     "locator": "'Give Con Div 700 85 65 take an army if <15 Noonan 7500 1500 S++'; 'Negative Con Div 185 120 150 hilltop east of trenches Noonan 7000 1400 S'"
+    },
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "'Negative (logos)' rev 21379 (2007-12-16, Zarevak) adds {{bug|The shrine displays symbol for Logos element [[Give (logos)|Give]]|year=2007|month=12}}; rev 24877 (2008-01-01, Dashiva) 'ver, bug still present'; rev 32061 (2008-08-24, Zarevak) removes it: 'wrong displayed logos symbol bug was fixed...'"
+    },
+    {
+     "source": "community_db:ellatha-logos-maps-20260927",
+     "locator": "Divide Logos Locations: 'Give 182 137', 'Negative 742 8.8' - the world seed's assignment, the glyph the hilltop shrine showed while the TaRapedia bug stood"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "LogosGiveNegativeSwap",
+   "table": "logos",
+   "key": {
+    "id": 33
+   },
+   "field": "pos_z",
+   "old": -5.2539062,
+   "new": 137.64453,
+   "tier": "inferred",
+   "reason": "Negative stood on the cave pedestal the sources give to Give; it moves to the hilltop pedestal north of Foxtrot Outpost, 'hilltop east of trenches', at the height the world seed carried for it. Class 12691 (the Negative stone) is unchanged. No final-era capture (GAP-DIVIDE-GIVE-NEGATIVE-FINAL). Ellatha's undated list names the shrines the other way round, as the seed did; TaRapedia records that from 2007-12 until the fix noted on 2008-08-24 the hilltop shrine displayed Give's glyph while granting Negative, which accounts for that reading. The post-fix state is taken.",
+   "citations": [
+    {
+     "source": "client_map:adv_foreas_concordia_divide-20260927",
+     "locator": "ArchElohLogosDispenserBase (25593) at (745.24, 97.85, -5.21), 2.8 m below the row, inside a cavern: TerraForeasCavern stalagmites/roots/crystals and VfxForeasCavesCeilingShiftDust within 11-25 m, WaterForeasPond32mDirty 10 m away; the other pedestal at (184.09, 120.22, 137.75) stands among ArchForeanTorchV01, wicker, pottery and VfxForeasFirebug, no cavern entity within 40 m. The map names no stone for either."
+    },
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "'Negative (logos)' LocX/LocZ/LocY = 183.6/120.5/139.5 from rev 11493 (2007-10-20), 184/121/138 from rev 21379 (2007-12-16) through rev 34480 (2008-09-29, latest), 'North of Foxtrot Outpost'; Verified = 2007-12-31"
+    },
+    {
+     "source": "community_db:giddygamer-logos-alpha-20071126",
+     "locator": "'Give Con Div 700 85 65 take an army if <15 Noonan 7500 1500 S++'; 'Negative Con Div 185 120 150 hilltop east of trenches Noonan 7000 1400 S'"
+    },
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "'Negative (logos)' rev 21379 (2007-12-16, Zarevak) adds {{bug|The shrine displays symbol for Logos element [[Give (logos)|Give]]|year=2007|month=12}}; rev 24877 (2008-01-01, Dashiva) 'ver, bug still present'; rev 32061 (2008-08-24, Zarevak) removes it: 'wrong displayed logos symbol bug was fixed...'"
+    },
+    {
+     "source": "community_db:ellatha-logos-maps-20260927",
+     "locator": "Divide Logos Locations: 'Give 182 137', 'Negative 742 8.8' - the world seed's assignment, the glyph the hilltop shrine showed while the TaRapedia bug stood"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "TarapediaBossLevels",
+   "table": "creature",
+   "key": {
+    "id": 520024
+   },
+   "field": "level",
+   "old": 42,
+   "new": 28,
+   "tier": "inferred",
+   "reason": "Overseer Turquar's row (upstream BossCreaturePreloader, one unsourced level for every Incline boss) said 42. TaRapedia's page states 28 in every revision that gives a level, rev 20780 (2007-12-14) through rev 24523 (2007-12-29); no source records a later change. A player-written level (inferred), taken over upstream's unsourced value under OD-171. The client carries no creature level; Incline's suggested player range in gamecontext.pyo is 24-27. max_hp is left as upstream wrote it (OD-172, GAP-UPSTREAM-BOSS-HP).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "page 'Overseer Turquar' revs 20780 (2007-12-14) to 24523 (2007-12-29): 'is a level 28 [[Thrax Soldier]], and one of [[The Four Horsemen]]'"
+    },
+    {
+     "source": "client_table:gamecontext-20260927",
+     "locator": "Incline suggested level range 24-27 (fields 4/5)"
+    },
+    {
+     "source": "client_table:creature-names",
+     "locator": "creature 520024 name_id is the client's own 'Overseer Turquar'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "TarapediaBossLevels",
+   "table": "creature",
+   "key": {
+    "id": 520025
+   },
+   "field": "level",
+   "old": 42,
+   "new": 30,
+   "tier": "inferred",
+   "reason": "Taskmaster Puuk's row (upstream BossCreaturePreloader, one unsourced level for every Incline boss) said 42. TaRapedia's page states 30 in every revision that gives a level, rev 20781 (2007-12-14) through rev 24564 (2007-12-30); no source records a later change. A player-written level (inferred), taken over upstream's unsourced value under OD-171. The client carries no creature level; Incline's suggested player range in gamecontext.pyo is 24-27. max_hp is left as upstream wrote it (OD-172, GAP-UPSTREAM-BOSS-HP).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "page 'Taskmaster Puuk' revs 20781 (2007-12-14) to 24564 (2007-12-30): 'is a [[level]] 30 [[Thrax Soldier]] [[boss]], and one of [[The Four Horsemen]]'"
+    },
+    {
+     "source": "client_table:gamecontext-20260927",
+     "locator": "Incline suggested level range 24-27 (fields 4/5)"
+    },
+    {
+     "source": "client_table:creature-names",
+     "locator": "creature 520025 name_id is the client's own 'Taskmaster Puuk'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "TarapediaBossLevels",
+   "table": "creature",
+   "key": {
+    "id": 520026
+   },
+   "field": "level",
+   "old": 42,
+   "new": 26,
+   "tier": "inferred",
+   "reason": "Thrall Bruunk's row (upstream BossCreaturePreloader, one unsourced level for every Incline boss) said 42. TaRapedia's page states 26 in every revision that gives a level, rev 20779 (2007-12-14) through rev 24565 (2007-12-30); no source records a later change. A player-written level (inferred), taken over upstream's unsourced value under OD-171. The client carries no creature level; Incline's suggested player range in gamecontext.pyo is 24-27. max_hp is left as upstream wrote it (OD-172, GAP-UPSTREAM-BOSS-HP).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "page 'Thrall Bruunk' revs 20779 (2007-12-14) to 24565 (2007-12-30): 'is a [[level]] 26 [[Lightbender]] [[boss]], and one of [[The Four Horsemen]]'"
+    },
+    {
+     "source": "client_table:gamecontext-20260927",
+     "locator": "Incline suggested level range 24-27 (fields 4/5)"
+    },
+    {
+     "source": "client_table:creature-names",
+     "locator": "creature 520026 name_id is the client's own 'Thrall Bruunk'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "TarapediaBossLevels",
+   "table": "creature",
+   "key": {
+    "id": 520027
+   },
+   "field": "level",
+   "old": 42,
+   "new": 26,
+   "tier": "inferred",
+   "reason": "Thrall Yquog's row (upstream BossCreaturePreloader, one unsourced level for every Incline boss) said 42. TaRapedia's page states 26 in every revision that gives a level, rev 20782 (2007-12-14) through rev 31501 (2008-07-22); no source records a later change. A player-written level (inferred), taken over upstream's unsourced value under OD-171. The client carries no creature level; Incline's suggested player range in gamecontext.pyo is 24-27. max_hp is left as upstream wrote it (OD-172, GAP-UPSTREAM-BOSS-HP).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "page 'Thrall Yquog' revs 20782 (2007-12-14) to 31501 (2008-07-22): 'is a [[level]] 26 [[Caretaker]] [[boss]], and one of [[The Four Horsemen]]'"
+    },
+    {
+     "source": "client_table:gamecontext-20260927",
+     "locator": "Incline suggested level range 24-27 (fields 4/5)"
+    },
+    {
+     "source": "client_table:creature-names",
+     "locator": "creature 520027 name_id is the client's own 'Thrall Yquog'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "TarapediaBossLevels",
+   "table": "creature",
+   "key": {
+    "id": 520048
+   },
+   "field": "level",
+   "old": 40,
+   "new": 28,
+   "tier": "inferred",
+   "reason": "Overseer Quarm's row (upstream BossCreaturePreloader, one unsourced level for every Plains boss) said 40. TaRapedia's page states 28 in every revision that gives a level, rev 16805 (2007-11-27) through rev 16805 (2007-11-27); no source records a later change. A player-written level (inferred), taken over upstream's unsourced value under OD-171. The client carries no creature level; Plains's suggested player range in gamecontext.pyo is 21-25. max_hp is left as upstream wrote it (OD-172, GAP-UPSTREAM-BOSS-HP).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "page 'Overseer Quarm' revs 16805 (2007-11-27) to 16805 (2007-11-27): {{NPC |Level=28 |Species=Thrax ... |Zone=Plains}}"
+    },
+    {
+     "source": "client_table:gamecontext-20260927",
+     "locator": "Plains suggested level range 21-25 (fields 4/5)"
+    },
+    {
+     "source": "client_table:creature-names",
+     "locator": "creature 520048 name_id is the client's own 'Overseer Quarm'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "TarapediaBossLevels",
+   "table": "creature",
+   "key": {
+    "id": 520049
+   },
+   "field": "level",
+   "old": 40,
+   "new": 25,
+   "tier": "inferred",
+   "reason": "Plains Devil Lord's row (upstream BossCreaturePreloader, one unsourced level for every Plains boss) said 40. TaRapedia's page states 25 in every revision that gives a level, rev 34918 (2008-10-10) through rev 34922 (2008-10-10); no source records a later change. A player-written level (inferred), taken over upstream's unsourced value under OD-171. The client carries no creature level; Plains's suggested player range in gamecontext.pyo is 21-25. max_hp is left as upstream wrote it (OD-172, GAP-UPSTREAM-BOSS-HP).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "page 'Plains Devil Lord' revs 34918 (2008-10-10) to 34922 (2008-10-10): {{Boss |Level=25 |Species=Beam Manta ... |Zone=Plains}}"
+    },
+    {
+     "source": "client_table:gamecontext-20260927",
+     "locator": "Plains suggested level range 21-25 (fields 4/5)"
+    },
+    {
+     "source": "client_table:creature-names",
+     "locator": "creature 520049 name_id is the client's own 'Plains Devil Lord'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "TarapediaBossLevels",
+   "table": "creature",
+   "key": {
+    "id": 520031
+   },
+   "field": "level",
+   "old": 38,
+   "new": 42,
+   "tier": "inferred",
+   "reason": "Daddy Long-Legs's row (upstream BossCreaturePreloader, one unsourced level for every Marshes boss) said 38. TaRapedia's page states 42 in every revision that gives a level, rev 17260 (2007-11-30) through rev 33763 (2008-09-20); no source records a later change. A player-written level (inferred), taken over upstream's unsourced value under OD-171. The client carries no creature level; Marshes's suggested player range in gamecontext.pyo is 36-38. max_hp is left as upstream wrote it (OD-172, GAP-UPSTREAM-BOSS-HP).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "page 'Daddy Long-Legs' revs 17260 (2007-11-30) to 33763 (2008-09-20): 'is a level 42 [[strider]] boss in [[Marshes]]'"
+    },
+    {
+     "source": "client_table:gamecontext-20260927",
+     "locator": "Marshes suggested level range 36-38 (fields 4/5)"
+    },
+    {
+     "source": "client_table:creature-names",
+     "locator": "creature 520031 name_id is the client's own 'Daddy Long-Legs'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "TarapediaBossLevels",
+   "table": "creature",
+   "key": {
+    "id": 520036
+   },
+   "field": "level",
+   "old": 38,
+   "new": 42,
+   "tier": "inferred",
+   "reason": "Seymour's row (upstream BossCreaturePreloader, one unsourced level for every Marshes boss) said 38. TaRapedia's page states 42 in every revision that gives a level, rev 35629 (2008-11-11) through rev 35630 (2008-11-11); no source records a later change. A player-written level (inferred), taken over upstream's unsourced value under OD-171. The client carries no creature level; Marshes's suggested player range in gamecontext.pyo is 36-38. max_hp is left as upstream wrote it (OD-172, GAP-UPSTREAM-BOSS-HP).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "page 'Seymour' revs 35629 (2008-11-11) to 35630 (2008-11-11): {{NPC |Level=42 |Species=Maw ... |Type=Boss}}, 'a level 42 Boss [[Maw]]'"
+    },
+    {
+     "source": "client_table:gamecontext-20260927",
+     "locator": "Marshes suggested level range 36-38 (fields 4/5)"
+    },
+    {
+     "source": "client_table:creature-names",
+     "locator": "creature 520036 name_id is the client's own 'Seymour'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "TarapediaBossLevels",
+   "table": "creature",
+   "key": {
+    "id": 520056
+   },
+   "field": "level",
+   "old": 35,
+   "new": 37,
+   "tier": "inferred",
+   "reason": "Goriam's row (upstream BossCreaturePreloader, one unsourced level for every Pools boss) said 35. TaRapedia's page states 37 in every revision that gives a level, rev 23352 (2007-12-22) through rev 24207 (2007-12-27); no source records a later change. A player-written level (inferred), taken over upstream's unsourced value under OD-171. The client carries no creature level; Pools's suggested player range in gamecontext.pyo is 33-36. max_hp is left as upstream wrote it (OD-172, GAP-UPSTREAM-BOSS-HP).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "page 'Goriam' revs 23352 (2007-12-22) to 24207 (2007-12-27): {{NPC |Level=37 |Species=Amoeboid |Type=Boss |Zone=Pools}}"
+    },
+    {
+     "source": "client_table:gamecontext-20260927",
+     "locator": "Pools suggested level range 33-36 (fields 4/5)"
+    },
+    {
+     "source": "client_table:creature-names",
+     "locator": "creature 520056 name_id is the client's own 'Goriam'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "TarapediaBossLevels",
+   "table": "creature",
+   "key": {
+    "id": 520058
+   },
+   "field": "level",
+   "old": 35,
+   "new": 37,
+   "tier": "inferred",
+   "reason": "Irix's row (upstream BossCreaturePreloader, one unsourced level for every Pools boss) said 35. TaRapedia's page states 37 in every revision that gives a level, rev 23354 (2007-12-22) through rev 35566 (2008-11-11); no source records a later change. A player-written level (inferred), taken over upstream's unsourced value under OD-171. The client carries no creature level; Pools's suggested player range in gamecontext.pyo is 33-36. max_hp is left as upstream wrote it (OD-172, GAP-UPSTREAM-BOSS-HP).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "page 'Irix' revs 23354 (2007-12-22) to 35566 (2008-11-11): {{NPC |Level=37 |Species=Thrax |Type=Boss |Zone=Pools}}"
+    },
+    {
+     "source": "client_table:gamecontext-20260927",
+     "locator": "Pools suggested level range 33-36 (fields 4/5)"
+    },
+    {
+     "source": "client_table:creature-names",
+     "locator": "creature 520058 name_id is the client's own 'Irix'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "TarapediaBossLevels",
+   "table": "creature",
+   "key": {
+    "id": 520059
+   },
+   "field": "level",
+   "old": 35,
+   "new": 37,
+   "tier": "inferred",
+   "reason": "Krammitron's row (upstream BossCreaturePreloader, one unsourced level for every Pools boss) said 35. TaRapedia's page states 37 in every revision that gives a level, rev 23349 (2007-12-22) through rev 31522 (2008-07-23); no source records a later change. A player-written level (inferred), taken over upstream's unsourced value under OD-171. The client carries no creature level; Pools's suggested player range in gamecontext.pyo is 33-36. max_hp is left as upstream wrote it (OD-172, GAP-UPSTREAM-BOSS-HP).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "page 'Krammitron' revs 23349 (2007-12-22) to 31522 (2008-07-23): {{NPC |Level=37 |Species=Strider |Type=Boss |Zone=Pools}}"
+    },
+    {
+     "source": "client_table:gamecontext-20260927",
+     "locator": "Pools suggested level range 33-36 (fields 4/5)"
+    },
+    {
+     "source": "client_table:creature-names",
+     "locator": "creature 520059 name_id is the client's own 'Krammitron'"
+    }
+   ]
+  },
+  {
+   "date": "2026-09-27",
+   "migration": "TarapediaBossLevels",
+   "table": "creature",
+   "key": {
+    "id": 520061
+   },
+   "field": "level",
+   "old": 35,
+   "new": 37,
+   "tier": "inferred",
+   "reason": "Orax's row (upstream BossCreaturePreloader, one unsourced level for every Pools boss) said 35. TaRapedia's page states 37 in every revision that gives a level, rev 23346 (2007-12-22) through rev 35569 (2008-11-11); no source records a later change. A player-written level (inferred), taken over upstream's unsourced value under OD-171. The client carries no creature level; Pools's suggested player range in gamecontext.pyo is 33-36. max_hp is left as upstream wrote it (OD-172, GAP-UPSTREAM-BOSS-HP).",
+   "citations": [
+    {
+     "source": "community_db:tarapedia-dit-review-20260927",
+     "locator": "page 'Orax' revs 23346 (2007-12-22) to 35569 (2008-11-11): {{NPC |Level=37 |Species=Thrax Grenadier |Type=Boss |Zone=Pools}}"
+    },
+    {
+     "source": "client_table:gamecontext-20260927",
+     "locator": "Pools suggested level range 33-36 (fields 4/5)"
+    },
+    {
+     "source": "client_table:creature-names",
+     "locator": "creature 520061 name_id is the client's own 'Orax'"
+    }
+   ]
   }
  ],
  "owner_decisions": [
@@ -120066,6 +120714,26 @@
    "notes": [
     "Raised by the PalisadesDossierMissions batch; no dossier counterpart."
    ]
+  },
+  {
+   "id": "OD-171",
+   "decision": "Level of a named boss whose world row is upstream's unsourced value and whose TaRapedia page states a level",
+   "default": "Take the page's level (inferred), citing the first and latest revision that state it; keep upstream's value where no page gives one",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default, for twelve bosses outside Palisades and the Divide (TarapediaBossLevels). The pages are player-written and ten of the twelve levels were first written before D11 (Plains Devil Lord and Seymour after it); no source records a later level change for these zones. Alternative: leave upstream's values until a capture shows a nameplate.",
+   "approved_on": "2026-09-27",
+   "record": "docs/retail-accuracy.md, 2026-09-27 - DIT reference review"
+  },
+  {
+   "id": "OD-172",
+   "decision": "Health of the twelve bosses whose level TarapediaBossLevels changes",
+   "default": "Leave max_hp as upstream wrote it (100 x its old level + 500)",
+   "status": "approved",
+   "review_status": "approved-by-agent-pending-owner-review",
+   "choice": "As the default: no source records any boss's health, and recomputing it with upstream's formula would present an emulator rule as evidence. The mismatch is recorded as GAP-UPSTREAM-BOSS-HP. Alternative: rescale max_hp with upstream's formula for internal consistency (an analogue).",
+   "approved_on": "2026-09-27",
+   "record": "docs/retail-accuracy.md, 2026-09-27 - DIT reference review"
   }
  ]
 }

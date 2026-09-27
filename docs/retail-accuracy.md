@@ -4866,3 +4866,90 @@ command was approved individually in default permission mode.
 - **Logged at load, not new**: missions 321, 955 and 969 are still withheld as incomplete, as on 2026-09-26.
 - **Not yet verified**: no client has logged in to the new build, so squad copies, the new doors, Pravus, the Divide
   operations and the Palisades missions have not been played in the real client.
+
+## 2026-09-27 — DIT reference review: Logos shrines, boss levels, the boot camp, Crucible and the mission list
+
+The DIT bot project compiled a Tabula Rasa reference from footage, Giddy Gamer's 2007 printables and TaRapedia
+(`~/backups/rasa-net/research/20260927-dit-tr-videos`, `ref/*.json`, `DIGEST.md`) and listed discrepancies with this
+world. Each was checked against the 1.16.5.0 client and maps and dated sources, not taken as fact. Working files, fetched
+pages (full TaRapedia revision histories, Ellatha lists) and hashes: `research/20260927-dit-discrepancies/` (`work/`,
+`tools/`, `work/SHA256SUMS`). Two migrations: `LogosGiveNegativeSwap` (20260927070000) and `TarapediaBossLevels`
+(20260927070100); decisions OD-171 and OD-172, agent-approved, pending owner review. No id allocated. The local
+`rasaworld.db` is the 2026-09-24 snapshot; later migrations touch neither table's compared rows.
+
+- **1. Give and Negative swapped: confirmed, fixed.** The world seed (LogosPreloader, 2023) had Give (15, the Give
+  stone 7296) on the hilltop north of Foxtrot Outpost and Negative (33, stone 12691) in the Benefactor Valley Xanx
+  cave. Both rows sit 2.73 m above an ArchElohLogosDispenserBase pedestal of the client map, which names no stone; the
+  cave pedestal (745.24, 97.85, -5.21) has TerraForeasCavern stalagmites, roots, crystals and a pool around it, the
+  hilltop one (184.09, 120.22, 137.75) Forean torches and firebugs. TaRapedia puts Give "within the upper part of the
+  Xanx cave" at (746, 98, -4) in every revision from 2007-09-04 to 2008-09-29 and Negative "North of Foxtrot Outpost" at
+  (184, 121, 138) from 2007-10-20 to 2008-09-29 (both Verified 2007-12-31); Giddy Gamer (2007-11-26) independently has
+  Give at (700, 85, 65) "take an army if <15" and Negative at (185, 120, 150) "hilltop east of trenches". Ellatha's
+  undated Divide list has them the other way round, as the seed does (Place_remaining_logos's statement that Ellatha
+  agrees with every pedestalled row stands for 162 of 164 now). TaRapedia accounts for that: from rev 21379
+  (2007-12-16) until rev 32061 (2008-08-24, "wrong displayed logos symbol bug was fixed") the Negative page carried
+  "The shrine displays symbol for Logos element Give". The hilltop shrine showed Give's glyph while granting Negative,
+  so a list keyed on glyphs names it Give. The post-fix state is taken: each row takes the other's position exactly and
+  keeps its own stone. Missions bind by logos id, so 1646 Logos: Give now leads to the cave. Tier inferred;
+  `GAP-DIVIDE-GIVE-NEGATIVE-FINAL` (no final-era capture).
+- **2. The other 19 of the 21 offsets over 5 m: refuted.** Every emulator row except Disperse sits on a client
+  pedestal, and no reference location lies within 5 m of any other pedestal in its map (only Give and Negative do).
+  The reference is imprecise or in another frame: Feeling, Heal and Trap are in the pre-rebuild Caves of Donn frame
+  (the final map is `cavesofdonn02`); Growth and East, Everyones, Few, Jump, Weave, Ours, At, Opposite, Cloud are Giddy
+  readings rounded to 5 m or printed with two numbers; East's first entry is Giddy's Plateau "Logos Obelisk" (22 m
+  from the If pedestal; his second, "East Val Maw -220 630", is the emulator's row within 1 m); Only (z -838 against
+  the pedestal's -678, with the page's own cave entrance at -823), Far (signs flipped), It (altitude 583 against 328.6)
+  are wiki typos; Time and Confront are 10 and 6 m TaRapedia readings. Disperse (P'reo Das) is the one row not on a
+  pedestal, a mission pickup Place_remaining_logos placed at Ellatha's reading fitted to the command room; Giddy is 10
+  m from it and neither is precise. Not in the reference: Cosmos, Immortality and West, which the client has
+  (logosstone constants, stone classes) and whose pedestals hold them; Giddy's "Empty" has no client logosstone
+  constant or stone class, and its Ashen Desert reading (625, 335, -35) is 7 m from Immortality. Nothing changed.
+- **3. Enemy levels: partly confirmed.** The client carries no creature level (entityclass, creaturenamelanguage,
+  gamecontext); its gamecontext.pyo gives each map the map window's suggested player range (fields 4/5,
+  `suggestedMinLevel`/`suggestedMaxLevel` in mapwindow), which is not a creature level. The reference's ranges are
+  derived from mission levels and zone bands and are not retail data either. Of the 105 placed hostile rows, 48 fall
+  outside their map's suggested range; nearly all are InfiniteRasa's boss rows (Add_boss_spawns, d717ed1), which give
+  every boss of a zone one unsourced level. Where a boss's own TaRapedia page states a level (full histories fetched
+  2026-09-27), that level is taken (OD-171): the Incline Four Horsemen Turquar 28, Puuk 30, Bruunk 26, Yquog 26 (were
+  42), Plains Overseer Quarm 28 and Plains Devil Lord 25 (were 40), Marshes Daddy Long-Legs and Seymour 42 (were 38),
+  Pools Goriam, Irix, Krammitron and Orax 37 (were 35). Ten of the twelve were first written before D11, none records a
+  later change. max_hp stays upstream's 100 x old level + 500 (OD-172, `GAP-UPSTREAM-BOSS-HP`). Already agreeing:
+  Cavalon 35, the Mires bosses, P'toryc 19, Excavator Xang 11, Lt. Casper 9. Left: the bosses with no level source
+  (`GAP-UPSTREAM-BOSS-LEVELS`, e.g. Overseer Nyxroq 42 and the Crucible 47s against suggested 24-27 and 38-41);
+  Palisades and Divide bosses belong to their own gaps and the parallel population batch; Ellatha's pre-D11 Wilderness
+  levels (Archfiend 13, Atropos 14, Horntail 13, Old Scratch 14 against 15; Tizzik Gi 2) are not applied to rebuilt
+  content (`GAP-WILDERNESS-BOSS-LEVELS-PRE-D11`).
+- **4. Later boot camp mission set: confirmed as intended.** The world runs the D11-rebuilt boot camp (Training Day,
+  Initiation, Gearing Up for Battle, Capture the Flag, Calling for Reinforcements and its retry, Getting It In Gear),
+  per `docs/bootcamp-client-evidence.md`. The seven launch-era names the reference takes from TaRapedia (Basic Training
+  101, Bootcamp Bypass, Obstruction Destruction, Carpe Diem, A Tale of Elements, The Last Stand, Moving Up to the Big
+  League) are absent from the final client's mission tables. Unchanged.
+- **5. Crucible is map 1993 `adv_arieki_ligo_burningsteps`: confirmed; no emulator defect.** The client's gamecontext
+  row 1993 is "Planet Arieki: Ligo - Crucible" (suggested 38-41); 2138 `staaljunkyard`, 2141 and 2146 are Crucible's
+  instances; 1977 `burningsteps_magmacaverns` is "Torden Abyss (Magma Caverns)". map_info, ClientMapTemplates, the
+  Crucible dropship "Dropship Transport: Ligo Crucible" and the hospitals use the client's names; only row comments
+  say "burningsteps". Two research artifacts are wrong: the 2026-09-26 mission catalog's zone tokens label 16
+  missions "Burning Steps" (1993 is Crucible, 1977 Abyss), leave 2138 unresolved, file 1763 Live Target Pens (client:
+  Howling Maw) under Pools and 1823 Sanctus Grotto (client: Descent) under Plateau; the ambient population survey's
+  "no standalone overworld map exists for Crucible" is wrong. The DIT reference itself files Sanctus Grotto under
+  Plateau; the client says Descent.
+- **6. Reference missions against the client catalog (research only).** Of the reference's 765, 741 match a client
+  mission name. 14 more are TaRapedia misspellings of client missions (923 Logos: Feeling, Trap, Heal; 924 Logos:
+  Communication, Control, Machine; 800 Amoebalicious; 551 Treeback Beachhead; 1862 and 1854 Infensus; 888 Tread
+  Lightly; 1863 Missing in Action; 925/1028/1029/1030 The Regulator: Part I-IV; 1946 Ways and Means; 1539
+  Mox-a-million). Ten are not in the final client: the seven launch-era boot camp missions; Hoping for the Best (pre-D11
+  Twin Pillars); Welcome Tour (TaRapedia: removed at D12 with the Cumbria Research Facility; its Corman speakers survive
+  in 337 The Reformists); Artificial Inquity (Commander Tong's Raksha pylons; the final client's Raksha Central
+  Dispatch Unit mission is 2028 War Machine, and 1678 is a disabled copy). Catalog zones that differ from the
+  reference's (17): eleven are hand-offs the catalog files under the receiver's zone (1742, 1745, 1746, 1747, 1748,
+  1070, 836, 835, 2016, 1541, 1068), not errors; 331 Eloh Translations is filed under Pools only through the Pools
+  duplicate Orton that PalisadesDossierMissions has since retired (stale); 508 Survey Says is a Wilderness mission
+  completed by Rogers and the reference's Mires Survey Says is the other client mission of that name, 1200; 1554
+  Choosing Sides and 2017 Symbolism are cross-zone chains; 1974 Deadly Silence completes with Elder Hathen, whom the
+  world spawns on Howling Maw against the reference's Plateau (open, and the Velon Hollow zone is only inferred in
+  the reference); Trick or Treat! is the Halloween event (1754 and three 2000000x copies). The catalog's
+  implemented/ready/blocked verdicts reflect the 2026-09-24 snapshot. Nothing seeded.
+- **Tests**: `DitDiscrepancyFixesTests` (the twelve levels written out independently, store types, every updated value
+  against its manifest change, the decisions and gaps, the migrated world loaded through `LogosRepository` and the
+  creature table, rollback exact, the deployed world's rows) and the `ContentSchemaMigrationTests` block (the swapped
+  shrines and levels, rollback and re-apply). Full suite 1529/1529.

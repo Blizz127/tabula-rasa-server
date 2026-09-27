@@ -1107,3 +1107,20 @@ changes of `PalisadesDossierMissions` and OD-153 to OD-160. Account: `docs/retai
 | mission levels | none | giver's level: 25, 25, 15, 30, 20 (OD-155) | TaRapedia NPC pages | analogue |
 | 368 | skips its Warnet kill and timer | unchanged (OD-157) | client objective 368/1 counter | gap |
 | 1799-1801, 337, 366 <- 1988, Aldrin | proposed | held / left (OD-153, OD-154) | dossier; D12.5 notes | gap |
+
+## DIT reference review: shrines, boss levels, Crucible, missions (2026-09-27)
+
+The DIT bot project's reference (`research/20260927-dit-tr-videos`) reported six discrepancies; each was checked against
+the 1.16.5.0 client and maps and dated TaRapedia, Giddy Gamer and Ellatha pages (`research/20260927-dit-discrepancies`).
+Tiers and gaps: the manifest changes of `LogosGiveNegativeSwap` and `TarapediaBossLevels`, OD-171 and OD-172. Account:
+`docs/retail-accuracy.md`, "DIT reference review".
+
+| claim | verdict | was | now | evidence | tier |
+| --- | --- | --- | --- | --- | --- |
+| Give/Negative swapped | confirmed | Give (15) on the Foxtrot hilltop, Negative (33) in the Xanx cave | exchanged; stones unchanged | client map pedestals and cavern; TaRapedia 2007-09..2008-09 and its 2007-12..2008-08 wrong-glyph bug; Giddy 2007-11-26 | inferred (coordinates original) |
+| 21 shrines > 5 m off | 2 confirmed, 19 refuted | all 20 pedestalled rows on client pedestals | unchanged | client map pedestals; reference typos, rounding, old Caves of Donn frame | original |
+| enemy levels wrong | partly | 12 bosses at upstream's per-zone value | TaRapedia's level (OD-171); hp kept (OD-172) | TaRapedia histories; gamecontext suggested ranges | inferred |
+| other boss levels | unverified | upstream values | unchanged (`GAP-UPSTREAM-BOSS-LEVELS`) | no level source | gap |
+| later boot camp | confirmed, intended | D11 set | unchanged | final client mission tables; bootcamp-client-evidence | original |
+| Crucible = 1993 | confirmed | client names throughout | unchanged; catalog and survey labels wrong (research) | gamecontext 1993 "Ligo - Crucible" | original |
+| 765 reference missions | research | — | 755 in the client (14 misspelt), 10 retired | client mission tables; TaRapedia | — |
