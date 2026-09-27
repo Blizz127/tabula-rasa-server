@@ -5076,3 +5076,20 @@ as at 15:19 UTC.
   party 1. The Divide → Wilderness trip at 16:34:50 came before the pair had spawned (they spawn only beside a
   Wilderness leader), so no follow was expected there. The "saved mission 767 has no definition" errors on each map
   load predate this deploy.
+
+## 2026-09-27 17:29 UTC (12:29 CDT) — Deploy: DIT spawn-anywhere fix on banshee-ax41
+
+The owner's go was relayed by the DIT session ("deploy"). Only the DIT overlay changed: `DitBotManager.cs` and
+`DitBotTests.cs` from `~/scratch/tr-fixes/spawn-anywhere` (copied to
+`~/backups/rasa-net/research/20260927-dit-spawn-anywhere`). The seven hook files are identical to the 16:32 UTC
+deploy. With this change the bots spawn beside their leader on any shared map, not only the Wilderness, and catch up
+after a teleport of 40 m or more on the same map.
+
+- **Verification before deploy**: the full suite with the world database on development 82ceb83 plus the new
+  overlay gave 1554 passed, 0 skipped. The image `rasa_net_game:dit-20260927d` (19a6390e510c) was built from
+  `git archive da8b161` with the overlay, with 0 compiler errors.
+- **Backups**: `~/backups/rasa-net/predeploy-20260927T172917Z/` holds the three databases (integrity_check ok),
+  compose files, appsettings, and the previous and new DIT files. The deploy checkout carries the new files.
+  Rollback: re-pin `rasa_net_game:dit-20260927c` (`docker-compose.dit.yml.before-20260927d`) and relaunch Game.
+- **Startup**: navmeshes 75/75, 16 rules, 573 rows, 0 gaps; Auth authenticated; `dit/status.json` enabled and
+  fresh; `/app/dit` mounted.
