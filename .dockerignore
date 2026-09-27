@@ -1,5 +1,9 @@
-# The Dockerfile copies source, evidence JSON and solution files only.
+# The Dockerfile copies source and solution files only.
 # Keep local runtime state and large research artifacts out of the build context.
+# A global.json in the checkout (for example one pinning a newer SDK for local tools) must not reach the
+# .NET 5 SDK build stage.
+global.json
+**/global.json
 .git
 .claude
 navmesh

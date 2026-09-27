@@ -86,10 +86,12 @@ the companions and neuronet reporting. After a relaunch, confirm that
 `dit/status.json` has `"enabled": true` and a fresh `checkedAtUtc`, and that
 `docker inspect rasa-net-game-1` lists `/app/dit` among its mounts.
 
-The overlay image is the current base Game image plus
-`src/Rasa.Game/Dit/DitBotManager.cs` and `src/Rasa.Test/DitBotTests.cs`. After
-building a new base image, rebuild the DIT image from that base with those two
-files copied in and `dotnet build src/Rasa.Game/Rasa.Game.csproj`; update the
+The overlay image is the base Game source plus the DIT overlay
+(`src/Rasa.Game/Dit/`, `src/Rasa.Test/Dit*.cs` and `dit-overlay.patch`). The
+runtime image has no SDK, so the overlay cannot be compiled on top of a built
+image: after building a new base image, copy the overlay into a tree of the same
+commit, apply the patch and `docker build` that tree with the repository
+Dockerfile (it publishes a Release build; see `docs/docker_setup.md`); update the
 image tag in `docker-compose.dit.yml` before relaunching. Do not retag or
 rebuild `rasa_net_game:latest` for DIT. Leave `src/Rasa.Game/Dit/`, the
 `Dit.DitBotManager` hooks in `Server.cs`, `CommunicatorManager.cs`,

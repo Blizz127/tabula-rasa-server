@@ -3,7 +3,10 @@ services:
     image: rasa_net_auth
     restart: always
     build: .
-    command: dotnet run --project src/Rasa.Auth/Rasa.Auth.csproj
+    # Release build published by the Dockerfile into /app/src/Rasa.Auth; the working directory stays /app.
+    command: dotnet src/Rasa.Auth/Rasa.Auth.dll
+    # Guardrail: Auth settles well under 100 MB; a runaway is stopped (and restarted) instead of starving the host.
+    mem_limit: 512m
     stdin_open: true
     tty: true
     ports:
@@ -20,7 +23,11 @@ services:
     image: rasa_net_game
     restart: always
     build: .
-    command: dotnet run --project src/Rasa.Game/Rasa.Game.csproj
+    # Release build published by the Dockerfile into /app/src/Rasa.Game; the working directory stays /app, so the
+    # databases, navmesh, dit and kb-articles.json resolve where they did under `dotnet run`.
+    command: dotnet src/Rasa.Game/Rasa.Game.dll
+    # Guardrail: a runaway Game is stopped (and restarted by `restart: always`) instead of starving the host.
+    mem_limit: 3g
     stdin_open: true
     tty: true
     ports:
