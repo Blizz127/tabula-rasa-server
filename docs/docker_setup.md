@@ -132,3 +132,10 @@ Exited. If it has, either build and re-pin only, without starting anything, or s
 the service's wake. On 2026-09-28 at 03:31 UTC a Game-only deploy of an asleep server started Game without Auth.
 Game retried "Could not connect to the Auth server" for 5 minutes, and stackd went into an error state ("partly
 running outside stackd").
+
+## Read-only world snapshot for other lanes (since 2026-09-28)
+
+`~/rasa-reference/rasaworld.snapshot.db` on banshee-ax41 is a read-only `sqlite3 .backup` copy of the live world
+database, for DIT research lanes to query instead of the live file. Refresh it after any deploy that applies a
+world migration. Its seeded rows carry provenance tiers in `docs/evidence/bootcamp-d11-reconstruction-manifest.json`;
+treat analogue and inferred values as estimates.
