@@ -5436,3 +5436,15 @@ OD-191 are the batch's, agent-approved, pending owner review.
   navmesh floor and paths, species in and out, store types, manifest rows and change entries, and rollback with
   SpawnPoolEntries loading. The ContentSchemaMigrationTests block covers rows and rollback. Provider parity is also tested.
   The Footage block now expects the new respawn.
+
+## 2026-09-28 19:34 UTC (14:34 CDT) — Deploy: ambient respawn 60–300 s and the Divide's open ground
+
+The owner decided (relayed by the Devbox Coordinator, ~14:42 CDT) on a respawn of 60–300 s, staggered, for the
+Divide and the Wilderness, with bosses unchanged. Development dfefa8a applies
+`20260928090000_AmbientPoolRespawn` (128 hostile ambient pools, including 83 Wilderness pools, set to
+60 + 10·((id·7) mod 25) s) and `20260928091000_DivideOpenGroundPopulations` (21 pools, 68 creatures). The world
+database is at 163 migrations; 885 spawnpools load. The full suite with the world database (ax41) gave 1556/1556.
+`rasa_net_game:dit-20260928k` (the DIT overlay G+C3 is unchanged); Game only, with no human online, under
+`.deploy-lock`. Backup: only `predeploy-20260928T193234Z`, whose `rasaworld.db` predates the migrations. Rollback:
+re-pin `rasa_net_game:dit-20260928j` and restore that `rasaworld.db`. `~/rasa-reference/rasaworld.snapshot.db` was
+refreshed.
