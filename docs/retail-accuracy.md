@@ -5356,3 +5356,14 @@ Each part has a hot switch. The 10 hook files are unchanged. The full suite with
 gave 1680/1680. `rasa_net_game:dit-20260928i`, Game only, deployed with no human online. Just after startup, Game
 used 1.91 GiB of 4 GiB. Backup: only `predeploy-20260928T170536Z`. Rollback: re-pin `rasa_net_game:dit-20260928h`.
 Not yet verified in play: visible gear, the spread across five maps, squad spacing.
+
+## 2026-09-28 17:14 UTC (12:14 CDT) — Staged while asleep: DIT C3 (quest leading)
+
+tr-chat's C3 on G (`~/scratch/tr-fixes/presence-C3`, `presence-C3-on-G.patch` e16e1192…, copied to
+`~/backups/rasa-net/research/20260928-dit-presence-C3`). It adds `DitGuide`: a squadmate leads the owner to an NPC,
+mission giver or named place on the same map when he asks in squad chat. It has a hot switch, `"guide"`, and does
+nothing until the hub sets DIT_TR_COMPANION_ACTIONS=on. The hook files are unchanged. The full suite with the world
+database gave 1681/1681. TR was asleep (stackd), so this was a build-and-re-pin only, under `.deploy-lock`:
+`rasa_net_game:dit-20260928j`, nothing started. The DIT files it replaced are in
+`~/backups/rasa-net/overlay-before-C3`, and the database backup from 17:05 UTC still applies. Rollback: re-pin
+`rasa_net_game:dit-20260928i`.
