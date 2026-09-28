@@ -5340,3 +5340,19 @@ still under `.deploy-lock`, with nothing started. Rollback: re-pin `rasa_net_gam
   `rasa_net_game:dit-20260928g`.
 - **Startup**: quest book 154/127/146, 864 spawnpools, navmeshes 75/75, 0 gaps, Auth authenticated.
 - **Not yet verified in play**: squadmate spacing and ground snapping (needs the owner's client).
+
+## 2026-09-28 17:06 UTC (12:06 CDT) — Deploy: DIT presence G (C2 + D + E + F) on banshee-ax41
+
+tr-chat's package G (`~/scratch/tr-fixes/presence-G`, `presence-G-on-C1.patch` d4743e5c…, copied to
+`~/backups/rasa-net/research/20260928-dit-presence-G`) on the live C1:
+- C2: an always-on spread by persona level over Wilderness, Divide, Palisades, Torden Plains and Mires, with no
+  owner-relative placement, and positions and activities that persist between sessions;
+- D: skills, gear and powers, with the armour-grade fix (grade = max(required level, the level band in the class
+  name));
+- E: Logos hunting, with the catch-up;
+- F: persona facts for the hub;
+- `PopMoves.SquadSlot` with the spacing test (400 arrivals, squads of 2–5, no two stops within 1.5 m).
+Each part has a hot switch. The 10 hook files are unchanged. The full suite with the world database (ax41, capped)
+gave 1680/1680. `rasa_net_game:dit-20260928i`, Game only, deployed with no human online. Just after startup, Game
+used 1.91 GiB of 4 GiB. Backup: only `predeploy-20260928T170536Z`. Rollback: re-pin `rasa_net_game:dit-20260928h`.
+Not yet verified in play: visible gear, the spread across five maps, squad spacing.
