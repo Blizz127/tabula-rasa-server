@@ -5314,3 +5314,29 @@ a live switch (`combatFeel`, `movement`). Strafing and jumping are left out unti
 evidenced. Only DIT files changed; the 10-hook patch 005369c66b49 is unchanged. The full suite with the world
 database gave 1641/1641. `rasa_net_game:dit-20260928g` (e9cd05833292) replaces the A-only `dit-20260928f` pin,
 still under `.deploy-lock`, with nothing started. Rollback: re-pin `rasa_net_game:dit-20260928e`.
+
+## 2026-09-28 16:53 UTC (11:53 CDT) — Deploy: DIT presence C1, the kick-display fix, and the day's hot config
+
+- **Code**: development 64510c1, which adds the `RemovePartyMember` id fix (kicked bots leave the owner's squad
+  window) to 36f6c17. The full suite with the world database, with the overlay (ax41, capped), gave 1645/1645.
+- **Overlay**: tr-chat's C1 (`~/scratch/tr-fixes/presence-C1`, `presence-C1-on-C.patch` e843cde6…, copied to
+  `~/backups/rasa-net/research/20260928-dit-presence-C1`) on A+B+C. It covers:
+  - squad chat for dead, far or loading squadmates;
+  - squad duty resumed after a revive;
+  - no revisiting a spot where the bot died twice, and a "meet at" line;
+  - no Squad Finder tell after a join;
+  - second-person squad lines with route ETAs;
+  - the question-clause check;
+  - the retreat window;
+  - ground snapping with a hot `groundOffset` (0.15 m);
+  - squad slots 2–4 m apart.
+  The 10 hook files are unchanged. `rasa_net_game:dit-20260928h`; base 64510c1.
+- **Hot config during the owner's session** (dit/population.json, kept): `"schedule": false` (always-fill presence;
+  the schedule left 1–2 bots on at weekday daytime) and `"maxPerBase": 4`. The previous values are in
+  `population.json.before-schedule-off-20260928` and `population.json.before-spread-20260928`.
+- **Not in this deploy**: DIT D+E+F (gear, Logos, persona facts). The rebased handoff with the armour-grade fix had
+  not landed, so bots still wear recruit gear.
+- **Backup**: only `predeploy-20260928T164807Z`, which includes `game-before.log`. Rollback: re-pin
+  `rasa_net_game:dit-20260928g`.
+- **Startup**: quest book 154/127/146, 864 spawnpools, navmeshes 75/75, 0 gaps, Auth authenticated.
+- **Not yet verified in play**: squadmate spacing and ground snapping (needs the owner's client).
