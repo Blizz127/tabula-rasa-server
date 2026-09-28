@@ -5504,3 +5504,18 @@ Changes (behaviour on the wire is unchanged; no new handshake):
 Next evidence: the first cold-start login after this is deployed. Its disconnect line gives the frames received and
 whether the Login was handled, which says whether the client closed on the acknowledgement or after logging in. A client-side log
 (`tabula_rasa` log or a Wine trace) from the owner's machine is the other missing source.
+
+## 2026-09-28 20:10 UTC (15:10 CDT) — Staged while asleep: disconnect reasons and socket fixes
+
+Development 92e5414 (full suite 1559/1559 on ax41):
+- every disconnect logs who ended it and why;
+- `LoginClient` drops its handler when it hands the socket to the world client;
+- the listener re-arms after a failed accept;
+- `ColdStartWorldLoginTests`.
+The investigation found that the first world login dropped after a wake (19:03:21 UTC, 205 ms) was closed by the
+client or the network, not the server. The auth→game handoff race and first-use initialisation were both ruled out.
+TR was asleep, so this was a build-and-re-pin only, under `.deploy-lock`: `rasa_net_game:dit-20260928l` (the G+C3
+overlay is unchanged), and `rasa_net_game:latest` / `rasa_net_auth:latest` retagged to the 92e5414 base. Both start
+at the next stackd wake. Backup: only `predeploy-20260928T200841Z`, which includes the previous game and auth logs.
+Rollback: re-pin `rasa_net_game:dit-20260928k` and retag `rasa_net_auth:latest` to `rasa_net_auth:release-20260928e`.
+Not yet verified: the first wake with the new logging.
