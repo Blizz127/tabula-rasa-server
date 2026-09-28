@@ -113,3 +113,9 @@ above. `docker-compose.dit.yml` only overrides `image` and adds `./dit:/app/dit`
 from `docker-compose.yml`. A Debug-era image (anything built before this change, including the rollback tags)
 has no published `Rasa.Game.dll` at that path. To roll back to one, restore the previous `docker-compose.yml`
 (`command: dotnet run --project ...`) as well as the image pin.
+
+## Deploy lock on banshee-ax41 (since 2026-09-28)
+
+While a deploy is under way, `~/servers/rasa-net/.deploy-lock` exists. Create it before the backups and remove it
+after Game is healthy. The on-demand sleep service (stackd) and the DIT offline-sim apply step check for it: stackd
+does not stop Game while it exists, and offline-sim keeps its plan pending instead of writing to `rasachar.db`.
