@@ -26,6 +26,11 @@
                     break;
             }
 
+            // The client keeps the id as a signed 32-bit int (WriteUInt sends ids above int.MaxValue as 0x1F), so
+            // an account id above 2147483647 - the DIT bots' 42000000xx - comes back negative, even after long().
+            if (value < 0 && value >= int.MinValue)
+                value = unchecked((uint)(int)value);
+
             return value > 0 && value <= uint.MaxValue ? (uint)value : 0;
         }
 
