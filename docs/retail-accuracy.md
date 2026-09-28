@@ -5448,3 +5448,59 @@ database is at 163 migrations; 885 spawnpools load. The full suite with the worl
 `.deploy-lock`. Backup: only `predeploy-20260928T193234Z`, whose `rasaworld.db` predates the migrations. Rollback:
 re-pin `rasa_net_game:dit-20260928j` and restore that `rasaworld.db`. `~/rasa-reference/rasaworld.snapshot.db` was
 refreshed.
+
+## 2026-09-28 — First world login after a cold start: investigation and disconnect reasons (branch `fix-first-login`, not deployed)
+
+The report: after a stackd wake, the owner's first world connection ended silently and the retry worked. Game
+(container started 19:02:43 UTC, authenticated with Auth 19:02:50.313): `*** Client connected from 172.56.61.66`
+19:03:21.388, `*** Client disconnected!` 19:03:21.593, nothing between; the retry connected 19:03:45.861 and played.
+Auth (the 17:45 wake): a 9 ms connection at 17:45:53.979, then a normal login at 17:45:56.515.
+
+What the code and logs establish:
+- **The Game did not close that connection.** Every server-initiated close on that path already logged a line
+  (version mismatch, invalid session, banned, already logged in, decode and handler exceptions, framing and pool drops
+  in `LengthedSocket.Drop`, unhandled socket-thread faults in `LengthedSocket.OperationCompleted`). The one path that
+  logged nothing was `Client.OnError`, which is how a FIN or RST from the other side arrives. The drop came 205 ms
+  after registration, about one round trip to that client (Auth shows 210–350 ms from its greeting to the client's
+  reply), so the client (or something between it and the server) closed the connection about when it received the
+  key-exchange acknowledgement or sent its Login.
+- **Not the Auth→Game handoff (hypothesis a).** Auth logs "redirected to the queue" only in
+  `HandleSuccessfulRedirect`, after the Game has answered the RedirectRequest (19:03:19.911 here), and a Login that
+  arrived before the session was registered is refused with a logged "invalid session data" line. There was none.
+- **Not a first-use fault on the server (hypothesis b).** Nothing on the key-exchange or login path swallows an
+  exception, and the key exchange a fresh process serves first is byte for byte the one it serves later: the fixed
+  server exponent makes the ServerKey constant, and `BigNum` DH agreed with `System.Numerics.BigInteger` on 400 random
+  client keys (scratch check). `ColdStartWorldLoginTests` runs the server's own `LengthedSocket`, `LoginManager`,
+  `LoginClient` and `Client.RegisterAtServer` over loopback against a scripted client: the first connection's
+  acknowledgement decrypts to `ENC OK` under the client's key, and its Login, split across two writes and sent while
+  the handoff waits on the Clients lock for a whole "tick", reaches the world client intact.
+- **The client has no short network timer that would fire here.** In `tabula_rasa.exe` (1.16.5.0) the only elapsed-time
+  checks in the net layer are the 3 s keep-alive (`NetSession::_CheckSendTimeout`, 0x70bc10, sends the 4-byte
+  channel-0xFF frame) and a 60 s key-negotiation timeout (`TCPConnection::_ProcessKeyNegotiation`, 0x70cfd2
+  `cmp …,0x3c` on a seconds field). Its script (`client/inputstate/login.pyo`, `GameOnDisconnect`) shows
+  "Disconnected" on any close it did not request. Why the client closed its first connection is therefore still
+  **unverified**; the server logs cannot say.
+- **The Auth 9 ms connections are probes, not failed logins (hypothesis c for Auth).** The same 5–15 ms
+  connect-and-close appears before warm logins too (19:03:38.547, 19:06:08.587, 19:14:59.137 …), with no `sent Login`.
+  The banshee-realm launcher's reachability probe (`LiveServiceReachabilityProbe`, targets auth 2106, game 8102 and
+  queue 8001) has that shape.
+
+Changes (behaviour on the wire is unchanged; no new handshake):
+- Every disconnect now says why. `LengthedSocket.DescribeError` turns an OnError into "the other side closed the
+  connection" / "reset the connection" / "closed locally" / the socket error. Game's `Client.Close(sendPacket, reason)`
+  logs `*** Client disconnected! Ip: <ip> - <reason> (state, account, ms since connecting, frames in, whether the
+  world Login was handled, last opcode)`; a malformed client message (`InvalidClientMessageException`, previously silent)
+  and every other caller pass a reason, and callers that do not are named by `[CallerMemberName]`. A world key
+  exchange that ends early is logged (`World key exchange with <ip> ended before it completed: …`), as are queue
+  connections (`Queue connection from <ip> closed: …`, including the silent public-key mismatch) and Auth
+  disconnects (timeout, logout, wrong password, locked account, out-of-turn opcode, refused redirect, socket close).
+- `LoginClient.Cleanup` also removes its `OnDrop`, which stayed on the socket after the handover and, on a later
+  drop, closed the socket under the world client and had its disconnect read as a local close.
+- A failed accept (a peer that resets before it is accepted) no longer leaves a listener that never accepts again:
+  `LengthedSocket` re-arms it (at once for ConnectionAborted/Reset, after 1 s otherwise) and logs the failure.
+- `docs/docker_setup.md` documents the true readiness signal (both handshake lines in the current container run and
+  in-namespace LISTEN on 8102 and 2106), which stackd's `probes.py` already uses.
+
+Next evidence: the first cold-start login after this is deployed. Its disconnect line gives the frames received and
+whether the Login was handled, which says whether the client closed on the acknowledgement or after logging in. A client-side log
+(`tabula_rasa` log or a Wine trace) from the owner's machine is the other missing source.

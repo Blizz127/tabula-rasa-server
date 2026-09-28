@@ -290,7 +290,7 @@ namespace Rasa.Game
             {
                 try
                 {
-                    client.Close(false);
+                    client.Close(false, "the shutdown countdown ended");
                     closed++;
                 }
                 catch (Exception e)

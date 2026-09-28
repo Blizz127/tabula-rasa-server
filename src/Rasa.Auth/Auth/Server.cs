@@ -468,7 +468,7 @@ namespace Rasa.Auth
 
                         try
                         {
-                            c.Close();
+                            c.Close($"updating it threw {e.GetType().Name}");
                         }
                         catch (Exception inner)
                         {
@@ -584,7 +584,7 @@ namespace Rasa.Auth
                     connected = Clients.Where(c => c.AccountEntry != null && c.AccountEntry.Id == account.Id).ToList();
 
                 foreach (var client in connected)
-                    client.Close();
+                    client.Close("the account was locked");
             }
 
             var notice = new AccountLockChangedPacket { AccountId = account.Id, Locked = locked };

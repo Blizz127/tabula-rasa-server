@@ -2,7 +2,9 @@
 using System.Buffers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -88,6 +90,15 @@ namespace Rasa.Game
         private int _pendingBytes;
         private const int MaxPendingBytes = 512 * 1024;
 
+        // What the disconnect line reports (Close). A connection that ends silently can only be
+        // told apart afterwards by these: how long it lasted, how many frames came in, whether the
+        // main loop got as far as handling its world Login, and the last message it handled. Written
+        // on the socket thread (frames) and the MainLoop (opcode, login); read once, when it closes.
+        private long _connectedAt;
+        private int _framesReceived;
+        private volatile bool _loginHandled;
+        private ClientMessageOpcode? _lastOpcode;
+
 
         private static PacketRouter<ClientPacketHandler, GameOpcode> PacketRouter { get; } = new PacketRouter<ClientPacketHandler, GameOpcode>();
 
@@ -125,6 +136,8 @@ namespace Rasa.Game
             for (var i = 0; i < 256; ++i)
                 SendSequence[i] = 1;
 
+            _connectedAt = Stopwatch.GetTimestamp();
+
             Logger.WriteLog(LogType.Network, "*** Client connected from {0}", Socket.RemoteAddress);
         }
 
@@ -151,13 +164,13 @@ namespace Rasa.Game
                     }
                     catch (InvalidClientMessageException)
                     {
-                        Close();
+                        Close(reason: $"a malformed {DescribeMessage(protocolPacket)}");
                         return;
                     }
                     catch (Exception e)
                     {
                         Logger.WriteLog(LogType.Error, $"Error handling {protocolPacket.Type} from {Socket?.RemoteAddress}, disconnecting client: {e}");
-                        Close();
+                        Close(reason: $"handling {protocolPacket.Type} threw {e.GetType().Name}");
                         return;
                     }
                 }
@@ -167,7 +180,7 @@ namespace Rasa.Game
                 // DecodeIncomingPackets() can throw while advancing the iterator (desynced
                 // or malformed stream), which the inner try above would never see.
                 Logger.WriteLog(LogType.Error, $"Error decoding packet stream from {Socket?.RemoteAddress}, disconnecting client: {e}");
-                Close();
+                Close(reason: $"decoding its packet stream threw {e.GetType().Name}");
                 return;
             }
 
@@ -181,11 +194,17 @@ namespace Rasa.Game
             catch (Exception e)
             {
                 Logger.WriteLog(LogType.Error, $"Error sending queued packets to {Socket?.RemoteAddress}, disconnecting client: {e}");
-                Close();
+                Close(reason: $"sending queued packets threw {e.GetType().Name}");
             }
         }
 
-        public void Close(bool sendPacket = true)
+        /// <summary>
+        /// Ends the connection. Every caller says why: the line this writes is the only record of a
+        /// connection that ended before it did anything else, and "disconnected" alone cannot tell
+        /// a client that left from one the server threw out (2026-09-28: a first world login after a
+        /// cold start ended 205 ms after "Client connected" with nothing in between).
+        /// </summary>
+        public void Close(bool sendPacket = true, string reason = null, [CallerMemberName] string caller = null)
         {
             if (State == ClientState.Disconnected)
                 return;
@@ -195,7 +214,7 @@ namespace Rasa.Game
                 if (State == ClientState.Disconnected)
                     return;
 
-                Logger.WriteLog(LogType.Network, "*** Client disconnected! Ip: {0}", Socket?.RemoteAddress);
+                Logger.WriteLog(LogType.Network, "*** Client disconnected! Ip: {0} - {1}", Socket?.RemoteAddress, DescribeClose(reason ?? $"closed by the server ({caller})"));
 
                 State = ClientState.Disconnected;
 
@@ -313,9 +332,13 @@ namespace Rasa.Game
 
         private void HandleProtocolPacket(ProtocolPacket protocolPacket)
         {
+            _lastOpcode = protocolPacket.Type;
+
             switch (protocolPacket.Type)
             {
                 case ClientMessageOpcode.Login:
+                    _loginHandled = true;
+
                     var loginMsg = GetMessageAs<LoginMessage>(protocolPacket);
 
                     if (loginMsg.Version.Length != 8 || loginMsg.Version != "1.16.5.0")
@@ -441,7 +464,7 @@ namespace Rasa.Game
 
                     if (!csmPacket.ReadPacket())
                     {
-                        Close(true);
+                        Close(true, $"an unreadable {csmPacket.MethodId} call");
                         return;
                     }
 
@@ -477,6 +500,20 @@ namespace Rasa.Game
                 return message;
             }
             throw new InvalidClientMessageException();
+        }
+
+        private static string DescribeMessage(ProtocolPacket packet)
+            => packet.Message is CallServerMethodMessage call ? $"{call.MethodId} call" : $"{packet.Type} message";
+
+        /// <summary>The disconnect line's detail: why, and where the connection had got to.</summary>
+        private string DescribeClose(string reason)
+        {
+            var lasted = _connectedAt == 0 ? "never registered" : $"{(Stopwatch.GetTimestamp() - _connectedAt) * 1000 / Stopwatch.Frequency} ms after connecting";
+            var account = AccountEntry != null ? $"account {AccountEntry.Id}" : "no account yet";
+            var login = _loginHandled ? "world Login handled" : "world Login not handled";
+            var last = _lastOpcode.HasValue ? $", last {_lastOpcode.Value}" : "";
+
+            return $"{reason} (state {State}, {account}, {lasted}, {_framesReceived} frame(s) in, {login}{last})";
         }
 
         public bool IsAuthenticated()
@@ -528,7 +565,7 @@ namespace Rasa.Game
 
         private void OnError(SocketAsyncEventArgs args)
         {
-            Close(false);
+            Close(false, LengthedSocket.DescribeError(args));
         }
 
         /// <summary>
@@ -538,7 +575,7 @@ namespace Rasa.Game
         /// </summary>
         private void OnDrop(string reason)
         {
-            Close(false);
+            Close(false, "dropped: " + reason);
         }
 		
         private void OnReceive(BufferData data)
@@ -547,6 +584,8 @@ namespace Rasa.Game
             var count = data.RemainingLength;
             if (count <= 0 || State == ClientState.Disconnected)
                 return;
+
+            Interlocked.Increment(ref _framesReceived);
 
             // Same rent-and-copy CopyFromArray() used to do; only the List.Add is deferred.
             var chunk = ArrayPool<byte>.Shared.Rent(count);
@@ -557,7 +596,7 @@ namespace Rasa.Game
             {
                 ArrayPool<byte>.Shared.Return(chunk);
                 Logger.WriteLog(LogType.Security, $"Client {Socket.RemoteAddress} has {pending} bytes of undrained input (limit {MaxPendingBytes}), disconnecting.");
-                Close(false);
+                Close(false, $"{pending} bytes of undrained input");
                 return;
             }
 

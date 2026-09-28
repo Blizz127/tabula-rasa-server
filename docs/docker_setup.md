@@ -133,6 +133,36 @@ the service's wake. On 2026-09-28 at 03:31 UTC a Game-only deploy of an asleep s
 Game retried "Could not connect to the Auth server" for 5 minutes, and stackd went into an error state ("partly
 running outside stackd").
 
+## When a woken server is ready for a login (since 2026-09-28)
+
+A TCP connect to 2106 is not a readiness check. docker-proxy on the host accepts the connection before anything
+listens inside the container, and a listening Auth is still not enough: until Game has registered with it, Auth
+lists the server as down (or not at all) and cannot redirect anyone to it. Treat Tabula Rasa as ready only when all of
+these hold for the **current** container run (compare the log timestamps with the container's `State.StartedAt`, so
+a previous run's lines do not count):
+
+1. Game has logged `*** Listening for clients on port 8102` and `Successfully authenticated with the Auth server!`.
+2. Auth has logged `*** Listening for clients on port 2106` and `The Game server (Id: 234, ...) has authenticated!`.
+3. A socket is in LISTEN on 8102 inside the Game container's network namespace and on 2106 inside Auth's
+   (`/proc/<container pid>/net/tcp`, state `0A`), not merely on the host.
+
+Game opens 8102 only after every manager has loaded (`Server.Start`), and it registers with Auth only after that, so
+line 1 is the later of the two and implies the world data is loaded. The queue port 8001 opens earlier, during
+start-up, and says nothing about readiness. stackd's `probes.py` (`rasa_health`) implements exactly this check, plus a
+3 s settle after the last of the four lines. The settle is harmless; no server-side step needs it (see the
+2026-09-28 cold-start entry in `docs/retail-accuracy.md`).
+
+What a login looks like in the logs, so a probe is not mistaken for a failure (both are from the 2026-09-28 wakes):
+
+- A reachability probe (the launcher's, or anything else that connects and closes) shows at Auth as a connection that
+  lasts 5–15 ms with no `sent Login` line. At Game it never reaches `*** Client connected` (that line is written
+  when the key exchange completes) and is logged as `World key exchange with <ip> ended before it completed: the
+  other side closed the connection`. Probes appear before warm logins as well; they are not the cold-start problem.
+- Every `*** Client disconnected!` line now carries its reason: `the other side closed the connection` (the client's
+  FIN), `the other side reset the connection`, `dropped: ...` (framing, buffers, send queue), or the server's own
+  reason. Game adds the client state, the account, how long the connection lasted, how many frames it received and
+  whether its world Login was handled. Queue connections are logged as `Queue connection from <ip> closed: ...`.
+
 ## Read-only world snapshot for other lanes (since 2026-09-28)
 
 `~/rasa-reference/rasaworld.snapshot.db` on banshee-ax41 is a read-only `sqlite3 .backup` copy of the live world

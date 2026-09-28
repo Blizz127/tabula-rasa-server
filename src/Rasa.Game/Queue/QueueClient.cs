@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 
 namespace Rasa.Queue
 {
@@ -55,7 +56,7 @@ namespace Rasa.Queue
             catch (Exception e)
             {
                 Logger.WriteLog(LogType.Error, $"Error handling queue packet from {Socket.RemoteAddress}, disconnecting: {e}");
-                Close();
+                Close($"handling its packet threw {e.GetType().Name}");
             }
         }
 
@@ -70,7 +71,7 @@ namespace Rasa.Queue
 
                     if (keyPacket.PublicKey != Manager.Config.PublicKey)
                     {
-                        Close();
+                        Close("its key exchange used a different public key");
                         return;
                     }
 
@@ -103,20 +104,28 @@ namespace Rasa.Queue
 
         private void OnError(SocketAsyncEventArgs args)
         {
-            Close();
+            Close(LengthedSocket.DescribeError(args));
         }
 
         /// <summary>The socket gave up on this connection; the reason is already logged.</summary>
         private void OnDrop(string reason)
         {
-            Close();
+            Close("dropped: " + reason);
         }
 
-        public void Close()
+        public void Close(string reason = null, [CallerMemberName] string caller = null)
         {
-            Socket.Close();
+            // Once per connection: the socket's own close cancels its receive, which comes back
+            // through OnError, and a handed-off client closing its queue socket is routine.
+            if (State == QueueState.Disconnected)
+                return;
 
+            var was = State;
             State = QueueState.Disconnected;
+
+            Logger.WriteLog(LogType.Network, $"Queue connection from {Socket.RemoteAddress} closed: {reason ?? $"closed by the server ({caller})"} (state {was}, account {UserId}).");
+
+            Socket.Close();
 
             Manager.Disconnect(this);
         }

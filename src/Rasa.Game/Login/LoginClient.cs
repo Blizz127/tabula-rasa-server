@@ -68,6 +68,11 @@ namespace Rasa.Login
 
         private void OnError(SocketAsyncEventArgs args)
         {
+            // The world connection is not logged until the key exchange completes, so without this
+            // a connection that ends inside it leaves no trace at all. The launcher's reachability
+            // probe (a bare TCP connect) ends here as well, which is what a probe looks like.
+            Logger.WriteLog(LogType.Network, $"World key exchange with {Socket.RemoteAddress} ended before it completed: {LengthedSocket.DescribeError(args)}.");
+
             Manager.Disconnect(this);
 
             Close();
@@ -81,11 +86,18 @@ namespace Rasa.Login
             Close();
         }
 
+        /// <summary>
+        /// Hands the socket over: every handler this exchange put on it comes off, OnDrop included.
+        /// OnDrop used to stay, so a drop after the handover reached this finished exchange first,
+        /// which closed the socket underneath the world client and had its disconnect logged as a
+        /// local close rather than as the drop it was.
+        /// </summary>
         private void Cleanup()
         {
             Socket.AutoReceive = true;
             Socket.OnReceive = null;
             Socket.OnError = null;
+            Socket.OnDrop = null;
             Socket.OnEncrypt = null;
         }
 

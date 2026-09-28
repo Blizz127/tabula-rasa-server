@@ -248,7 +248,10 @@ namespace Rasa.Networking
             Released,
 
             /// <summary>As Released, and a whole send went out, so the next queued send may start.</summary>
-            SendFinished
+            SendFinished,
+
+            /// <summary>The listener's accept failed; it is re-armed once the args is torn down.</summary>
+            AcceptFailed
         }
 
         /// <summary>
@@ -292,10 +295,14 @@ namespace Rasa.Networking
             if (outcome == Completion.Pending)
                 return;
 
+            var acceptError = args.SocketError;
+
             TeardownEventArgs(args);
 
             if (outcome == Completion.SendFinished)
                 SendNext();
+            else if (outcome == Completion.AcceptFailed)
+                RearmAcceptAfterFailure(acceptError);
         }
 
         private Completion OperationCompletedCore(SocketAsyncEventArgs args)
@@ -308,7 +315,12 @@ namespace Rasa.Networking
                     DiscardQueuedSends();
 
                 OnError?.Invoke(args);
-                return Completion.Released;
+
+                // A failed accept is one connection that went away before it was taken (a probe
+                // that connected and reset, say), not the end of the listener. Nothing but an accept
+                // re-arms the accept, so without this the listener stopped accepting for good and
+                // every later login hung at the connect without a line in the log.
+                return args == _acceptArgs ? Completion.AcceptFailed : Completion.Released;
             }
 
             var data = args.GetUserToken<BufferData>();
@@ -408,6 +420,29 @@ namespace Rasa.Networking
             }
 
             return Completion.Released;
+        }
+
+        /// <summary>
+        /// Why an OnError fired, in words an owner can put in its disconnect line. A receive of
+        /// zero bytes is the other side closing its end (a FIN): the client left, the server did
+        /// not throw it out. OperationAborted is this side's own Close() cancelling the receive it
+        /// had armed. Anything else is the socket error the operation ended with.
+        /// </summary>
+        public static string DescribeError(SocketAsyncEventArgs args)
+        {
+            if (args == null)
+                return "socket error";
+
+            if (args.SocketError == SocketError.Success && args.LastOperation == SocketAsyncOperation.Receive && args.BytesTransferred == 0)
+                return "the other side closed the connection";
+
+            if (args.SocketError == SocketError.OperationAborted)
+                return "the connection was closed locally";
+
+            if (args.SocketError == SocketError.ConnectionReset)
+                return "the other side reset the connection";
+
+            return $"{args.LastOperation} failed: {args.SocketError}";
         }
 
         /// <summary>The last resort must not itself be able to throw, whatever state the logger is in.</summary>
@@ -602,6 +637,39 @@ namespace Rasa.Networking
 
             if (!Socket.AcceptAsync(_acceptArgs))
                 OperationCompleted(Socket, _acceptArgs);
+        }
+
+        private void RearmAcceptAfterFailure(SocketError error)
+        {
+            // OperationAborted is this listener being closed; there is nothing to go back to.
+            if (error == SocketError.OperationAborted || error == SocketError.Shutdown || error == SocketError.NotSocket)
+                return;
+
+            SafeLog($"Accepting a connection failed ({error}); listening on.");
+
+            void Rearm(object _)
+            {
+                try
+                {
+                    AcceptAsync();
+                }
+                catch (ObjectDisposedException)
+                {
+                    // Closed in the meantime.
+                }
+                catch (Exception e)
+                {
+                    SafeLog($"Could not start accepting again after {error}: {e.Message}");
+                }
+            }
+
+            // A peer that went away before its accept is over at once; anything else (out of
+            // descriptors, say) could fail again straight away, so that waits a second instead of
+            // spinning on this thread.
+            if (error == SocketError.ConnectionAborted || error == SocketError.ConnectionReset)
+                Rearm(null);
+            else
+                System.Threading.Tasks.Task.Delay(1000).ContinueWith(_ => Rearm(null), System.Threading.Tasks.TaskScheduler.Default);
         }
 
         public void ConnectAsync(EndPoint remote)

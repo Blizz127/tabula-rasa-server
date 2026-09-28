@@ -213,7 +213,7 @@ namespace Rasa.Game
 
                         try
                         {
-                            client.Close(false);
+                            client.Close(false, $"updating it threw {e.GetType().Name}");
                         }
                         catch (Exception inner)
                         {
@@ -582,7 +582,7 @@ namespace Rasa.Game
             // Close() runs from socket threads already (OnError) and only enqueues the client; the
             // world removal and final save happen on the MainLoop, so it is safe from this thread.
             foreach (var client in online)
-                client.Close();
+                client.Close(reason: "the account was banned by Auth");
 
             Logger.WriteLog(LogType.Security, $"Account {packet.AccountId} banned by Auth; disconnected {online.Count} world connection(s).");
         }

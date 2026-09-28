@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace Rasa.Auth
@@ -86,7 +87,7 @@ namespace Rasa.Auth
             {
                 Logger.WriteLog(LogType.Network, "*** Client timed out! Ip: {0}", Socket.RemoteAddress);
 
-                Close();
+                Close("it timed out");
             });
 
             Logger.WriteLog(LogType.Network, "*** Client connected from {0}", Socket.RemoteAddress);
@@ -102,7 +103,7 @@ namespace Rasa.Auth
             catch (Exception e)
             {
                 Logger.WriteLog(LogType.Error, $"Error updating timers for {Socket.RemoteAddress}, disconnecting client: {e}");
-                Close();
+                Close($"updating its timers threw {e.GetType().Name}");
                 return;
             }
 
@@ -133,7 +134,7 @@ namespace Rasa.Auth
                 catch (Exception e)
                 {
                     Logger.WriteLog(LogType.Error, $"Error handling {packet.GetType().Name} from {Socket.RemoteAddress}, disconnecting client: {e}");
-                    Close();
+                    Close($"handling {packet.GetType().Name} threw {e.GetType().Name}");
                     return;
                 }
             }
@@ -149,11 +150,16 @@ namespace Rasa.Auth
             catch (Exception e)
             {
                 Logger.WriteLog(LogType.Error, $"Error sending queued packets to {Socket.RemoteAddress}, disconnecting client: {e}");
-                Close();
+                Close($"sending queued packets threw {e.GetType().Name}");
             }
         }
         
-        public void Close()
+        /// <summary>
+        /// Ends the connection, saying why. "Disconnected" alone could not tell the launcher's
+        /// reachability probe (a connect and an immediate close, a few ms) from a client the server
+        /// threw out, and the 2026-09-28 cold-start report needed exactly that distinction.
+        /// </summary>
+        public void Close(string reason = null, [CallerMemberName] string caller = null)
         {
             if (State == ClientState.Disconnected)
                 return;
@@ -165,7 +171,8 @@ namespace Rasa.Auth
                 if (State == ClientState.Disconnected)
                     return;
 
-                Logger.WriteLog(LogType.Network, "*** Client disconnected! Ip: {0}", Socket.RemoteAddress);
+                Logger.WriteLog(LogType.Network, "*** Client disconnected! Ip: {0} - {1} (state {2}{3})", Socket.RemoteAddress,
+                    reason ?? $"closed by the server ({caller})", State, AccountEntry != null ? $", account {AccountEntry.Id}" : "");
 
                 Timer.Remove("timeout");
                 Timer.Remove("InitialServerListWait");
@@ -204,7 +211,7 @@ namespace Rasa.Auth
             if (!IsExpected(authPacket.Opcode))
             {
                 Logger.WriteLog(LogType.Security, $"Client {Socket.RemoteAddress} sent {authPacket.Opcode} in state {State}; disconnecting.");
-                Close();
+                Close($"{authPacket.Opcode} out of turn");
                 return;
             }
 
@@ -252,7 +259,7 @@ namespace Rasa.Auth
                 case RedirectResult.Fail:
                     SendPacket(new PlayFailPacket(FailReason.UnexpectedError));
 
-                    Close();
+                    Close("the game server refused the redirect");
 
                     Logger.WriteLog(LogType.Error, $"Account ({AccountEntry.Username}, {AccountEntry.Id}) couldn't be redirected to server: {info.ServerId}!");
                     break;
@@ -284,7 +291,7 @@ namespace Rasa.Auth
 
         private void OnError(SocketAsyncEventArgs args)
         {
-            Close();
+            Close(LengthedSocket.DescribeError(args));
         }
 
         /// <summary>
@@ -293,7 +300,7 @@ namespace Rasa.Auth
         /// </summary>
         private void OnDrop(string reason)
         {
-            Close();
+            Close("dropped: " + reason);
         }
 
         private static void OnEncrypt(BufferData data, ref int length)
@@ -340,7 +347,7 @@ namespace Rasa.Auth
                 if (Interlocked.Increment(ref _queuedPackets) > MaxQueuedPackets)
                 {
                     Logger.WriteLog(LogType.Security, $"Client {Socket.RemoteAddress} has {_queuedPackets} unanswered packets queued (limit {MaxQueuedPackets}), disconnecting.");
-                    Close();
+                    Close($"{_queuedPackets} unanswered packets queued");
                     return;
                 }
 
@@ -350,7 +357,7 @@ namespace Rasa.Auth
             {
                 var what = opcode.HasValue ? $"a {opcode.Value} packet" : "a packet whose opcode could not be read";
                 Logger.WriteLog(LogType.Error, $"Error reading {what} from {Socket.RemoteAddress}, disconnecting client: {e}");
-                Close();
+                Close($"reading {what} threw {e.GetType().Name}");
             }
         }
 
@@ -380,21 +387,21 @@ namespace Rasa.Auth
             catch (EntityNotFoundException)
             {
                 SendPacket(new LoginFailPacket(FailReason.UserNameOrPassword));
-                Close();
+                Close("unknown user name");
                 Logger.WriteLog(LogType.Security, $"User ({packet.UserName}) tried to log in with an invalid username!");
                 return;
             }
             catch (PasswordCheckFailedException e)
             {
                 SendPacket(new LoginFailPacket(FailReason.UserNameOrPassword));
-                Close();
+                Close("wrong password");
                 Logger.WriteLog(LogType.Security, e.Message);
                 return;
             }
             catch (AccountLockedException e)
             {
                 SendPacket(new BlockedAccountPacket());
-                Close();
+                Close("the account is locked");
                 Logger.WriteLog(LogType.Security, e.Message);
                 return;
             }
@@ -416,7 +423,7 @@ namespace Rasa.Auth
 #pragma warning disable IDE0060 // Remove unused parameter
         private void MsgLogout(LogoutPacket packet)
         {
-            Close();
+            Close("the client logged out");
         }
 
         private void MsgServerListExt(ServerListExtPacket packet)
