@@ -5243,3 +5243,18 @@ development 3ca3247, and there is no migration.
 - **Startup**: 864 spawnpools, navmeshes 75/75, 16 rules / 577 rows / 0 gaps, Auth authenticated, DIT enabled.
 - **Not yet verified in play** (needs the owner's client): bots answering his Squad Finder ad, bot ads in Search, and
   the 25-bot population.
+
+## 2026-09-28 03:03 UTC (2026-09-27 22:03 CDT) — Deploy: bot user ids for kick, promote and join
+
+The owner had logged off; his last ping was at 03:00:26 UTC.
+
+- **Fix** (development 36f6c17): the DIT bots' account ids (42000000xx) are above `int.MaxValue`. `WriteUInt` sends
+  them to the client as 0x1F, the client holds them as a signed 32-bit int, and it echoed them back negative, so
+  `PartyArgs.ReadUserId` matched no member. The owner's four `KickUserFromPartyById` calls at 02:50 UTC removed
+  nobody. Promote-by-id and join-request answers were broken the same way. `PartyUserIdTests` covers it; the full
+  suite with the world database (on ax41, capped) gave 1547/1547.
+- **Image**: `rasa_net_game:dit-20260928c` from 36f6c17 with the unchanged 10-hook-file DIT overlay; only Game was
+  relaunched. The switches are unchanged (population, squadfinder, pair-lives).
+- **Backups**: only the latest, `~/backups/rasa-net/predeploy-20260928T030149Z/`. `.deploy-lock` was held during
+  the deploy. Rollback: re-pin `rasa_net_game:dit-20260928b` (`docker-compose.dit.yml.before-20260928c`).
+- **Startup**: 864 spawnpools, navmeshes 75/75, 0 gaps, Auth authenticated, DIT enabled.
