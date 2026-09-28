@@ -5201,3 +5201,24 @@ relayed the go for one combined post-logoff deploy of development aa329dd.
   backed-up `rasaworld.db`.
 - **Not yet verified in play**: the new creatures on Palisades, Plains and Mires (spawners run only while a player is
   on the map).
+
+## 2026-09-28 01:25 UTC (2026-09-27 20:25 CDT) — Deploy: the boot camp navmesh fix and the DIT 2-bot Bootcamp pilot
+
+The owner was offline in TR. The Devbox Coordinator relayed the owner's approval of the 2-bot Bootcamp pilot.
+
+- **Server fix** (development 3ca3247): `MapChannelManager.PerCharacterInstance` now gives each private boot camp the
+  context's navmesh. Before, every private camp ran without pathing, for human players too. The DIT pilot found
+  this. `PerCharacterInstanceNavMeshTests` covers it. The trench gap the pilot then reached is recorded as
+  `GAP-BOOTCAMP-TRENCH-NAVMESH` in `docs/navmesh.md`.
+- **Tests**: run on ax41 (local memory was short), capped at 1.5 CPUs / 3 GB with analyzers off and a single-node
+  build: 1544/1544 on 3ca3247, and 1610/1610 with the pilot overlay (`~/scratch/tr-fixes/bootcamp-pilot`, copied to
+  `~/backups/rasa-net/research/20260928-dit-bootcamp-pilot`; still 9 hook files).
+- **Images**: base d17537de909e from `git archive 3ca3247`; `rasa_net_game:dit-20260928a` 0c883fd22aec from branch
+  `deploy-20260928a` with the overlay, 0 compiler errors. Only Game was relaunched (auth code unchanged); memory cap
+  4 GiB.
+- **Pilot switch** (hot): `dit/population` plus `dit/population.json` = `{ "mode": "bootcamp", "target": 2 }`. At
+  01:25:33 and 01:25:37 UTC the log showed "DIT bootcamp Bram step 1 login: logged in: level 1, Bootcamp (own
+  instance 2)" and the same for Ysolde (instance 3); both accepted Initiation (1990) within 10 s.
+- **Backups**: `~/backups/rasa-net/predeploy-20260928T012244Z/`. Rollback: re-pin `rasa_net_game:dit-20260927g`
+  (`docker-compose.dit.yml.before-20260928a`) and relaunch Game, or switch the pilot off with `rm dit/population`.
+- **Startup**: 864 spawnpools, navmeshes 75/75, 16 rules / 577 rows / 0 gaps, Auth authenticated, DIT enabled.
