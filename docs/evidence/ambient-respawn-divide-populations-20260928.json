@@ -1,0 +1,3189 @@
+{
+ "schema": "rasa-ambient-respawn-divide-populations/1",
+ "date": "2026-09-28",
+ "batch": "AmbientPoolRespawn (20260928090000) and DivideOpenGroundPopulations (20260928091000), branch seed-populations-3",
+ "decision": "owner feedback 2026-09-28 (~17:55 UTC / 12:55 CDT): \"i see the mobs, they respawn really fast. world seems empty\"; OD-186 to OD-191",
+ "sources": {
+  "research": "research/20260928-seed-populations-3",
+  "footage": "research/20260928-seed-populations-3/footage/respawn-observations.json (sha256 0b0c809b255bc9ef114bc2499d491e0870deb256e8355b10dd298790e88c4549)",
+  "text": "research/20260928-seed-populations-3/text/respawn-text-evidence.json (sha256 d29f43208b2d4fa210f48b4d5dbf1eb55497272d2450952d649259fe66c7db4f)",
+  "divide": "research/20260928-seed-populations-3/divide/divide-creature-evidence.json (sha256 6761fbd2c1b9d8cbe04e2af20369ebdebb3a4767aab88c630464d45e9d5f562e)",
+  "map_fit": "research/20260928-seed-populations-3/divide/leaf116-map-fit.json (sha256 2d92604fc167722369bfd7e24b8971a80dc5f1bf3f242a5609b30a1ebb7471bf)",
+  "probes": "research/20260928-seed-populations-3/final.out (sha256 2ca46930b51689c081cbbec571a63750b47cfd0aa1020959c05979abd743a918)"
+ },
+ "respawn": {
+  "bracket_s": [
+   60.0,
+   300.0
+  ],
+  "formula": "60 + 10 x ((pool id x 7) mod 25) s",
+  "decision": "OD-186 (owner, 2026-09-28 ~14:42 CDT / 19:42 UTC, relayed by the Devbox Coordinator): 60-300 s, staggered so pools do not sync; the 2026-09-27 batches, the new Divide pools and the Wilderness hostile ambient pools; bosses and friendly/service pools excluded",
+  "server": "SpawnPoolManager refills a pool when all of its creatures are dead, respown_time x 100 ms after the last death; one value per pool, no jitter",
+  "footage": [
+   {
+    "id": "C2-corpse-return",
+    "video": "C2rGwo6fLw0",
+    "recorded": "2009-02-27",
+    "zone": "Torden Mires",
+    "place_measured": {
+     "x": 812,
+     "z": 212,
+     "unc_m": 15,
+     "source": "reg/C2rGwo6fLw0_mires.jsonl t=15-20"
+    },
+    "species": [
+     "Thrax Scavenger (Pillard thrax) L30",
+     "Thrax Technician Sergeant (Sergent du génie thrax) L29"
+    ],
+    "t_death": {
+     "value": 20,
+     "unc_s": 3,
+     "note": "group fight t=8-22 alongside allied Fusilier NPC soldiers; last hostile targeted alive ~t=20-22"
+    },
+    "t_reappear": null,
+    "interval_s": {
+     "value": 36,
+     "unc_s": 4,
+     "bound": "lower",
+     "meaning": "no live replacement at the kill spot 36 s after death"
+    },
+    "respawn_kind": "none observed",
+    "tier": "measured",
+    "caveat": null
+   },
+   {
+    "id": "IDA-gantic-site",
+    "video": "IDAug5iUa9c",
+    "recorded": "2008-12-13",
+    "zone": "Concordia Palisades (Cumbria Weald edge)",
+    "place_measured": {
+     "x": -64,
+     "z": 597,
+     "unc_m": 15,
+     "source": "encounters.json rows 126-206"
+    },
+    "species": [
+     "Executor Gantic L18 (named mission target)",
+     "Thrax Infantry PFC L17 escorts"
+    ],
+    "t_death": {
+     "value": 145,
+     "unc_s": 4,
+     "note": "Gantic's bar is draining t=128-145 and dark/empty from t=146. PFC escorts died during t=123-145. The PFC targets at t=158-163 are corpses."
+    },
+    "t_reappear": null,
+    "interval_s": {
+     "value": 109,
+     "unc_s": 6,
+     "bound": "lower",
+     "meaning": "nothing hostile reappeared at the site while the player stood there, looting and managing inventory, from death to t≈254. The player left at ≈t=258."
+    },
+    "respawn_kind": "none observed",
+    "tier": "measured",
+    "caveat": "Named mission target plus escorts, not an ambient pool, so it is weak evidence for ambient timing. It does show no 2 s-style refill at a cleared Bane group."
+   },
+   {
+    "id": "RCT-cp-dropship-waves",
+    "video": "rCt23ux-kyU",
+    "recorded": "2009-02-01",
+    "zone": "Torden Plains, Lightning Fields area, a control point under Bane attack ('Point de contrôle …' banner t≈364-368)",
+    "place_measured": null,
+    "species": [
+     "Thrax Infantry/Technician Corporal L25-27",
+     "Thrax Infantry/Technician Specialist L23-24"
+    ],
+    "t_death": {
+     "value": 340,
+     "unc_s": 6,
+     "note": "first wave (dropship landing t≈292-296, red landing glow) fought t≈310-345; corpses litter the CP by t≈350"
+    },
+    "t_reappear": {
+     "value": 394,
+     "unc_s": 4,
+     "note": "next Bane dropship visible over the gate t≈390-392, landing glow t≈394-398, wave engaged t≈404-410"
+    },
+    "interval_s": {
+     "value": 100,
+     "unc_s": 6,
+     "bound": "exact (dropship to dropship)",
+     "meaning": "~100 s between successive Bane dropship landings at an attacked CP. The gap from first-wave cleared to the next dropship is ~50 s."
+    },
+    "respawn_kind": "whole group by dropship (CP reinforcement wave)",
+    "tier": "observed",
+    "caveat": "CONTROL POINT REINFORCEMENT, NOT AMBIENT RESPAWN. Registration failed here (score 0.6-0.7), so there is no position. Only one interval was measured, because the player died at t≈414 (hospital map t≈416)."
+   },
+   {
+    "id": "FPE-cp-iapyx",
+    "video": "FpevZX2qIT8",
+    "recorded": "2009-02-28 (shutdown day)",
+    "zone": "Torden Mires, Control Point: Iapyx",
+    "place_measured": null,
+    "species": [
+     "Thrax Infantry WO",
+     "Hunter WO",
+     "Kael WO",
+     "Demon Pup Howler",
+     "Caretaker Pharmacologist",
+     "etc. L34-38"
+    ],
+    "t_death": null,
+    "t_reappear": null,
+    "interval_s": null,
+    "respawn_kind": "CP siege / final-event reinforcement",
+    "tier": "observed",
+    "caveat": "Shutdown-day CP event. Record separately and do not use for ambient timing."
+   },
+   {
+    "id": "NSZ-warnet-bait",
+    "video": "Nsz75UOlZz0",
+    "recorded": "2008-11-22",
+    "zone": "Warnet Caverns instance (Palisades)",
+    "place_measured": null,
+    "species": [
+     "Irate Warnet Soldier L18-19"
+    ],
+    "t_death": null,
+    "t_reappear": null,
+    "interval_s": null,
+    "respawn_kind": "scripted mission spawn (bait)",
+    "tier": "observed",
+    "caveat": "Instance, scripted spawn. Excluded from ambient timing."
+   },
+   {
+    "id": "RCT-atta-dwell",
+    "video": "rCt23ux-kyU",
+    "recorded": "2009-02-01",
+    "zone": "Torden Plains, Atta Territory",
+    "place_measured": {
+     "x": -580,
+     "z": 97,
+     "unc_m": 40,
+     "source": "reg t=735-835 (all within ~40 m of (-552..-607, 87..105))"
+    },
+    "species": [
+     "Atta Harvester Feeder L21-23",
+     "Atta Soldier Conscript L20-24",
+     "Atta Harvester Gatherer L25"
+    ],
+    "t_death": null,
+    "t_reappear": null,
+    "interval_s": null,
+    "respawn_kind": "undeterminable",
+    "tier": "observed",
+    "caveat": null
+   },
+   {
+    "id": "FARM-flaregashers",
+    "video": [
+     "K9i12Dw5IMc (2008-10-04)",
+     "MqWk5QW3sOw (2008-10-15)"
+    ],
+    "recorded": null,
+    "zone": "Torden Plains/Wilderness, outside Staal Junkyard",
+    "place_measured": null,
+    "species": [
+     "Flaregasher (level ~40-45 per uploader)"
+    ],
+    "t_death": null,
+    "t_reappear": null,
+    "interval_s": null,
+    "respawn_kind": "undeterminable (continuous supply)",
+    "tier": "observed",
+    "caveat": "Pre-final (Oct 2008) and 480p. Gives only a qualitative 'continuous supply' observation."
+   },
+   {
+    "id": "FARM-thunderhead",
+    "video": [
+     "4p5_NFQinNc (Joe Kaczmarek, 2008-11-27)",
+     "b-nBe7m2G6Y (Korky, uploaded 2011, recording date unknown)"
+    ],
+    "recorded": null,
+    "zone": "Thunderhead (Palisades?) near Control Point Fault Lever ('Control Point: Fault Lever' banner)",
+    "place_measured": null,
+    "species": [
+     "mixed Bane/Thrax, level ~40"
+    ],
+    "t_death": null,
+    "t_reappear": null,
+    "interval_s": null,
+    "respawn_kind": "undeterminable",
+    "tier": "inferred",
+    "caveat": null
+   },
+   {
+    "id": "FPE-ingruo-raid",
+    "video": "FpevZX2qIT8",
+    "recorded": "2009-02-28",
+    "zone": "Ingruo Valley",
+    "place_measured": null,
+    "species": [
+     "Ferocious Warnet Soldier L48-49",
+     "Filcher Embezzler L49",
+     "Xanx Slayer L47"
+    ],
+    "t_death": null,
+    "t_reappear": null,
+    "interval_s": null,
+    "respawn_kind": "n/a",
+    "tier": "observed",
+    "caveat": null
+   },
+   {
+    "id": "C2-moving-fight",
+    "video": "C2rGwo6fLw0",
+    "recorded": "2009-02-27",
+    "zone": "Torden Mires",
+    "place_measured": {
+     "x": 600,
+     "z": -54,
+     "unc_m": 15,
+     "source": "reg dwell t=295-370"
+    },
+    "species": [
+     "Caretaker Comm Officer",
+     "Thrax Scavenger",
+     "Kael Master Sergeant"
+    ],
+    "t_death": null,
+    "t_reappear": null,
+    "interval_s": null,
+    "respawn_kind": "n/a",
+    "tier": "observed",
+    "caveat": null
+   }
+  ],
+  "text": [
+   {
+    "subject": "Class IV Stalker under the bridge by Foxtrot Outpost (5,-5)",
+    "kind": "open-world creature (non-boss Stalker, single spawn)",
+    "zone": "Divide",
+    "interval_or_statement": "every 15 minutes",
+    "quote": "A Class IV Stalker spawns beneath the bridge next to Foxtrot Outpost every 15 minutes (at 5, -5 ...)",
+    "source": "https://tabularasa.fandom.com/wiki/The_Tallest",
+    "revision": "first 15638 (2007-11-20, anon); still in latest 33730 (2008-09-19)",
+    "date": "2007-11-20",
+    "era": "launch (<2008-01)",
+    "tier": "inferred",
+    "notes": "Stalker is a big war machine, closer to a mini-boss than ambient fauna; still unchanged on page in 2008-09."
+   },
+   {
+    "subject": "Stalker counting for Restraining Order (Mires lava flats)",
+    "kind": "open-world creature (Stalker)",
+    "zone": "Mires",
+    "interval_or_statement": "about six minutes",
+    "quote": "Respawn rate about six minutes.",
+    "source": "https://tabularasa.fandom.com/wiki/Restraining_Order",
+    "revision": "first 32668 (2008-09-01, anon); latest 35173 (2008-10-17)",
+    "date": "2008-09-01",
+    "era": "final (>=2008-09)",
+    "tier": "inferred",
+    "notes": "Mission 976; final-era observation."
+   },
+   {
+    "subject": "Miasma bulls at Vogren's Tomb",
+    "kind": "open-world creature group",
+    "zone": "Plateau (mission from New Velon Village)",
+    "interval_or_statement": "about 5 minutes; 4-5 up at once",
+    "quote": "Typically only 4-5 bulls spawn at one time.  Respawn rate is about 5 minutes.",
+    "source": "https://tabularasa.fandom.com/wiki/Graveyard_Shift",
+    "revision": "first 35967 (2009-01-30, anon); latest 35968",
+    "date": "2009-01-30",
+    "era": "final (>=2008-09)",
+    "tier": "inferred",
+    "notes": "Final-era (F2P period)."
+   },
+   {
+    "subject": "Kael south of AFS Resistance Camp (-350,-435)",
+    "kind": "open-world creature group",
+    "zone": "Plateau",
+    "interval_or_statement": "qualitative: \"respawn fairly quickly\"; 2-4 at a time",
+    "quote": "two to four Kael who respawn fairly quickly",
+    "source": "https://tabularasa.fandom.com/wiki/Plateau_Targets_of_Opportunity",
+    "revision": "first 28273 (2008-02-02, Dashiva); latest 35974 (2009-01-30)",
+    "date": "2008-02-02",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "inferred",
+    "notes": ""
+   },
+   {
+    "subject": "Beam Manta Glider Captains around (200,-230)",
+    "kind": "open-world creature group",
+    "zone": "Mires",
+    "interval_or_statement": "qualitative: \"respawn frequently\"",
+    "quote": "These are significantly easier to kill than the Beam Manta Glider Captains you will find around 200, 250, -230 and respawn frequently.",
+    "source": "https://tabularasa.fandom.com/wiki/Mires_Targets_of_Opportunity",
+    "revision": "first 26909 (2008-01-12, Dashiva); latest 35542 (2008-11-08)",
+    "date": "2008-01-12",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "inferred",
+    "notes": "Grammar ambiguous: \"respawn frequently\" may refer to the Floaters or the Captains."
+   },
+   {
+    "subject": "Flare Gashers before Staal Junkyard bridge",
+    "kind": "open-world creature group",
+    "zone": "Crucible",
+    "interval_or_statement": "qualitative: \"pretty short respawn time\"",
+    "quote": "They have a pretty short respawn time so it's easy to count your kills to 20",
+    "source": "https://tabularasa.fandom.com/wiki/Junkyard_Dogs",
+    "revision": "first 25956 (2008-01-05, Mekwall); latest 30406 (2008-04-17)",
+    "date": "2008-01-05",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "inferred",
+    "notes": ""
+   },
+   {
+    "subject": "Caretakers near the Destruction logos shrine",
+    "kind": "open-world creature (pair)",
+    "zone": "Mires (Fort Condor)",
+    "interval_or_statement": "qualitative: \"quick respawn\"",
+    "quote": "there are two on quick respawn near the shrine of [[Destruction (logos)]]",
+    "source": "https://tabularasa.fandom.com/wiki/Little_Bit_Crazy...",
+    "revision": "first 26944 (2008-01-12, Dashiva); latest 26963",
+    "date": "2008-01-12",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "inferred",
+    "notes": ""
+   },
+   {
+    "subject": "Thrax, Lightbenders and Kael around the Bane bunker",
+    "kind": "open-world creature group",
+    "zone": "Marshes? (So Thirsty...)",
+    "interval_or_statement": "qualitative: \"respawn very quickly\"",
+    "quote": "[[Thrax]], [[Lightbender]]'s and [[Kael]] respawn very quickly around the bunker.",
+    "source": "https://tabularasa.fandom.com/wiki/So_Thirsty...",
+    "revision": "first 25747 (2008-01-05, Karlman); latest 32401 (2008-08-28)",
+    "date": "2008-01-05",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "inferred",
+    "notes": "Zone not re-verified in this pass."
+   },
+   {
+    "subject": "Warnets (with Kennilaxx) near River-base Krimm",
+    "kind": "open-world creature group",
+    "zone": "Palisades (post-D12 rebuild era)",
+    "interval_or_statement": "qualitative: warnet \"high respawn rate\"",
+    "quote": "... the [[Warnet]] infested area where I have seen them kill him because of there high respawn rate",
+    "source": "https://tabularasa.fandom.com/wiki/Kennilaxx",
+    "revision": "first/latest 35398 (2008-10-25, Deilax)",
+    "date": "2008-10-25",
+    "era": "final (>=2008-09)",
+    "tier": "inferred",
+    "notes": "Final-era; Palisades was reworked in D12.5 (2008-09-18: spawns thinned/rebalanced)."
+   },
+   {
+    "subject": "Patrols near Camp Cato/Camp Inferno bridge (Maalev area)",
+    "kind": "open-world patrols",
+    "zone": "Mires? (Drill Instructors)",
+    "interval_or_statement": "qualitative: \"fast respawning patrols\"",
+    "quote": "The area is full of fast respawning patrols",
+    "source": "https://tabularasa.fandom.com/wiki/Drill_Instructors",
+    "revision": "first 30948 (2008-05-14, Gresh); latest 35323 (2008-10-23)",
+    "date": "2008-05-14",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "inferred",
+    "notes": ""
+   },
+   {
+    "subject": "Bane in the yard (Out of Thin Air)",
+    "kind": "open-world creature group",
+    "zone": "unverified",
+    "interval_or_statement": "qualitative: respawn after death",
+    "quote": "The ones in the yard respawn after death.",
+    "source": "https://tabularasa.fandom.com/wiki/Out_of_Thin_Air",
+    "revision": "35555 (2008-11-10, anon)",
+    "date": "2008-11-10",
+    "era": "final (>=2008-09)",
+    "tier": "inferred",
+    "notes": ""
+   },
+   {
+    "subject": "Tree Lurker Cubs west of a Wilderness camp",
+    "kind": "open-world creature pair",
+    "zone": "Wilderness (launch-era; obsolete after D11 rebuild)",
+    "interval_or_statement": "\"every few minutes\"",
+    "quote": "Two Tree Lurker Cubs are there, and they respawn every few minutes.",
+    "source": "/home/blizz/backups/rasa-net/research/20260927-zone-footage-search/search/brady_djvu.txt line 8178 (BradyGames guide, 2007-10)",
+    "revision": "n/a (print, pub. 2007-10)",
+    "date": "2007-10",
+    "era": "launch (<2008-01)",
+    "tier": "inferred",
+    "notes": "OBSOLETE for Wilderness (rebuilt D11, 2008-08-14). Do not use as analogue for rebuilt content."
+   },
+   {
+    "subject": "Howlers (3) with a Hunter at 533,275,307 near Badlands CP",
+    "kind": "open-world creature group",
+    "zone": "Plains (Ortho CP guide)",
+    "interval_or_statement": "qualitative: \"reliable respawn\"",
+    "quote": "There is one area of the zone that has a reliable respawn of 3 Howlers with a Hunter",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_16113.txt (Ten Ton Hammer \"Ortho Control Point\")",
+    "revision": "TTH node 16113 (date not extracted)",
+    "date": "2007-12",
+    "era": "launch (<2008-01)",
+    "tier": "inferred",
+    "notes": "Date unverified (TTH node ids ~16000 are Dec 2007)."
+   },
+   {
+    "subject": "Divide: Hominis Machina patrol (Officers Varga & Hraak + 4 Hominis escort)",
+    "kind": "open-world patrol (mission targets)",
+    "zone": "Divide",
+    "interval_or_statement": "\"every few minutes, then stop spawning for an unknown period of time\"; unlooted corpse blocks that individual's next spawn",
+    "quote": "They will spawn at the edge of Thoria Das by the fire pit (around 130, 850) every few minutes, then stop spawning for an unknown period of time... If a corpse is left unlooted that individual will not spawn in the next spawning until it is looted.",
+    "source": "https://tabularasa.fandom.com/wiki/There's_A_Hominus_Among_Us",
+    "revision": "first 33049 (2008-09-13, Ebonweaver); coords added 35926 (2009-01-20)",
+    "date": "2008-09-13",
+    "era": "final (>=2008-09)",
+    "tier": "inferred",
+    "notes": "Final-era. Earlier (2007-11/2008-01) text: \"I never saw them spawn for about half an hour ... on Divide District 1 this group spawned multiple times\" (rev 14477/25606, removed)."
+   },
+   {
+    "subject": "Divide: Bane patrols the Bane Battle Plans mission wants",
+    "kind": "open-world patrol",
+    "zone": "Divide",
+    "interval_or_statement": "qualitative: patrol \"travels that area's roads all the time\"; revisit periodically",
+    "quote": "The wandering enemy patrol that you seek travels that area's roads all the time. Even if you miss them on your first trip, it's not a big deal.",
+    "source": "/home/blizz/backups/rasa-net/research/20260927-footage-study/brady/brady_divide.txt leaf 117",
+    "revision": "BradyGames 2007-10",
+    "date": "2007-10",
+    "era": "launch (<2008-01)",
+    "tier": "inferred",
+    "notes": "Launch-era; Divide not known to be rebuilt."
+   },
+   {
+    "subject": "Palisades: Bane Hunting Party patrol",
+    "kind": "open-world patrol (mission)",
+    "zone": "Palisades",
+    "interval_or_statement": "~5 minutes wait observed",
+    "quote": "1/24/09 - Found the patrol at the above spot (485,300) after approximately 5 minutes of waiting.",
+    "source": "https://tabularasa.fandom.com/wiki/Intercept_Bane_Hunting_Parties",
+    "revision": "35931 (2009-01-24, anon)",
+    "date": "2009-01-24",
+    "era": "final (>=2008-09)",
+    "tier": "inferred",
+    "notes": "Final-era."
+   },
+   {
+    "subject": "Incline: named target next to crate (Intercept and Exterminate)",
+    "kind": "named mission target",
+    "zone": "Incline (Nyxroq Post)",
+    "interval_or_statement": "every 3-4 minutes",
+    "quote": "She spawns next to the crate every 3-4 minutes.",
+    "source": "https://tabularasa.fandom.com/wiki/Intercept_and_Exterminate",
+    "revision": "first 20686 (2007-12-14, Dashiva)",
+    "date": "2007-12-14",
+    "era": "launch (<2008-01)",
+    "tier": "inferred",
+    "notes": ""
+   },
+   {
+    "subject": "Respawn tied to corpse fade: looted corpses fade and respawn sooner",
+    "kind": "mechanic (open world, CP)",
+    "zone": "Control Point (generic, written for a Torden CP)",
+    "interval_or_statement": "qualitative",
+    "quote": "Do not loot the bodies if you can avoid it, as looted bodies fade (and therefore respawn) faster than bodies with any loot in them.",
+    "source": "https://tabularasa.fandom.com/wiki/Control_Point",
+    "revision": "33836 (2008-09-22, EvilSmoo)",
+    "date": "2008-09-22",
+    "era": "final (>=2008-09)",
+    "tier": "inferred",
+    "notes": "Final-era; consistent with Up and Atta'em (2008-11-10) and the Hominus patrol note (2008-09-13)."
+   },
+   {
+    "subject": "Unlooted corpses delay respawn",
+    "kind": "mechanic (open world)",
+    "zone": "Plains (Up and Atta 'em)",
+    "interval_or_statement": "qualitative",
+    "quote": "clear the field ... of any atta and xanx, but do not loot their corpses. This will keep them from respawning for a while.",
+    "source": "https://tabularasa.fandom.com/wiki/Up_and_Atta_'em",
+    "revision": "first 35557 (2008-11-10, Deoradhan)",
+    "date": "2008-11-10",
+    "era": "final (>=2008-09)",
+    "tier": "inferred",
+    "notes": "Final-era."
+   },
+   {
+    "subject": "Caves of Donn: loot corpses so they do not respawn (contradicts the above)",
+    "kind": "mechanic (instance)",
+    "zone": "Caves of Donn (Wilderness instance)",
+    "interval_or_statement": "qualitative",
+    "quote": "pick up the corpse loot from the machinas as you kill them, if possible, to make sure they don't respawn",
+    "source": "https://tabularasa.fandom.com/wiki/Caves_of_Donn",
+    "revision": "first 5090 (2007-08-16, Geschafft); latest 24944",
+    "date": "2007-08-16",
+    "era": "launch (<2008-01)",
+    "tier": "inferred",
+    "notes": "Pre-launch/launch instance note; conflicts with the 2008 corpse-fade statements. Unreconciled."
+   },
+   {
+    "subject": "Meat Grinder (Divide ToO boss, trench south of Delta)",
+    "kind": "named boss",
+    "zone": "Divide",
+    "interval_or_statement": "~6 min (rev 12833) then edited to \"7 Minute Respawn Aprox.\" (rev 12835)",
+    "quote": "He usually spawns south of Delta Outpost, near location 543, 49, -532. (7 Minute Respawn Aprox.)",
+    "source": "https://tabularasa.fandom.com/wiki/Divide_Targets_of_Opportunity",
+    "revision": "12833/12835 (2007-11-05, same anon IP 84.120.81.151); still in latest 34567 (2008-10-02)",
+    "date": "2007-11-05",
+    "era": "launch (<2008-01)",
+    "tier": "inferred",
+    "notes": "Carried unchanged through 2008-10; no later contradiction found."
+   },
+   {
+    "subject": "Caretaker Mordra (Divide ToO boss, lvl 24)",
+    "kind": "named boss",
+    "zone": "Divide",
+    "interval_or_statement": ">=50 min (2007-11-07) -> \"approximately 10 minutes\" as of Deployment 11.6",
+    "quote": "The time between spawns is at least 50 minutes. (As of Deployment 11.6, spawn time has been reduced to approximately 10 minutes.)",
+    "source": "https://tabularasa.fandom.com/wiki/Caretaker_Mordra",
+    "revision": "50 min: 13114 (2007-11-07); D11.6 note: 31805 (2008-08-19, Chatoyant); latest 35755 (2008-12-09)",
+    "date": "2008-08-19",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "inferred",
+    "notes": "Late-era value ~10 min. \"Deployment 11.6\" patch-note text not found in cached captures (deployment_11360.html has no content)."
+   },
+   {
+    "subject": "Buzzrup (Warnet boss, Horsetail Falls)",
+    "kind": "named boss",
+    "zone": "Wilderness (post-D11)",
+    "interval_or_statement": "about 2 minutes; spawns with ~5 warnets",
+    "quote": "Respawn is about 2 minutes and he's no tougher than other warnets.  He spawns with about 5 other warnets.",
+    "source": "https://tabularasa.fandom.com/wiki/Double_Dog_Tag_Dare",
+    "revision": "31691 (2008-08-10, Ebonweaver)",
+    "date": "2008-08-10",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "inferred",
+    "notes": "Written 4 days before D11 went live (2008-08-14); Wilderness rebuilt in D11, so may be obsolete."
+   },
+   {
+    "subject": "Lawfoid / Mirtanz (Thrax Technician bosses + 3-4 technicians)",
+    "kind": "named boss",
+    "zone": "Palisades (pre-D12)",
+    "interval_or_statement": "every 5-10 minutes",
+    "quote": "he respawns every 5-10 minutes.",
+    "source": "https://tabularasa.fandom.com/wiki/Lawfoid ; https://tabularasa.fandom.com/wiki/Mirtanz",
+    "revision": "24517 / 24521 (2007-12-29, Banns)",
+    "date": "2007-12-29",
+    "era": "launch (<2008-01)",
+    "tier": "inferred",
+    "notes": "Palisades reworked D12.5 (2008-09-18); may be obsolete."
+   },
+   {
+    "subject": "Kennilaxx (Palisades boss)",
+    "kind": "named boss",
+    "zone": "Palisades",
+    "interval_or_statement": "5-10 minutes",
+    "quote": "Respawn time: 5-10 Minutes",
+    "source": "https://tabularasa.fandom.com/wiki/Kennilaxx",
+    "revision": "35398 (2008-10-25, Deilax)",
+    "date": "2008-10-25",
+    "era": "final (>=2008-09)",
+    "tier": "inferred",
+    "notes": "Final-era."
+   },
+   {
+    "subject": "Cavalon (Pools named Bane w/ escort)",
+    "kind": "named boss",
+    "zone": "Pools (Retread Camp area)",
+    "interval_or_statement": "qualitative: respawned twice while writing",
+    "quote": "He respawned there twice on top of me as I was writing this in another window.",
+    "source": "https://tabularasa.fandom.com/wiki/Cavalon",
+    "revision": "first 35895 (2009-01-18, BluSky) quoting a 19 July 2008 sighting",
+    "date": "2008-07-19",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "inferred",
+    "notes": "Suggests a few-minute timer."
+   },
+   {
+    "subject": "Grumble (Pools named)",
+    "kind": "named boss",
+    "zone": "Pools",
+    "interval_or_statement": "qualitative: waited for respawn, it came back nearby",
+    "quote": "I waited for respawn and he DID respawn just a short bit away",
+    "source": "https://tabularasa.fandom.com/wiki/Grumble",
+    "revision": "31079 (2008-06-03, Drifterella)",
+    "date": "2008-06-03",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "inferred",
+    "notes": ""
+   },
+   {
+    "subject": "Overseer P'toryc and group",
+    "kind": "named boss",
+    "zone": "Wilderness? (Hedgehog Down)",
+    "interval_or_statement": "qualitative: group respawns",
+    "quote": "[[Overseer P'toryc]] and his group will respawn, so if you go there and the overseer is dead ... wait for a bit.",
+    "source": "https://tabularasa.fandom.com/wiki/Hedgehog_Down",
+    "revision": "16688 (2007-11-27)",
+    "date": "2007-11-27",
+    "era": "launch (<2008-01)",
+    "tier": "inferred",
+    "notes": ""
+   },
+   {
+    "subject": "Hygax (lvl 20 Palisades boss); Nyxroq-area named",
+    "kind": "named boss",
+    "zone": "Palisades / Incline",
+    "interval_or_statement": "\"wait around a few minutes for him to respawn\"",
+    "quote": "If you don't immediately spot him, wait around a few minutes for him to respawn.",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_14652.html; tth_node_28481.html",
+    "revision": "TTH (2007-11 / 2008-02, dates approximate)",
+    "date": "2007-11",
+    "era": "launch (<2008-01)",
+    "tier": "inferred",
+    "notes": "Qualitative \"a few minutes\"."
+   },
+   {
+    "subject": "Conscript Naan (Divide mission Thrax officer)",
+    "kind": "named mission target",
+    "zone": "Divide",
+    "interval_or_statement": "qualitative: \"spawns frequently enough\"",
+    "quote": "he currently spawns frequently enough a few circles around the base should locate him",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_13755.txt (TTH \"Foreas Base Missions\", 2007-10-23)",
+    "revision": "TTH node 13755",
+    "date": "2007-10-23",
+    "era": "launch (<2008-01)",
+    "tier": "inferred",
+    "notes": "Launch-era."
+   },
+   {
+    "subject": "Bane named boss in Gellman Meadow (Wilderness)",
+    "kind": "named boss",
+    "zone": "Wilderness (pre-D11, obsolete)",
+    "interval_or_statement": "qualitative: \"wait ... until his spawn time cycles back\"",
+    "quote": "If you dont see the Boss right away, wait around for a bit until his spawn time cycles back through.",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_18138.txt (TTH Leveling Guide 10-15, 2008-01-09)",
+    "revision": "TTH 18138",
+    "date": "2008-01-09",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "inferred",
+    "notes": "Obsolete zone layout."
+   },
+   {
+    "subject": "Named quest mob (beta preview)",
+    "kind": "named mission target",
+    "zone": "unknown (beta)",
+    "interval_or_statement": "qualitative: respawned quickly, killed 5 times",
+    "quote": "One named quest mob seemed to respawn quickly ... killing him 5 times before getting his head (paraphrase via search summary)",
+    "source": "http://tobolds.blogspot.com/2007/09/tabula-rasa-preview.html",
+    "revision": "blog 2007-09",
+    "date": "2007-09",
+    "era": "launch (<2008-01)",
+    "tier": "inferred",
+    "notes": "Beta-era; page not fetched directly (search-summary only) - low weight."
+   },
+   {
+    "subject": "Divide: Bane food crates (Care and Feeding of Prisoners)",
+    "kind": "object (mission crate)",
+    "zone": "Divide",
+    "interval_or_statement": "\"longer than usual, several minutes or so\"",
+    "quote": "Note that the respawn times for these crates is longer than usual, several minutes or so.",
+    "source": "/home/blizz/backups/rasa-net/research/20260927-footage-study/brady/brady_divide.txt leaf 120",
+    "revision": "BradyGames 2007-10",
+    "date": "2007-10",
+    "era": "launch (<2008-01)",
+    "tier": "inferred",
+    "notes": "Implies \"usual\" crate respawn is shorter than several minutes. TTH 13755 gives the two crash sites (-5.6,130.2) and (-88.0,89.5)."
+   },
+   {
+    "subject": "Divide: ambient ammunition crates",
+    "kind": "object",
+    "zone": "Divide",
+    "interval_or_statement": "fixed to \"take proper damage and respawn\" (no interval)",
+    "quote": "Ambient ammunition crates in Foreas divide will now take proper damage and respawn.",
+    "source": "https://tabularasa.fandom.com/wiki/Updates/2008-01-29 (Patch 1.4 live)",
+    "revision": "TaRapedia rev 27883 (2008-01-29, Dashiva); also rgtr copy research/20260926-reward-items/work/rgtr-patch-1.4-20080129.txt",
+    "date": "2008-01-29",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "original",
+    "notes": "Official live patch note (original tier for the fact of respawn; no interval)."
+   },
+   {
+    "subject": "Devil's Den Eloh artifact containers",
+    "kind": "object (instance)",
+    "zone": "Devil's Den (Palisades instance)",
+    "interval_or_statement": "every 1-2 minutes",
+    "quote": "The artifacts are located in containers near each of the three main bosses, and respawn every 1-2 minutes.",
+    "source": "https://tabularasa.fandom.com/wiki/Recover_the_Eloh_Artifacts",
+    "revision": "35094 (2008-10-15, Wildstoo)",
+    "date": "2008-10-15",
+    "era": "final (>=2008-09)",
+    "tier": "inferred",
+    "notes": "Final-era. Brady (2007-10) also: \"There are only a few crates, but they respawn very quickly.\" Patch 1.4 (2008-01-29): \"Destroyed objects in Devil's Den should no longer respawn\" (destroyables, not these containers)."
+   },
+   {
+    "subject": "Centrifuge crystal crates (Crater Lake Research Facility)",
+    "kind": "object (instance)",
+    "zone": "Wilderness instance",
+    "interval_or_statement": "\"given a minute or two\"",
+    "quote": "they will respawn given a minute or two",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_12625.txt",
+    "revision": "TTH 12625 (2007-10)",
+    "date": "2007-10",
+    "era": "launch (<2008-01)",
+    "tier": "inferred",
+    "notes": ""
+   },
+   {
+    "subject": "Mires Barb Tick \"Machinery\" destructible",
+    "kind": "object (spawner)",
+    "zone": "Mires",
+    "interval_or_statement": "re-spawns every one minute (spawns 6 Barb Ticks)",
+    "quote": "The Machinery, when destroyed, re-spawns every one minute.",
+    "source": "https://tabularasa.fandom.com/wiki/Mires_Targets_of_Opportunity",
+    "revision": "34220 (2008-09-25, anon)",
+    "date": "2008-09-25",
+    "era": "final (>=2008-09)",
+    "tier": "inferred",
+    "notes": "Final-era."
+   },
+   {
+    "subject": "Mires crates for \"Unlockable\"",
+    "kind": "object (mission crate)",
+    "zone": "Mires",
+    "interval_or_statement": "three minutes (official)",
+    "quote": "Fixed bug by increasing timer on respawning crates for mission \"Unlockable\" on Mires, set the timer to three minutes.",
+    "source": "https://tabularasa.fandom.com/wiki/Updates/2007-11-14",
+    "revision": "14941 (2007-11-15)",
+    "date": "2007-11-14",
+    "era": "launch (<2008-01)",
+    "tier": "original",
+    "notes": "Official patch note - an original value for that object."
+   },
+   {
+    "subject": "Nyxroq bunker crates",
+    "kind": "object (mission crate)",
+    "zone": "Incline",
+    "interval_or_statement": "\"a few minutes\"",
+    "quote": "The crates will take a few minutes to respawn",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_16113.txt",
+    "revision": "TTH 16113",
+    "date": "2007-12",
+    "era": "launch (<2008-01)",
+    "tier": "inferred",
+    "notes": ""
+   },
+   {
+    "subject": "Saccharo roots (Plateau harvestables)",
+    "kind": "object (harvest)",
+    "zone": "Plateau",
+    "interval_or_statement": "\"respawn quickly\"",
+    "quote": "while you may not see many, they do respawn quickly",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_21365.txt",
+    "revision": "TTH 21365 (2008-01)",
+    "date": "2008-01",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "inferred",
+    "notes": ""
+   },
+   {
+    "subject": "Instances generally",
+    "kind": "instance population",
+    "zone": "all instances",
+    "interval_or_statement": "\"respawn much less frequently or not at all\"; zoning resets",
+    "quote": "Unlike on the battlefield, monsters in instances respawn much less frequently or not at all ... Zoning in or out of an instance will \"reset\" it",
+    "source": "https://tabularasa.fandom.com/wiki/Operation",
+    "revision": "first 2368 (2007-07-05, Tetris L); latest 36591 (2009-03-05)",
+    "date": "2007-07-05",
+    "era": "launch (<2008-01)",
+    "tier": "inferred",
+    "notes": "Beta-era text kept to the end."
+   },
+   {
+    "subject": "Retread Caves Miasmas",
+    "kind": "instance population",
+    "zone": "Retread Caves (Pools)",
+    "interval_or_statement": "\"quick respawn\" -> \"As of January 2008, the miasma no longer respawn\"",
+    "quote": "As of January 2008, the miasma no longer respawn.",
+    "source": "https://tabularasa.fandom.com/wiki/Retread_Caves",
+    "revision": "18300 (2007-12-05) / 26367 (2008-01-07)",
+    "date": "2008-01-07",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "inferred",
+    "notes": ""
+   },
+   {
+    "subject": "Cuthah Base Sentinels",
+    "kind": "instance population",
+    "zone": "Cuthah Base",
+    "interval_or_statement": "slower respawn (official, no value)",
+    "quote": "Cuthah Base: Sentinels now have slower respawn times",
+    "source": "https://tabularasa.fandom.com/wiki/Updates/2008-02-26",
+    "revision": "29194 (2008-02-26)",
+    "date": "2008-02-26",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "original",
+    "notes": "Official live patch note."
+   },
+   {
+    "subject": "Lamna Armory bosses",
+    "kind": "instance bosses",
+    "zone": "Lamna Armory",
+    "interval_or_statement": "Gaite and Fearce respawn; Kewl does not",
+    "quote": "Gaite will respawn, so you likely will have to kill him twice (or more)... This boss does not respawn... Fearce and his minions do respawn.",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_21749.txt",
+    "revision": "TTH 21749 (2008-01/02)",
+    "date": "2008-02",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "inferred",
+    "notes": ""
+   },
+   {
+    "subject": "Operation Overlord key-card holders",
+    "kind": "instance mobs",
+    "zone": "Operation Overlord",
+    "interval_or_statement": "\"respawns rather rapidly\"",
+    "quote": "each of these three respawns rather rapidly, and several engineers respawn around the Lightbender",
+    "source": "https://tabularasa.fandom.com/wiki/Operation_Overlord",
+    "revision": "19276 (2007-12-09)",
+    "date": "2007-12-09",
+    "era": "launch (<2008-01)",
+    "tier": "inferred",
+    "notes": ""
+   },
+   {
+    "subject": "Open-world area respawns during an instance run",
+    "kind": "open world",
+    "zone": "Plains/Tahrendra, Energy Center guides",
+    "interval_or_statement": "area cleared before an instance \"will likely have respawned\" after the run",
+    "quote": "Note that the area you cleared before entering this instance will likely have respawned.",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_20429.txt; tth_node_16424.txt",
+    "revision": "TTH 20429 / 16424",
+    "date": "2008-01",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "inferred",
+    "notes": "Bounds open-world respawn to below a typical instance-run duration (tens of minutes)."
+   },
+   {
+    "subject": "Palisades/Incline/Plains respawns; Divide & Wilderness spot adjustments",
+    "kind": "official spawn change",
+    "zone": "several",
+    "interval_or_statement": "no intervals",
+    "quote": "Respawns: Palisades, Incline, and Plains have had their spawns significantly adjusted to better balance spawn across the full map. Divide and Wilderness have had spot adjustments to remove a few excessively tough areas.",
+    "source": "https://tabularasa.fandom.com/wiki/Updates/2008-04-28; wayback research/20260926-notes-audit/sources/wayback-pts/patch_notes_and_known_issues_4072008.html",
+    "revision": "TaRapedia 35847; PTS capture 2008-04-07",
+    "date": "2008-04-28",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "original",
+    "notes": "Official. Says nothing about timers; \"Respawns\" is the section label."
+   },
+   {
+    "subject": "PvP/CP base defenses",
+    "kind": "official spawn change",
+    "zone": "wargame / CP",
+    "interval_or_statement": "\"much longer respawns\" (no value)",
+    "quote": "Base defenses have been beefed up, but put on much longer respawns",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-notes-audit/sources/wayback-live/deployment_10_7232008.html",
+    "revision": "D10 live 2008-07-23",
+    "date": "2008-07-23",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "original",
+    "notes": "Wargame map section."
+   },
+   {
+    "subject": "Plains GPS beacon (Operation Termination)",
+    "kind": "official timer change",
+    "zone": "Plains",
+    "interval_or_statement": "adjusted (no value)",
+    "quote": "Adjusted respawn timer for Plains: Operation Termination GPS beacon",
+    "source": "https://tabularasa.fandom.com/wiki/Updates/2008-03-26",
+    "revision": "35844",
+    "date": "2008-03-26",
+    "era": "mid (2008-01..2008-08)",
+    "tier": "original",
+    "notes": ""
+   },
+   {
+    "subject": "Divide Deployment 14 dynamic spawners",
+    "kind": "official spawn change",
+    "zone": "Divide",
+    "interval_or_statement": "reactive spawners (no timer)",
+    "quote": "Dynamic spawners are additional reactive elements ... specifically focus on the presence of players",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-notes-audit/sources/wayback-live/deployment_14_11112008.html",
+    "revision": "D14 live 2008-11-11",
+    "date": "2008-11-11",
+    "era": "final (>=2008-09)",
+    "tier": "original",
+    "notes": "Final-era Divide change; mechanism/timers unknown."
+   }
+  ],
+  "text_summary": {
+   "ambient_numeric": [
+    "Divide Class IV Stalker 15 min (2007-11, unchanged to 2008-09)",
+    "Mires Stalker ~6 min (2008-09)",
+    "Plateau Miasma bulls ~5 min, 4-5 up (2009-01)"
+   ],
+   "ambient_qualitative": "\"respawn fairly quickly / frequently / very quickly / short respawn\" for open-world groups (Kael, Manta, Flare Gashers, Caretakers, Thrax) - consistent with a few minutes",
+   "named_numeric": [
+    "Meat Grinder ~6-7 min (2007-11, unchanged to 2008-10)",
+    "Caretaker Mordra >=50 min -> ~10 min after D11.6 (2008-08)",
+    "Kennilaxx 5-10 min (2008-10)",
+    "Lawfoid/Mirtanz 5-10 min (2007-12, pre-D12)",
+    "Buzzrup ~2 min (2008-08, pre-D11 Wilderness)",
+    "Hominus patrol \"every few minutes, then pauses\" (2008-09)"
+   ],
+   "objects": [
+    "Mires Unlockable crates 3 min (official 2007-11)",
+    "Mires Machinery 1 min (2008-09)",
+    "Devil's Den artifact boxes 1-2 min (2008-10)",
+    "CLRF crystal crates 1-2 min (2007-10)",
+    "Divide food crates \"several minutes\", longer than usual (Brady 2007-10)"
+   ],
+   "mechanic": "Several final-era players state respawn is tied to corpse removal: looted corpses fade sooner and respawn sooner; unlooted corpses delay the respawn (2008-09..2008-11). One 2007 instance note says the opposite.",
+   "gaps": "No official numeric respawn timer for ambient creatures was found. No forum (plaync/rasaworld/mmorpg) post with a timer was found by web search; archived forums not fetched."
+  },
+  "pools": {
+   "1148200": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 600
+   },
+   "1148201": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 1300
+   },
+   "1148202": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 2000
+   },
+   "1148203": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 2700
+   },
+   "1148204": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 900
+   },
+   "1148205": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 1600
+   },
+   "1148206": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 2300
+   },
+   "1148207": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 3000
+   },
+   "1148208": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 1200
+   },
+   "1148209": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 1900
+   },
+   "1148210": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 2600
+   },
+   "1148211": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 800
+   },
+   "1244200": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 600
+   },
+   "1244201": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 1300
+   },
+   "1244202": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 2000
+   },
+   "1244203": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 2700
+   },
+   "1244204": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 900
+   },
+   "1244205": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 1600
+   },
+   "1244206": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 2300
+   },
+   "1244207": {
+    "from": "ConcordiaAmbientPopulations",
+    "old": 20,
+    "new": 3000
+   },
+   "1244208": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 1200
+   },
+   "1244209": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 1900
+   },
+   "1244210": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 2600
+   },
+   "1244211": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 800
+   },
+   "1244212": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 1500
+   },
+   "1244213": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 2200
+   },
+   "1764200": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 600
+   },
+   "1764201": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 1300
+   },
+   "1764202": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 2000
+   },
+   "1764203": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 2700
+   },
+   "1764204": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 900
+   },
+   "1764205": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 1600
+   },
+   "1764206": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 2300
+   },
+   "1764207": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 3000
+   },
+   "1764208": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 1200
+   },
+   "1764209": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 1900
+   },
+   "1764210": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 2600
+   },
+   "1759200": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 600
+   },
+   "1759201": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 1300
+   },
+   "1759202": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 2000
+   },
+   "1759203": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 2700
+   },
+   "1759204": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 900
+   },
+   "1759205": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 1600
+   },
+   "1759206": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 2300
+   },
+   "1759207": {
+    "from": "FootageAmbientPopulations",
+    "old": 20,
+    "new": 3000
+   },
+   "37": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 1500
+   },
+   "38": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 2200
+   },
+   "39": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 2900
+   },
+   "40": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 1100
+   },
+   "41": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 1800
+   },
+   "42": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 2500
+   },
+   "43": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 700
+   },
+   "44": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 1400
+   },
+   "45": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 2100
+   },
+   "46": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 2800
+   },
+   "47": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 1000
+   },
+   "48": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 1700
+   },
+   "52": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 2000
+   },
+   "54": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 900
+   },
+   "55": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1600
+   },
+   "56": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 2300
+   },
+   "57": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 3000
+   },
+   "58": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1200
+   },
+   "60": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2600
+   },
+   "61": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 800
+   },
+   "69": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 1400
+   },
+   "70": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 2100
+   },
+   "73": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 50,
+    "new": 1700
+   },
+   "74": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 50,
+    "new": 2400
+   },
+   "75": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 50,
+    "new": 600
+   },
+   "76": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 50,
+    "new": 1300
+   },
+   "77": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 50,
+    "new": 2000
+   },
+   "79": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 50,
+    "new": 900
+   },
+   "80": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 50,
+    "new": 1600
+   },
+   "83": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 50,
+    "new": 1200
+   },
+   "85": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 50,
+    "new": 2600
+   },
+   "88": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 50,
+    "new": 2200
+   },
+   "94": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 25,
+    "new": 1400
+   },
+   "96": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2800
+   },
+   "97": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1000
+   },
+   "98": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1700
+   },
+   "99": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2400
+   },
+   "102": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2000
+   },
+   "103": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2700
+   },
+   "104": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 900
+   },
+   "105": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1600
+   },
+   "108": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1200
+   },
+   "109": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1900
+   },
+   "110": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2600
+   },
+   "111": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 800
+   },
+   "112": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1500
+   },
+   "118": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 700
+   },
+   "121": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2800
+   },
+   "122": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1000
+   },
+   "123": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1700
+   },
+   "124": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2400
+   },
+   "125": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 600
+   },
+   "126": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1300
+   },
+   "127": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2000
+   },
+   "128": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2700
+   },
+   "129": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 900
+   },
+   "130": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1600
+   },
+   "131": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2300
+   },
+   "133": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1200
+   },
+   "137": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1500
+   },
+   "138": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2200
+   },
+   "139": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2900
+   },
+   "140": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1100
+   },
+   "141": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1800
+   },
+   "142": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2500
+   },
+   "143": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 700
+   },
+   "144": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1400
+   },
+   "145": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2100
+   },
+   "146": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2800
+   },
+   "147": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1000
+   },
+   "148": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1700
+   },
+   "151": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 1300
+   },
+   "152": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2000
+   },
+   "153": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 2700
+   },
+   "154": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 20,
+    "new": 900
+   },
+   "160": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 30,
+    "new": 2600
+   },
+   "161": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 30,
+    "new": 800
+   },
+   "162": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 30,
+    "new": 1500
+   },
+   "163": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 30,
+    "new": 2200
+   },
+   "164": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 30,
+    "new": 2900
+   },
+   "165": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 30,
+    "new": 1100
+   },
+   "166": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 30,
+    "new": 1800
+   },
+   "167": {
+    "from": "the emulator world seed (gameserver_dev_Full)",
+    "old": 30,
+    "new": 2500
+   }
+  },
+  "wilderness_included": [
+   37,
+   38,
+   39,
+   40,
+   41,
+   42,
+   43,
+   44,
+   45,
+   46,
+   47,
+   48,
+   52,
+   54,
+   55,
+   56,
+   57,
+   58,
+   60,
+   61,
+   69,
+   70,
+   73,
+   74,
+   75,
+   76,
+   77,
+   79,
+   80,
+   83,
+   85,
+   88,
+   94,
+   96,
+   97,
+   98,
+   99,
+   102,
+   103,
+   104,
+   105,
+   108,
+   109,
+   110,
+   111,
+   112,
+   118,
+   121,
+   122,
+   123,
+   124,
+   125,
+   126,
+   127,
+   128,
+   129,
+   130,
+   131,
+   133,
+   137,
+   138,
+   139,
+   140,
+   141,
+   142,
+   143,
+   144,
+   145,
+   146,
+   147,
+   148,
+   151,
+   152,
+   153,
+   154,
+   160,
+   161,
+   162,
+   163,
+   164,
+   165,
+   166,
+   167
+  ],
+  "wilderness_excluded": {
+   "1": "draws nothing (count 0; Fithik dropship test row)",
+   "2": "draws nothing (count 0; Caretaker)",
+   "3": "draws nothing (count 0; Thrax Soldier)",
+   "4": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "5": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "6": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "7": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "8": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "9": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "10": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "11": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "12": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "13": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "14": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "15": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "16": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "17": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "18": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "19": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "20": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "21": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "22": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "23": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "24": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "25": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "26": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "27": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "28": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "29": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "30": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "31": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "32": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "33": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "34": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "35": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "36": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "49": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "50": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "51": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "59": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "62": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "63": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "64": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "65": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "66": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "67": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "68": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "71": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "72": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "78": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "81": "named boss (Bane Thrax Overseer Glognar, Bane_Thrax_Soldier_Rifle_Boss)",
+   "82": "named boss (Overseer Phlegg, Rifle_Boss class)",
+   "84": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "86": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "87": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "89": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "90": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "91": "named boss (Overseer Rankash, Rifle_Boss class)",
+   "92": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "93": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "95": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "100": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "101": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "106": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "107": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "113": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "114": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "115": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "116": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "117": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "119": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "120": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "132": "draws nothing (count 0; Stalkerspawn)",
+   "134": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "135": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "136": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "149": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "150": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "155": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "156": "boss pool (Archfiend Grenadier + Old Scratch, 50 s)",
+   "157": "boss pool (Proctor Fulgor, 50 s)",
+   "158": "boss pool (Arioch Xanx, 50 s)",
+   "159": "boss pool (Atropos Linker, 50 s)",
+   "168": "named boss (Fithik Hive Monarch Boss, Bane_Fithik_Winged_Boss)",
+   "169": "named boss Overseer Graal (Rifle_Boss class) with his escort; the pool refills as one unit",
+   "170": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "171": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "172": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "173": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "174": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "175": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "176": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "177": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "178": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "179": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "180": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "181": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "182": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "183": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "184": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "185": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "186": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "187": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "188": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "189": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "190": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "191": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "192": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "193": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "194": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "195": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "196": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "197": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "198": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "199": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "200": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "201": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "202": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "203": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "204": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "205": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "206": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "207": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "208": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "209": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "210": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "211": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "212": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "213": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "214": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "215": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "216": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "217": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "218": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "219": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "500001": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "500002": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "500003": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "500004": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "500005": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "501001": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "501002": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "501003": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "501004": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "501005": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "501006": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "501007": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "501008": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "501009": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "501010": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "501011": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "501012": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "510002": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "510003": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "510004": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "510005": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "510006": "friendly or service NPC pool (faction 1 or non-hostile)",
+   "520065": "boss pool (Horntail, 50 s)"
+  },
+  "unchanged": {
+   "1148212/1148213 Class IV Stalkers": "9000 (15 min, TaRapedia The Tallest)",
+   "Divide bosses 520015-520019": "500 (GAP-DIVIDE-BOSS-RESPAWN)",
+   "Wilderness bosses and friendly/service pools": "see wilderness_excluded"
+  }
+ },
+ "divide": {
+  "navmesh": {
+   "adv_foreas_concordia_divide.nav": "c5e9a352fcf78cb0c2f1a313dbd5d442da8c355564a4dbfce3b9e22983516ede"
+  },
+  "reference_point": "Waypoint: Foreas Base (-33.55, 116.18, 564.44)",
+  "probes": {
+   "1148214": {
+    "surface": "110.705",
+    "floor": "110.429",
+    "nearest": "(95.00,110.70,300.00) d=0.00",
+    "levels": "[110.7]",
+    "underground": "False",
+    "path": "complete len=316.3 end=(95.0,110.70,300.0) endGap=0.0"
+   },
+   "1148215": {
+    "surface": "59.512",
+    "floor": "59.236",
+    "nearest": "(440.00,59.51,75.00) d=0.00",
+    "levels": "[59.2,59.51,60.8]",
+    "underground": "False",
+    "path": "complete len=881.2 end=(440.0,59.51,75.0) endGap=0.0"
+   },
+   "1148216": {
+    "surface": "128.155",
+    "floor": "127.879",
+    "nearest": "(358.00,128.15,653.00) d=0.00",
+    "levels": "[87.5,120.18,120.6,128.15,128.61]",
+    "underground": "False",
+    "path": "complete len=762.5 end=(358.0,128.15,653.0) endGap=0.0"
+   },
+   "1148217": {
+    "surface": "110.400",
+    "floor": "110.124",
+    "nearest": "(377.26,110.40,852.55) d=0.06",
+    "levels": "[108,110.4]",
+    "underground": "False",
+    "path": "complete len=964.5 end=(377.3,110.40,852.5) endGap=0.1"
+   },
+   "1148218": {
+    "surface": "107.876",
+    "floor": "107.600",
+    "nearest": "(385.00,107.88,605.00) d=0.00",
+    "levels": "[106.81,107.88]",
+    "underground": "False",
+    "path": "complete len=774.0 end=(385.0,107.88,605.0) endGap=0.0"
+   },
+   "1148219": {
+    "surface": "61.045",
+    "floor": "60.769",
+    "nearest": "(625.00,61.05,200.00) d=0.00",
+    "levels": "[61.05]",
+    "underground": "False",
+    "path": "complete len=934.2 end=(625.0,61.05,200.0) endGap=0.0"
+   },
+   "1148220": {
+    "surface": "81.639",
+    "floor": "81.363",
+    "nearest": "(619.40,81.64,-13.00) d=0.00",
+    "levels": "[81.64,82.72]",
+    "underground": "False",
+    "path": "complete len=1036.0 end=(619.4,81.64,-13.0) endGap=0.0"
+   },
+   "1148221": {
+    "surface": "162.369",
+    "floor": "162.093",
+    "nearest": "(640.00,162.37,-124.00) d=0.00",
+    "levels": "[162.32,162.37,162.41,189.89,190,192.38]",
+    "underground": "False",
+    "path": "complete len=1615.4 end=(640.0,162.37,-124.0) endGap=0.0"
+   },
+   "1148222": {
+    "surface": "122.273",
+    "floor": "121.997",
+    "nearest": "(600.00,122.27,-360.00) d=0.00",
+    "levels": "[121,122.27]",
+    "underground": "False",
+    "path": "complete len=1426.9 end=(600.0,122.27,-360.0) endGap=0.0"
+   },
+   "1148223": {
+    "surface": "70.010",
+    "floor": "69.734",
+    "nearest": "(600.00,70.01,60.00) d=0.00",
+    "levels": "[69.6,69.88,70.01]",
+    "underground": "False",
+    "path": "complete len=969.8 end=(600.0,70.01,60.0) endGap=0.0"
+   },
+   "1148224": {
+    "surface": "53.524",
+    "floor": "53.248",
+    "nearest": "(9.00,53.52,-152.00) d=0.00",
+    "levels": "[52.91,53.52]",
+    "underground": "False",
+    "path": "complete len=750.5 end=(9.0,53.52,-152.0) endGap=0.0"
+   },
+   "1148225": {
+    "surface": "69.618",
+    "floor": "69.342",
+    "nearest": "(-79.60,69.62,-152.80) d=0.00",
+    "levels": "[69.45,69.62]",
+    "underground": "False",
+    "path": "complete len=821.2 end=(-79.6,69.62,-152.8) endGap=0.0"
+   },
+   "1148226": {
+    "surface": "77.351",
+    "floor": "77.075",
+    "nearest": "(328.00,77.35,-436.00) d=0.00",
+    "levels": "[77.35,77.69]",
+    "underground": "False",
+    "path": "complete len=1164.5 end=(328.0,77.35,-436.0) endGap=0.0"
+   },
+   "1148227": {
+    "surface": "49.136",
+    "floor": "48.860",
+    "nearest": "(543.00,49.14,-532.00) d=0.00",
+    "levels": "[46,49.14]",
+    "underground": "False",
+    "path": "complete len=1287.0 end=(543.0,49.14,-532.0) endGap=0.0"
+   },
+   "1148228": {
+    "surface": "106.548",
+    "floor": "106.272",
+    "nearest": "(138.00,106.55,-639.00) d=0.00",
+    "levels": "[106.55]",
+    "underground": "False",
+    "path": "complete len=1273.4 end=(138.0,106.55,-639.0) endGap=0.0"
+   },
+   "1148229": {
+    "surface": "116.256",
+    "floor": "115.980",
+    "nearest": "(-116.00,116.26,-631.00) d=0.00",
+    "levels": "[116.26]",
+    "underground": "False",
+    "path": "complete len=1297.0 end=(-116.0,116.26,-631.0) endGap=0.0"
+   },
+   "1148230": {
+    "surface": "158.375",
+    "floor": "158.099",
+    "nearest": "(130.00,158.38,850.00) d=0.00",
+    "levels": "[155.63,158.38,159.83]",
+    "underground": "False",
+    "path": "complete len=974.9 end=(130.0,158.38,850.0) endGap=0.0"
+   },
+   "1148231": {
+    "surface": "136.649",
+    "floor": "136.373",
+    "nearest": "(150.00,136.65,400.00) d=0.00",
+    "levels": "[136.65]",
+    "underground": "False",
+    "path": "complete len=505.7 end=(150.0,136.65,400.0) endGap=0.0"
+   },
+   "1148232": {
+    "surface": "163.400",
+    "floor": "163.124",
+    "nearest": "(-698.60,163.40,701.40) d=0.00",
+    "levels": "[163.4,164]",
+    "underground": "False",
+    "path": "complete len=962.6 end=(-698.6,163.40,701.4) endGap=0.0"
+   },
+   "1148233": {
+    "surface": "124.400",
+    "floor": "124.124",
+    "nearest": "(-401.60,124.40,418.80) d=0.00",
+    "levels": "[123.06,123.2,124.4]",
+    "underground": "False",
+    "path": "complete len=524.5 end=(-401.6,124.40,418.8) endGap=0.0"
+   },
+   "1148234": {
+    "surface": "136.527",
+    "floor": "136.251",
+    "nearest": "(150.00,136.53,720.00) d=0.00",
+    "levels": "[134.9,136.53,138.01]",
+    "underground": "False",
+    "path": "complete len=912.5 end=(150.0,136.53,720.0) endGap=0.0"
+   }
+  },
+  "pools": {
+   "1148214": {
+    "site": "Boargar at the downed airship (Makin' Bacon)",
+    "place_tier": "inferred",
+    "x": 95.0,
+    "z": 300.0,
+    "y": 110.429,
+    "reasoning": "TaRapedia's coordinates for the Boargar (95, 300); Brady's Map Point 9 'Downed Airship' and TTH's 'flaming wreckage' east-south-east of Foreas Base agree; the final map still carries the destroyed dropship static at (124, 244)",
+    "slots": [
+     {
+      "creature": 1148008,
+      "count": 3
+     }
+    ],
+    "respown_time": 2900
+   },
+   "1148215": {
+    "site": "Xanx by the Calla fronds east of Foxtrot",
+    "place_tier": "inferred",
+    "x": 440.0,
+    "z": 75.0,
+    "y": 59.236,
+    "reasoning": "TTH's '/loc' of the Calla flowers that 'grow around the Xanx at 435,90,68'; moved 9 m to the nearest navmesh point with a complete path",
+    "slots": [
+     {
+      "creature": 1148001,
+      "count": 2
+     }
+    ],
+    "respown_time": 1100
+   },
+   "1148216": {
+    "site": "Xanx at the War cave north of Crossroads",
+    "place_tier": "inferred",
+    "x": 358.0,
+    "z": 653.0,
+    "y": 127.879,
+    "reasoning": "A Fading Signal's route point (358, 653) at the cave the War shrine is in, where 'Xanx inhabit the area'; TTH's War shrine (358.6, 613.5) is 'near a number of Xanx'",
+    "slots": [
+     {
+      "creature": 1148001,
+      "count": 3
+     }
+    ],
+    "respown_time": 1800
+   },
+   "1148217": {
+    "site": "Xanx by the Bane terraform kits, north-east",
+    "place_tier": "inferred",
+    "x": 377.3,
+    "z": 852.5,
+    "y": 110.124,
+    "reasoning": "TTH's '/loc' of the Bane terraform kits 'around 377.8, 851.8 near the Xanx area' (Brady: kits on open ground east from Thoria Das)",
+    "slots": [
+     {
+      "creature": 1148001,
+      "count": 2
+     }
+    ],
+    "respown_time": 2500
+   },
+   "1148218": {
+    "site": "Filchers near the War-cave Xanx",
+    "place_tier": "inferred",
+    "x": 385.0,
+    "z": 605.0,
+    "y": 107.6,
+    "reasoning": "TTH's Filcher spot 'near the Xanx around 389.2, 611.3', one of the most abundant; moved 7 m to a point with a complete path",
+    "slots": [
+     {
+      "creature": 1148005,
+      "count": 3
+     }
+    ],
+    "respown_time": 700
+   },
+   "1148219": {
+    "site": "Warnets at the Benefactor Valley nests",
+    "place_tier": "inferred",
+    "x": 625.0,
+    "z": 200.0,
+    "y": 60.769,
+    "reasoning": "Nest to Nothing's 'highest concentration of Warnet's nests' at (625, 200), Benefactor Valley; Brady's Map Point 18 'Warnet Nests' lies there; Queen Stazzle's sightings span the same field",
+    "slots": [
+     {
+      "creature": 1148006,
+      "count": 3
+     }
+    ],
+    "respown_time": 1400
+   },
+   "1148220": {
+    "site": "Warnets at the Enlighten shrine",
+    "place_tier": "inferred",
+    "x": 619.4,
+    "z": -13.0,
+    "y": 81.363,
+    "reasoning": "TTH's Enlighten shrine 'Southeast of the Crossroads among the Warnets' (619.4, -13.0); Brady's table has Enlighten at (621, -13)",
+    "slots": [
+     {
+      "creature": 1148006,
+      "count": 3
+     }
+    ],
+    "respown_time": 2100
+   },
+   "1148221": {
+    "site": "Warnets at the Minos Caverns entrance",
+    "place_tier": "inferred",
+    "x": 640.0,
+    "z": -124.0,
+    "y": 162.093,
+    "reasoning": "TTH: Warnets 'highly concentrated around the Minos Caves entrance'; the entrance is (640, 162, -124) (TaRapedia Divide instance table; client map-link marker (640.15, 162.06, -124.03)); the pool stands on the entrance floor",
+    "slots": [
+     {
+      "creature": 1148012,
+      "count": 3
+     }
+    ],
+    "respown_time": 2800
+   },
+   "1148222": {
+    "site": "Warnets and Thrax on the road south-east of Delta",
+    "place_tier": "analogue",
+    "x": 600.0,
+    "z": -360.0,
+    "y": 121.997,
+    "reasoning": "a point 150 m east-south-east of Delta Outpost on the route TTH describes toward the Corman Tunnel ('Continue heading in a south easterly direction where youll hit pockets of warnets, along with more Bane soldiers', tth_node_21362); the route has no coordinates between Delta (481, -306) and Delia Corman (762, -458)",
+    "slots": [
+     {
+      "creature": 1148012,
+      "count": 2
+     },
+     {
+      "creature": 1148010,
+      "count": 2
+     }
+    ],
+    "respown_time": 1000
+   },
+   "1148223": {
+    "site": "Bane patrol on the road north of Minos",
+    "place_tier": "analogue",
+    "x": 600.0,
+    "z": 60.0,
+    "y": 69.734,
+    "reasoning": "a point on the Benefactor Valley road 180 m north of the Minos Caverns entrance, where Brady's Bane Battle Plans patrols walk ('Command wants you to kill a number of Bane soldiers north of Minos ... patrols along the road's southern side', leaf 117); the text names no coordinates",
+    "slots": [
+     {
+      "creature": 1148002,
+      "count": 3
+     },
+     {
+      "creature": 1148004,
+      "count": 1
+     }
+    ],
+    "respown_time": 1700
+   },
+   "1148224": {
+    "site": "Thrax at the Bane sandbags outside Foxtrot",
+    "place_tier": "inferred",
+    "x": 9.0,
+    "z": -152.0,
+    "y": 53.248,
+    "reasoning": "TTH: 'Just outside the outpost a consistent battle with Thrax is clearly visible'; the final map's nearest Bane position to Foxtrot is the sandbag line at (9, -152), 130 m south-west of the outpost",
+    "slots": [
+     {
+      "creature": 1148002,
+      "count": 3
+     }
+    ],
+    "respown_time": 2400
+   },
+   "1148225": {
+    "site": "Thrax around Rotting Sal's hill",
+    "place_tier": "inferred",
+    "x": -79.6,
+    "z": -152.8,
+    "y": 69.342,
+    "reasoning": "TTH's '/loc' at Rotting Sal's hill (-79.6, -152.8); TaRapedia: Sal 'is typically surrounded by Thrax Soldiers'",
+    "slots": [
+     {
+      "creature": 1148003,
+      "count": 3
+     }
+    ],
+    "respown_time": 600
+   },
+   "1148226": {
+    "site": "Bane troops at Pogonos More",
+    "place_tier": "measured",
+    "x": 328.0,
+    "z": -436.0,
+    "y": 77.075,
+    "reasoning": "Brady's Map Point 12 'Pogonos More', read from the leaf-116 map through an affine fit to the eleven Logos shrines the same page prints ('There are many enemy troops')",
+    "slots": [
+     {
+      "creature": 1148010,
+      "count": 3
+     },
+     {
+      "creature": 1148011,
+      "count": 1
+     }
+    ],
+    "respown_time": 1300
+   },
+   "1148227": {
+    "site": "The Meat Grinder's escort",
+    "place_tier": "inferred",
+    "x": 543.0,
+    "z": -532.0,
+    "y": 48.86,
+    "reasoning": "the Meat Grinder's spawn 'near location 543, 49, -532' (Divide Targets of Opportunity), where the seeded boss pool 520019 stands; his 7-8 troops are with him",
+    "slots": [
+     {
+      "creature": 1148010,
+      "count": 5
+     },
+     {
+      "creature": 1148011,
+      "count": 2
+     }
+    ],
+    "respown_time": 2000
+   },
+   "1148228": {
+    "site": "Bane Forward Command, east barracks",
+    "place_tier": "inferred",
+    "x": 138.0,
+    "z": -639.0,
+    "y": 106.272,
+    "reasoning": "the east barracks of Bane Forward Command in the final map (three ArchBaneOutpostBarracks, crates and a generator around (138, -639)); TTH: BFC is 'guarded by dozens of enemy troops'",
+    "slots": [
+     {
+      "creature": 1148010,
+      "count": 3
+     },
+     {
+      "creature": 1148011,
+      "count": 1
+     }
+    ],
+    "respown_time": 2700
+   },
+   "1148229": {
+    "site": "Bane Forward Command, west barracks",
+    "place_tier": "inferred",
+    "x": -116.0,
+    "z": -631.0,
+    "y": 115.98,
+    "reasoning": "the west barracks of Bane Forward Command in the final map (three ArchBaneOutpostBarracks and crates around (-116, -631)); TTH: 'dozens of enemy troops'",
+    "slots": [
+     {
+      "creature": 1148010,
+      "count": 3
+     }
+    ],
+    "respown_time": 900
+   },
+   "1148230": {
+    "site": "Hominis escort at the Thoria Das fire pit",
+    "place_tier": "inferred",
+    "x": 130.0,
+    "z": 850.0,
+    "y": 158.099,
+    "reasoning": "the final-era spawn of the Hominis escort patrol 'at the edge of Thoria Das by the fire pit (around 130, 850)' (2008-09-13; still in rev 35926, 2009-01-20); earlier revisions put it on the trench road",
+    "slots": [
+     {
+      "creature": 1148009,
+      "count": 4
+     }
+    ],
+    "respown_time": 1600
+   },
+   "1148231": {
+    "site": "Thrax south-east of Foreas Base",
+    "place_tier": "analogue",
+    "x": 150.0,
+    "z": 400.0,
+    "y": 136.373,
+    "reasoning": "a point on open ground 250 m south-east of Foreas Base, where Brady's Thrax groups 'come down southeast of the base' (Robot or Rotten, leaf 121); the text names no coordinates",
+    "slots": [
+     {
+      "creature": 1148002,
+      "count": 3
+     },
+     {
+      "creature": 1148004,
+      "count": 1
+     }
+    ],
+    "respown_time": 2300
+   },
+   "1148232": {
+    "site": "Boargar in the Northwestern Highlands",
+    "place_tier": "analogue",
+    "x": -698.6,
+    "z": 701.4,
+    "y": 163.124,
+    "reasoning": "a meadow below the Northwestern Highlands waypoint; Boargar are to be killed 'while you're out and about' (Brady leaf 121) and the text places none in the north-west",
+    "slots": [
+     {
+      "creature": 1148008,
+      "count": 2
+     }
+    ],
+    "respown_time": 3000
+   },
+   "1148233": {
+    "site": "Boargar east of Nidu Dav",
+    "place_tier": "analogue",
+    "x": -401.6,
+    "z": 418.8,
+    "y": 124.124,
+    "reasoning": "open ground 110 m east of Nidu Dav on the western road into the zone; as 1148232, Boargar 'out and about' with no place named",
+    "slots": [
+     {
+      "creature": 1148008,
+      "count": 2
+     }
+    ],
+    "respown_time": 1200
+   },
+   "1148234": {
+    "site": "Filchers on the Thoria Das road",
+    "place_tier": "analogue",
+    "x": 150.0,
+    "z": 720.0,
+    "y": 136.251,
+    "reasoning": "the road from Foreas Base north to Thoria Das; the Filchers 'are scattered throughout the zone' (Brady leaf 118) and this stretch has no pool",
+    "slots": [
+     {
+      "creature": 1148005,
+      "count": 2
+     }
+    ],
+    "respown_time": 1900
+   }
+  },
+  "evidence_rows": [
+   {
+    "species": "Boargar",
+    "area": "Downed airship / flaming wreckage east-southeast of Foreas Base (Brady Map Point 9 \"Downed Airship\")",
+    "coordinates_xz": [
+     [
+      95,
+      300
+     ],
+     [
+      160,
+      281
+     ]
+    ],
+    "coordinate_source": "95,300: TaRapedia player text (inferred location); 160,281: measured from BradyGames leaf116 map box (affine fit to 11 printed logos shrine coords; LOO rms 82 m, max 146 m; box may be offset from the actual point) - see leaf116-map-fit.json",
+    "count_or_density": "\"a handful\" (TaRapedia); \"tons of them running around\" (TTH)",
+    "level": "none stated",
+    "date": "2007-12-04",
+    "era": "launch (<2008-01)",
+    "source": "https://tabularasa.fandom.com/wiki/Makin'_Bacon rev 18110 (2007-12-04, Mistmoore; in latest 20275); /home/blizz/backups/rasa-net/research/20260927-footage-study/brady/leaf119 (Brady 2007-10); /home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_13755.txt (TTH 2007-10-23)",
+    "quote": "\"There are a handful of Boargar's located at 95, 300.\" / Brady: \"Proceed to Map Point 9 ... Note that there are Boargars in the area for Makin' Bacon.\" / TTH: \"Head out the east gate and south past the flaming wreckage to find tons of them running around.\"",
+    "coverage": "UNCOVERED",
+    "notes": "Three independent sources agree. Neutral fauna (Brady Wilderness chapter: Boargar show as white/neutral)."
+   },
+   {
+    "species": "Boargar",
+    "area": "\"while you're out and about\" - no place",
+    "coordinates_xz": null,
+    "coordinate_source": null,
+    "count_or_density": "unspecified",
+    "level": "none",
+    "date": "2007-10",
+    "era": "launch (<2008-01)",
+    "source": "/home/blizz/backups/rasa-net/research/20260927-footage-study/brady/leaf121",
+    "quote": "Kill plenty of Boargars while you're out and about",
+    "coverage": "n/a",
+    "notes": ""
+   },
+   {
+    "species": "Xanx",
+    "area": "Cave along the cliff wall east of Crossroads past the Warnet hives (Give shrine cave, 746.8,-6)",
+    "coordinates_xz": [
+     [
+      746.8,
+      -6.0
+     ]
+    ],
+    "coordinate_source": "TTH logos table (Give \"Xanx cave southeast of Crossroads near Warnet area\")",
+    "count_or_density": "\"a cave with many Xanx\"; \"One or two runs should be enough\"",
+    "level": "none",
+    "date": "2007-10",
+    "era": "launch (<2008-01)",
+    "source": "/home/blizz/backups/rasa-net/research/20260927-footage-study/brady/leaf122; /home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_13463.txt (2007-10-15)",
+    "quote": "You can find a cave with many Xanx along the cliff wall, just past the hive area. Go inside and kill off all of the Xanx.",
+    "coverage": "COVERED (725,0)/(740,-20)",
+    "notes": ""
+   },
+   {
+    "species": "Xanx",
+    "area": "South of Foreas Base (Dissections II sighting)",
+    "coordinates_xz": [
+     [
+      -57.7,
+      199.5
+     ]
+    ],
+    "coordinate_source": "TaRapedia player /loc (inferred)",
+    "count_or_density": "unspecified",
+    "level": "none",
+    "date": "2008-08-17",
+    "era": "mid (2008-01..08)",
+    "source": "https://tabularasa.fandom.com/wiki/Dissections:_Part_II rev 31786 (2008-08-17, Wunda)",
+    "quote": "Xanx spotted here: -57.7, 99.9, 199.5",
+    "coverage": "COVERED (-58,200)",
+    "notes": ""
+   },
+   {
+    "species": "Xanx",
+    "area": "Crash site with Bane-food crate south-west of Foreas Base",
+    "coordinates_xz": [
+     [
+      -88.0,
+      89.5
+     ]
+    ],
+    "coordinate_source": "TTH /loc of the crate (inferred)",
+    "count_or_density": "\"lots of Xanx\"",
+    "level": "none",
+    "date": "2007-10-23",
+    "era": "launch (<2008-01)",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_13755.txt",
+    "quote": "These nutrients spawn as crates at 2 different crash site locations: (-5.6, 83.5, 130.2), and (-88.0, 98.4, 89.5). Expect one to have Bane near it and the other lots of Xanx.",
+    "coverage": "PARTIAL (~115 m from pool (-58,200))",
+    "notes": "Which of the two sites has Xanx is not stated; the (-88,90) site is nearer the existing Xanx pool, the (-5.6,130) site would then be the Bane one. Unresolved."
+   },
+   {
+    "species": "Xanx",
+    "area": "\"valley to the east\" of Foreas Base",
+    "coordinates_xz": null,
+    "coordinate_source": null,
+    "count_or_density": "unspecified",
+    "level": "none",
+    "date": "2007-10-23",
+    "era": "launch (<2008-01)",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_13755.txt",
+    "quote": "Kerr wants Xanx samples which can be located south of Foreas base or in the valley to the east.",
+    "coverage": "UNKNOWN (no coords; may be 435,68 below)",
+    "notes": ""
+   },
+   {
+    "species": "Xanx",
+    "area": "Around Calla fronds east of Foxtrot (435,68)",
+    "coordinates_xz": [
+     [
+      435,
+      68
+     ]
+    ],
+    "coordinate_source": "TTH /loc 435,90,68 (inferred)",
+    "count_or_density": "unspecified",
+    "level": "none",
+    "date": "2008-01-29",
+    "era": "mid (2008-01..08)",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_21362.txt (TTH \"Thoria Das and Delta Outpost\")",
+    "quote": "Calla flowers are red spiky plants that grow around the Xanx at 435,90,68",
+    "coverage": "UNCOVERED",
+    "notes": "Also names a second Calla spot \"-200,56,137\" (no creature stated)."
+   },
+   {
+    "species": "Xanx",
+    "area": "War logos cave north of Crossroads (358.6,613.5) and the hill south of it (A Fading Signal route 358,653 -> 381,501)",
+    "coordinates_xz": [
+     [
+      358.6,
+      613.5
+     ],
+     [
+      358,
+      653
+     ]
+    ],
+    "coordinate_source": "TTH logos table + TaRapedia mission /loc (inferred)",
+    "count_or_density": "\"near a number of Xanx\"; \"Xanx inhabit the area\"",
+    "level": "none",
+    "date": "2008-01-30",
+    "era": "mid (2008-01..08)",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_13463.txt (2007-10-15); https://tabularasa.fandom.com/wiki/A_Fading_Signal rev 28027 (2008-01-30; in latest 32530 2008-08-29)",
+    "quote": "War: In cave north of Crossroads near a number of Xanx ... 358.6, 86.0, 613.5 / \"Continue east until you drop down a short cliff to the entrance of a cave. Xanx inhabit the area\"",
+    "coverage": "UNCOVERED (pool (495,733) is ~180 m away)",
+    "notes": ""
+   },
+   {
+    "species": "Xanx",
+    "area": "Xanx area south of the War logos cave: Now shrine (513.8,762.8)",
+    "coordinates_xz": [
+     [
+      513.8,
+      762.8
+     ]
+    ],
+    "coordinate_source": "TTH logos table",
+    "count_or_density": "\"In Xanx area\"",
+    "level": "none",
+    "date": "2007-10-15",
+    "era": "launch (<2008-01)",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_13463.txt",
+    "quote": "Now In Xanx area south of War Logos cave. 513.8, 88.8, 762.8",
+    "coverage": "COVERED (495,733)",
+    "notes": "The TTH direction \"south of War cave\" conflicts with coords (z larger = north). Coordinates taken as authoritative."
+   },
+   {
+    "species": "Xanx",
+    "area": "North-east Xanx area near Bane terraform kits (377.8,851.8), east of Thoria Das road",
+    "coordinates_xz": [
+     [
+      377.8,
+      851.8
+     ]
+    ],
+    "coordinate_source": "TTH /loc of kits (inferred)",
+    "count_or_density": "unspecified (\"near the Xanx area\")",
+    "level": "none",
+    "date": "2007-10-23",
+    "era": "launch (<2008-01)",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_13755.txt",
+    "quote": "You'll find them to the northeast around 377.8, 851.8 near the Xanx area.",
+    "coverage": "UNCOVERED",
+    "notes": "Brady leaf120: kits \"on open ground ... east from Thoria Das\"."
+   },
+   {
+    "species": "Xanx (count target)",
+    "area": "Divide-wide",
+    "coordinates_xz": "n/a",
+    "coordinate_source": null,
+    "count_or_density": "ToO: Kill 40 Xanx (30 in first rev 2007-10-21, 40 from rev 14371 2007-11-11)",
+    "level": "none",
+    "date": "2008-10-02",
+    "era": "final (>=2008-09)",
+    "source": "https://tabularasa.fandom.com/wiki/Divide_Targets_of_Opportunity latest 34567",
+    "quote": "Kill 40 [[Xanx]] on Divide",
+    "coverage": "n/a",
+    "notes": "Implies enough Xanx for 40 kills."
+   },
+   {
+    "species": "Warnet + nests",
+    "area": "Benefactor Valley woods east/south-east of Crossroads (Brady Map Point 18 \"Warnet Nests\"; Nest to Nothing)",
+    "coordinates_xz": [
+     [
+      625,
+      200
+     ],
+     [
+      741,
+      238
+     ]
+    ],
+    "coordinate_source": "625,200: TaRapedia \"Mouse Location\" (inferred); 741,238: measured from BradyGames leaf116 map box (affine fit to 11 printed logos shrine coords; LOO rms 82 m, max 146 m; box may be offset from the actual point) - see leaf116-map-fit.json",
+    "count_or_density": "\"highest concentration of Warnet's nests\"; \"Many Warnet Nests\"; Brady: 8 nests needed; \"enough enemies ... after a few minutes of slaughter\"",
+    "level": "none",
+    "date": "2007-12-15",
+    "era": "launch (<2008-01)",
+    "source": "https://tabularasa.fandom.com/wiki/Nest_to_Nothing rev 12758 (2007-11-05) & 21057 (2007-12-15; latest 21059); /home/blizz/backups/rasa-net/research/20260927-footage-study/brady/leaf116/leaf122",
+    "quote": "The highest concentration of Warnet's nests is about 200M south east of Waypoint: Crossroads. Many Warnet Nests can be found at Mouse Location: '''625, 200''' - '''Benefactor Valley'''.",
+    "coverage": "PARTIAL: pools (689,249)/(706,212) cover the east end; 625,200 and the ~200 m-SE-of-Crossroads core (~525,190 if Crossroads pool 383,334) are ~70-190 m away",
+    "notes": "Queen Stazzle sightings (2007-11..2008-09) span 540..731 x, 120..305 z - the nest field extent."
+   },
+   {
+    "species": "Warnet",
+    "area": "Enlighten shrine \"Southeast of the Crossroads among the Warnets\"",
+    "coordinates_xz": [
+     [
+      619.4,
+      -13.0
+     ]
+    ],
+    "coordinate_source": "TTH logos table",
+    "count_or_density": "\"among the Warnets\"",
+    "level": "none",
+    "date": "2007-10-15",
+    "era": "launch (<2008-01)",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_13463.txt",
+    "quote": "Enlighten Southeast of the Crossroads among the Warnets 619.4, 81.6, -13.0",
+    "coverage": "UNCOVERED",
+    "notes": ""
+   },
+   {
+    "species": "Warnet",
+    "area": "Around the Minos Caverns entrance (640,-124)",
+    "coordinates_xz": [
+     [
+      640,
+      -124
+     ]
+    ],
+    "coordinate_source": "Minos entrance coords from TaRapedia Divide page (instance table); creature location inferred",
+    "count_or_density": "\"highly concentrated\"; \"especially around Minos Caverns\"",
+    "level": "none",
+    "date": "2008-01-29",
+    "era": "mid (2008-01..08)",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_21362.txt",
+    "quote": "These guys are all over the map, but theyre highly concentrated around the Minos Caves entrance to the south.",
+    "coverage": "UNCOVERED",
+    "notes": "Also \"all over the map\"."
+   },
+   {
+    "species": "Warnet",
+    "area": "Road south-east of Delta toward the Corman Tunnel (to Delia Corman 762,-458)",
+    "coordinates_xz": [
+     [
+      762,
+      -458
+     ]
+    ],
+    "coordinate_source": "endpoint /loc (inferred); route only",
+    "count_or_density": "\"pockets of warnets, along with more Bane soldiers\"",
+    "level": "none",
+    "date": "2008-01-29",
+    "era": "mid (2008-01..08)",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_21362.txt; /home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_13463.txt",
+    "quote": "Continue heading in a south easterly direction where youll hit pockets of warnets, along with more Bane soldiers.",
+    "coverage": "UNCOVERED",
+    "notes": ""
+   },
+   {
+    "species": "Warnet",
+    "area": "Crossroads depot",
+    "coordinates_xz": [
+     [
+      383,
+      334
+     ]
+    ],
+    "coordinate_source": "Crossroads pool coords (existing)",
+    "count_or_density": "\"Under constant attack by Bane and Warnets\"",
+    "level": "none",
+    "date": "2007-10-15",
+    "era": "launch (<2008-01)",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_13463.txt",
+    "quote": "Under constant attack by Bane and Warnets",
+    "coverage": "PARTIAL (Filchers only at Crossroads)",
+    "notes": ""
+   },
+   {
+    "species": "Queen Stazzle (Warnet Queen boss) lvl 22",
+    "area": "Benefactor Valley nest field; spawns \"on top of a mountain left of entrance to Xanx cave\"",
+    "coordinates_xz": [
+     [
+      730,
+      263
+     ],
+     [
+      689,
+      249
+     ],
+     [
+      706,
+      212.5
+     ],
+     [
+      670,
+      175
+     ],
+     [
+      540,
+      240
+     ],
+     [
+      600,
+      225
+     ],
+     [
+      630,
+      265
+     ],
+     [
+      649,
+      246
+     ],
+     [
+      725,
+      305
+     ],
+     [
+      731,
+      268
+     ],
+     [
+      643,
+      221
+     ],
+     [
+      597,
+      120
+     ]
+    ],
+    "coordinate_source": "TaRapedia sightings (inferred)",
+    "count_or_density": "solo boss",
+    "level": "level 22",
+    "date": "2008-09-13",
+    "era": "final (>=2008-09)",
+    "source": "https://tabularasa.fandom.com/wiki/Queen_Stazzle latest 33067 (2008-09-13); level 22 from rev 15182 (2007-11-17)",
+    "quote": "She can wander, and has been observed at the following places",
+    "coverage": "named (check named seed)",
+    "notes": "Last sighting 670,175 (2008-09-13) \"In a trench just to the west of the Xanx cave\"."
+   },
+   {
+    "species": "Filcher",
+    "area": "Near the Xanx around the War cave (389.2,611.3) - \"one of the most abundant\"",
+    "coordinates_xz": [
+     [
+      389.2,
+      611.3
+     ]
+    ],
+    "coordinate_source": "TTH /loc (inferred)",
+    "count_or_density": "\"one of the most abundant\" spots",
+    "level": "none",
+    "date": "2007-10-23",
+    "era": "launch (<2008-01)",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_13755.txt",
+    "quote": "These can be found a few places in the zone but one of the most abundant is near the Xanx around 389.2, 611.3.",
+    "coverage": "UNCOVERED",
+    "notes": ""
+   },
+   {
+    "species": "Filcher",
+    "area": "Zone-wide",
+    "coordinates_xz": null,
+    "coordinate_source": null,
+    "count_or_density": "\"scattered throughout the zone\"",
+    "level": "Filcher Frenzy Requirement Level 12",
+    "date": "2007-10",
+    "era": "launch (<2008-01)",
+    "source": "/home/blizz/backups/rasa-net/research/20260927-footage-study/brady/leaf118; https://tabularasa.fandom.com/wiki/Filcher_Frenzy rev 14973",
+    "quote": "The Filchers are scattered throughout the zone, so it's easy to do this job without spending any real time on it.",
+    "coverage": "PARTIAL (3 pools)",
+    "notes": ""
+   },
+   {
+    "species": "Thrax patrols (Bane soldiers) carrying battle plans",
+    "area": "Roads north of Minos Caverns toward Crossroads, road's southern side",
+    "coordinates_xz": [
+     [
+      640,
+      -124
+     ],
+     [
+      383,
+      334
+     ]
+    ],
+    "coordinate_source": "endpoints only (Minos entrance, Crossroads pool); route inferred",
+    "count_or_density": "\"wandering enemy patrol ... travels that area's roads all the time\"",
+    "level": "none",
+    "date": "2007-12-08",
+    "era": "launch (<2008-01)",
+    "source": "/home/blizz/backups/rasa-net/research/20260927-footage-study/brady/leaf117; https://tabularasa.fandom.com/wiki/Bane_Battle_Plans_(Divide) rev 19051 (2007-12-08)",
+    "quote": "Command wants you to kill a number of Bane soldiers north of Minos ... killing off patrols along the road's southern side.",
+    "coverage": "UNCOVERED",
+    "notes": ""
+   },
+   {
+    "species": "Thrax groups with Thrax Officers",
+    "area": "South-east of Foreas Base / \"eastern front\"",
+    "coordinates_xz": null,
+    "coordinate_source": null,
+    "count_or_density": "\"many Thrax groups in the area\"",
+    "level": "Robot or Rotten Requirement Level 13",
+    "date": "2007-11-20",
+    "era": "launch (<2008-01)",
+    "source": "/home/blizz/backups/rasa-net/research/20260927-footage-study/brady/leaf121; https://tabularasa.fandom.com/wiki/Robot_or_Rotten rev 15596 (2007-11-20)",
+    "quote": "You can find Officers with many Thrax groups in the area, including ones that come down southeast of the base. / The head will drop from most any Thrax patrol killed along the eastern front.",
+    "coverage": "UNCOVERED (no coords)",
+    "notes": ""
+   },
+   {
+    "species": "Thrax (battle)",
+    "area": "Just outside Foxtrot Outpost",
+    "coordinates_xz": [
+     [
+      68.2,
+      -59.1
+     ]
+    ],
+    "coordinate_source": "Foxtrot teleporter /loc (TTH) - battle location inferred",
+    "count_or_density": "\"a consistent battle with Thrax\"",
+    "level": "none",
+    "date": "2007-10-30",
+    "era": "launch (<2008-01)",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_14030.txt",
+    "quote": "Just outside the outpost a consistent battle with Thrax is clearly visible",
+    "coverage": "UNCOVERED",
+    "notes": "Stalker pool (5,-5) is adjacent."
+   },
+   {
+    "species": "Thrax Soldiers (+ Hominis Machina) around Rotting Sal",
+    "area": "Hill with destroyed tower SW of Foxtrot",
+    "coordinates_xz": [
+     [
+      -63,
+      -138
+     ],
+     [
+      -79.6,
+      -152.8
+     ]
+    ],
+    "coordinate_source": "TaRapedia rev 30614 & TTH /loc (inferred)",
+    "count_or_density": "\"surrounded with fairly heavy spawns\"; \"typically surrounded by Thrax Soldiers\"; 2007-11-28 ToO: \"with the other Hominus Machina\"",
+    "level": "Rotting Sal level not stated",
+    "date": "2008-04-27",
+    "era": "mid (2008-01..08)",
+    "source": "https://tabularasa.fandom.com/wiki/Rotting_Sal revs 12607 (2007-11-03), 30614 (2008-04-27), latest 31792 (2008-08-17); https://tabularasa.fandom.com/wiki/Divide_Targets_of_Opportunity rev 17018 (2007-11-28, removed later)",
+    "quote": "He is unaccompanied by other Hominus Machina, but is typically surrounded by Thrax Soldiers.",
+    "coverage": "UNCOVERED (Front Lines dropship (-0.3,-232) is ~120 m away)",
+    "notes": "Latest page says unaccompanied by Hominis; the 2007-11 ToO line (removed) said with other Hominis - conflict."
+   },
+   {
+    "species": "Bane troops",
+    "area": "Pogonos More (Brady Map Point 12)",
+    "coordinates_xz": [
+     [
+      328,
+      -436
+     ]
+    ],
+    "coordinate_source": "measured from BradyGames leaf116 map box (affine fit to 11 printed logos shrine coords; LOO rms 82 m, max 146 m; box may be offset from the actual point) - see leaf116-map-fit.json",
+    "count_or_density": "\"There are many enemy troops\"",
+    "level": "none",
+    "date": "2007-10",
+    "era": "launch (<2008-01)",
+    "source": "/home/blizz/backups/rasa-net/research/20260927-footage-study/brady/leaf118",
+    "quote": "There are many enemy troops, so approach slowly, sniping as you go",
+    "coverage": "UNCOVERED",
+    "notes": ""
+   },
+   {
+    "species": "Meat Grinder (Thrax boss) + 7-8 Bane troops",
+    "area": "Trench south of Delta Outpost (Brady Map Point 24 \"Meat Grinder Location\")",
+    "coordinates_xz": [
+     [
+      536,
+      -494
+     ],
+     [
+      543,
+      -532
+     ],
+     [
+      474,
+      -446
+     ],
+     [
+      472,
+      -417
+     ],
+     [
+      346,
+      -431
+     ],
+     [
+      733,
+      -958
+     ]
+    ],
+    "coordinate_source": "TaRapedia/TTH sightings (inferred); 733,-958 = measured from BradyGames leaf116 map box (affine fit to 11 printed logos shrine coords; LOO rms 82 m, max 146 m; box may be offset from the actual point) - see leaf116-map-fit.json",
+    "count_or_density": "boss + 7-8 troops",
+    "level": "none stated",
+    "date": "2007-12-29",
+    "era": "launch (<2008-01)",
+    "source": "https://tabularasa.fandom.com/wiki/Meat_Grinder rev 24519 (2007-12-29; latest 32109 2008-08-26); https://tabularasa.fandom.com/wiki/The_Daily_Grind; /home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_21362.txt; /home/blizz/backups/rasa-net/research/20260927-footage-study/brady/leaf116/118",
+    "quote": "Meat Grinder has a lot of health and is accompanied by 7-8 other [[Bane]] troops.",
+    "coverage": "named (check named seed)",
+    "notes": "Brady box 24 plots far SE (733,-958) vs players' ~540,-500: ~470 m disagreement (label box may just be offset; unresolved)."
+   },
+   {
+    "species": "Caretaker Mordra (boss) lvl 24",
+    "area": "Eastern trench south of Meat Grinder",
+    "coordinates_xz": [
+     [
+      534,
+      -726
+     ],
+     [
+      539,
+      -730
+     ]
+    ],
+    "coordinate_source": "TaRapedia (inferred)",
+    "count_or_density": "solo",
+    "level": "level 24",
+    "date": "2008-12-09",
+    "era": "final (>=2008-09)",
+    "source": "https://tabularasa.fandom.com/wiki/Caretaker_Mordra revs 35741 (2008-12-03), 35755 (2008-12-09)",
+    "quote": "His approximate spawn point is 534, -726 / Confirmed ... 539, -730 as of Dec. 8, 2008",
+    "coverage": "named (check named seed)",
+    "notes": "Final-era position; 2008-11-07 note says spawn moved \"farther up north towards The Meat Grinder\" vs earlier 600,-800. Older spawns 524,-644 (2007-11), 522,-499 (2008-01), 280,-260 / 347,-316 (roaming)."
+   },
+   {
+    "species": "Splatter (large Amoeboid boss) lvl 24",
+    "area": "Bane Forward Command south part",
+    "coordinates_xz": [
+     [
+      -120,
+      -740
+     ],
+     [
+      -221,
+      -788.5
+     ],
+     [
+      -145,
+      -607
+     ],
+     [
+      -129,
+      -743
+     ],
+     [
+      35,
+      -644
+     ],
+     [
+      95,
+      -850
+     ],
+     [
+      100,
+      -720
+     ],
+     [
+      109,
+      -554
+     ]
+    ],
+    "coordinate_source": "TaRapedia (inferred)",
+    "count_or_density": "solo, wanders",
+    "level": "level 24",
+    "date": "2008-08-20",
+    "era": "mid (2008-01..08)",
+    "source": "https://tabularasa.fandom.com/wiki/Splatter latest 35711 (2008-11-19); https://tabularasa.fandom.com/wiki/Divide_Targets_of_Opportunity rev 31849 (2008-08-20)",
+    "quote": "Spawns at Bane Forward Command (Spawn -120 -740)",
+    "coverage": "named (check named seed)",
+    "notes": "2007-12-18: \"NEW SPAWN = inside the base now\"."
+   },
+   {
+    "species": "Thrax / Bane at Bane Forward Command",
+    "area": "BFC (Brady Map Point 15 \"Thrax Base\")",
+    "coordinates_xz": [
+     [
+      16,
+      -570
+     ],
+     [
+      14.7,
+      -555.7
+     ],
+     [
+      68.9,
+      -689.3
+     ]
+    ],
+    "coordinate_source": "16,-570: measured from BradyGames leaf116 map box (affine fit to 11 printed logos shrine coords; LOO rms 82 m, max 146 m; box may be offset from the actual point) - see leaf116-map-fit.json; T'Kar 14.7,-555.7 and Predator bay 68.9,-689.3: TTH /loc",
+    "count_or_density": "\"dozens of enemy troops\"; \"Stalkers, Predators, artillery, and full squads of Bane soldiers\"; \"Thrax soldiers of every type\"",
+    "level": "none",
+    "date": "2007-10-15",
+    "era": "launch (<2008-01)",
+    "source": "/home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_13463.txt; tth_node_16084.txt",
+    "quote": "a large heavily defended Bane station guarded by dozens of enemy troops",
+    "coverage": "COVERED (9,-642) - density likely under-represented",
+    "notes": ""
+   },
+   {
+    "species": "Conscript Naan (Thrax officer, mission)",
+    "area": "South end of BFC",
+    "coordinates_xz": [
+     [
+      -63,
+      -740
+     ],
+     [
+      -100,
+      -715
+     ],
+     [
+      -151,
+      -628
+     ],
+     [
+      73,
+      -770
+     ],
+     [
+      -91,
+      -713
+     ]
+    ],
+    "coordinate_source": "TaRapedia (inferred)",
+    "count_or_density": "single named",
+    "level": "none",
+    "date": "2007-12-18",
+    "era": "launch (<2008-01)",
+    "source": "https://tabularasa.fandom.com/wiki/Conscript_Naan rev 22311; https://tabularasa.fandom.com/wiki/Shoot_The_Messenger",
+    "quote": "He spawns in at -63, 116, -740",
+    "coverage": "named (check named seed)",
+    "notes": ""
+   },
+   {
+    "species": "Hominis Machina escort (4) with Officers Varga & Hraak",
+    "area": "Road from the trenches past Foxtrot north via Crossroads to Thoria Das; final-era spawn at Thoria Das fire pit",
+    "coordinates_xz": [
+     [
+      130,
+      850
+     ],
+     [
+      145,
+      910
+     ],
+     [
+      293,
+      -112
+     ],
+     [
+      301.5,
+      -93
+     ],
+     [
+      297,
+      -138
+     ],
+     [
+      295,
+      -118
+     ],
+     [
+      267,
+      419
+     ],
+     [
+      460,
+      293
+     ]
+    ],
+    "coordinate_source": "TaRapedia (inferred); 130,850 & 145,910 are 2008-09/2009-01, the others 2007-08..2008-02",
+    "count_or_density": "Objective \"Eliminate the Hominis Escort Patrol (4/4)\" -> 2 officers + 4 Hominis",
+    "level": "none",
+    "date": "2009-01-20",
+    "era": "final (>=2008-09)",
+    "source": "https://tabularasa.fandom.com/wiki/There's_A_Hominus_Among_Us revs 3106 (objective 4/4), 5658, 15933, 27762, 28534, 28661, 29865, 33049 (2008-09-13), 35926 (2009-01-20); https://tabularasa.fandom.com/wiki/Officer_Varga rev 34543 (2008-09-29); /home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_13755.txt; tth_node_21362.txt",
+    "quote": "They will spawn at the edge of Thoria Das by the fire pit (around 130, 850) every few minutes ... They have been known to spawn at other locations along the road from Thoria Das to the trenches past Foxtrot",
+    "coverage": "UNCOVERED (held in current manifest)",
+    "notes": "Spawn point shifted from south (~295,-115, 2007) to Thoria Das (2008-09+). TTH: patrols road between Delta Outpost (479.7,-293.8) and Thoria Das."
+   },
+   {
+    "species": "Hominis Machina (count target)",
+    "area": "Divide-wide",
+    "coordinates_xz": "n/a",
+    "coordinate_source": null,
+    "count_or_density": "ToO: Kill 20 Hominis Machina",
+    "level": "none",
+    "date": "2008-10-02",
+    "era": "final (>=2008-09)",
+    "source": "https://tabularasa.fandom.com/wiki/Divide_Targets_of_Opportunity latest 34567",
+    "quote": "Kill 20 [[Hominis Machina]]e on Divide",
+    "coverage": "n/a",
+    "notes": "Only known Divide Hominis: the 4-escort patrol and possibly Rotting Sal's hill."
+   },
+   {
+    "species": "Amoeboid",
+    "area": "Divide-wide (no location text found)",
+    "coordinates_xz": null,
+    "coordinate_source": null,
+    "count_or_density": "ToO: Kill 50 Amoeboids; D11 (live 2008-08-14): \"Reduced the chance that an Amoeboid will spawn on the Concordia Divide map\"; Brady: \"Amoeboids often appear in groups\"",
+    "level": "none",
+    "date": "2008-08-14",
+    "era": "mid (2008-01..08)",
+    "source": "https://tabularasa.fandom.com/wiki/Divide_Targets_of_Opportunity; https://tabularasa.fandom.com/wiki/Updates/2008-08-14 (rev 35870); wayback-pts deployment_11_7312008.html; brady_djvu.txt line 15471",
+    "quote": "Concordia Divide: Reduced the chance that an Amoeboid will spawn on the Concordia Divide map",
+    "coverage": "UNCOVERED / EVIDENCE GAP (no position)",
+    "notes": "\"Chance ... will spawn\" suggests Amoeboids are a random component of mixed spawns (e.g. Bane dropship/group rolls) rather than fixed pools - inference only."
+   },
+   {
+    "species": "Predator (flying)",
+    "area": "Forward trenches / front lines and Bane base; skies SW of Hydro Dam south of Front Lines West (Brady Map Point 19 \"Second GPS Location, Predator Patrols, Bane Storage Tank\"); Predator bay in BFC",
+    "coordinates_xz": [
+     [
+      -515,
+      -670
+     ],
+     [
+      -494.7,
+      -681.1
+     ],
+     [
+      68.9,
+      -689.3
+     ]
+    ],
+    "coordinate_source": "-515,-670: measured from BradyGames leaf116 map box (affine fit to 11 printed logos shrine coords; LOO rms 82 m, max 146 m; box may be offset from the actual point) - see leaf116-map-fit.json; -494.7,-681.1: TaRapedia Predator Prey beacon /loc (rev 30174 2008-04-03) - agrees with the Brady point within 25 m; 68.9,-689.3 TTH",
+    "count_or_density": "\"frequently patrol the skies in that area\"; kill 4 (Brady) / \"can be done anywhere in the zone\" (TTH)",
+    "level": "none",
+    "date": "2008-07-22",
+    "era": "mid (2008-01..08)",
+    "source": "/home/blizz/backups/rasa-net/research/20260927-footage-study/brady/leaf116/leaf123; https://tabularasa.fandom.com/wiki/Predator revs 6379 (2007-08-22) & 31509 (2008-07-22); /home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_16084.txt",
+    "quote": "The Predators frequently patrol the skies in that area—you have to kill just four of them.",
+    "coverage": "UNCOVERED (held in current manifest)",
+    "notes": "Legend says \"Bane Storage Tank\" (an object), not \"Tank Patrols\"."
+   },
+   {
+    "species": "Stalker (Class IV)",
+    "area": "Under the bridge west of Foxtrot; near Bane Forward Base",
+    "coordinates_xz": [
+     [
+      5,
+      -5
+     ],
+     [
+      -58,
+      -432
+     ]
+    ],
+    "coordinate_source": "TaRapedia (inferred)",
+    "count_or_density": "single each; 15-min respawn at the bridge",
+    "level": "none",
+    "date": "2008-01-27",
+    "era": "mid (2008-01..08)",
+    "source": "https://tabularasa.fandom.com/wiki/The_Tallest revs 15638 (2007-11-20), 27772 (2008-01-27)",
+    "quote": "A Class IV Stalker spawns beneath the bridge next to Foxtrot Outpost every 15 minutes",
+    "coverage": "COVERED",
+    "notes": "TTH 14030 (2007-10-30) instead: \"only one has been spotted to the northwest just before you get to Delta Outpost\" (uncovered, conflicts); Brady leaf124: Stalkers in the trenches (Through the Trenches); TTH 13463: Stalkers at BFC."
+   },
+   {
+    "species": "Caretaker (Bane medic)",
+    "area": "In Bane squads zone-wide; around the Hydro Plant on invading Thrax",
+    "coordinates_xz": [
+     [
+      -261,
+      118
+     ]
+    ],
+    "coordinate_source": "Hydro Plant pool coords",
+    "count_or_density": "\"in various squads around the map\"; \"various locations all over the zone\"",
+    "level": "none",
+    "date": "2008-02-24",
+    "era": "mid (2008-01..08)",
+    "source": "/home/blizz/backups/rasa-net/research/20260927-footage-study/brady/leaf119; /home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_13755.txt; https://tabularasa.fandom.com/wiki/Careless rev 29175 (2008-02-24)",
+    "quote": "All around the Hydro Plant Base you can pick up these samples off of the invading Thrax.",
+    "coverage": "PARTIAL (Hydro Plant only)",
+    "notes": "Taking Care of the Caretakers: kill 10 (TTH)."
+   },
+   {
+    "species": "Bane dropship assaults (Thrax, Caretakers, Predator)",
+    "area": "Nidu Dav (scripted), Prison, Delta road, Hydro Plant sieges",
+    "coordinates_xz": null,
+    "coordinate_source": null,
+    "count_or_density": "scripted/dropship waves",
+    "level": "none",
+    "date": "2007-10",
+    "era": "launch (<2008-01)",
+    "source": "/home/blizz/backups/rasa-net/research/20260927-footage-study/brady/leaf117/120/122/123; /home/blizz/backups/rasa-net/research/20260926-instances/work/guides/tth_node_13488.txt",
+    "quote": "Expect soldiers, caretakers, and even a Predator or two to show up.",
+    "coverage": "n/a (mission/CP scripted)",
+    "notes": ""
+   },
+   {
+    "species": "Dynamic spawners (Bane)",
+    "area": "Divide - Bane territory around base defences",
+    "coordinates_xz": null,
+    "coordinate_source": null,
+    "count_or_density": "reactive, player-presence driven",
+    "level": "none",
+    "date": "2008-11-11",
+    "era": "final (>=2008-09)",
+    "source": "research/20260926-notes-audit/sources/wayback-live/deployment_14_11112008.html (D14 live)",
+    "quote": "New spawners added to Divide: The Bane forces are becoming more aggressive ... Dynamic spawners are additional reactive elements ... focus on the presence of players",
+    "coverage": "UNCOVERED / GAP (mechanism unknown)",
+    "notes": "Final-era original patch note."
+   }
+  ],
+  "held": [
+   "Divide Predators (Brady Map Point 19 patrols; Predator Prey)",
+   "Divide Amoeboids (1582 Kill 50)",
+   "Divide Deployment 14 dynamic spawners",
+   "Divide boss respawn (520015-520019)",
+   "Wilderness boss, named-boss and non-drawing pools (1, 2, 3, 81, 82, 91, 132, 156-159, 168, 169, 520065) and every friendly or service pool of 1220"
+  ]
+ }
+}

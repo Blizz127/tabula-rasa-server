@@ -1168,3 +1168,19 @@ from any distance. The original server's use range is not recorded. The client m
 and that hasn't been checked either. Needed: the client's use-range constant (1.16.5.0 scripts) or original footage
 of a failed out-of-range use. Until then the server does not enforce a range. DIT's Logos-hunting bots walk to
 within 2.5 m, as a player would. Found by the DIT tr-chat lane, 2026-09-28.
+
+## Ambient respawn and the Divide's open ground (2026-09-28)
+
+Built after the owner's play report. Tiers and gaps: the manifest rows and change entries of `AmbientPoolRespawn` and
+`DivideOpenGroundPopulations`, and OD-186 to OD-191. Account: `docs/retail-accuracy.md`, "Ambient respawn from evidence,
+and the Divide's open ground".
+
+| behaviour | was | now | evidence | tier |
+| --- | --- | --- | --- | --- |
+| hostile ambient pool respawn (45 pools of the 2026-09-27 batches) | 2 s (world-seed analogue, OD-164/OD-178) | 60-300 s, fixed per pool, staggered by id | owner's range; footage lower bounds (>= 36 s, >= 109 s); TaRapedia final-era "about 5 minutes", "fairly quickly" | inferred within the owner's decision (OD-186) |
+| Wilderness hostile ambient pools (83) | 2-5 s (emulator world seed) | 60-300 s, as above | as above | inferred (OD-186) |
+| Wilderness bosses, named bosses, friendly/service pools | 2-50 s | unchanged | owner scope: hostile ambient pools only | - |
+| Divide boss respawn (520015-520019) | 50 s | unchanged (owner) | TaRapedia Meat Grinder about 7 min, Mordra about 10 min | gap (GAP-DIVIDE-BOSS-RESPAWN) |
+| Divide open-ground population | 14 pools | 35 pools: Boargar, Xanx, Filchers, Warnets, Thrax squads with Caretakers, the Meat Grinder's escort, BFC barracks, the Hominis escort | TaRapedia/TTH /loc lines, Brady, final map | places 14 inferred, 1 measured, 6 analogue (OD-187, OD-188) |
+| new Divide rows' levels, stats, counts | - | 12/15/16; same-class world rows; the earlier pools' sizes or the text's fewest | band 12-18 | analogue (OD-189 to OD-191) |
+| Divide Predators, Amoeboids, D14 dynamic spawners | - | held | no place / no mechanism | gap |

@@ -602,6 +602,23 @@ Mires and Palisades from footage"; evidence `docs/evidence/footage-ambient-popul
   1587 and the Targets of Opportunity; 368's Warnets now ~560 m from Kogari. Owner client check (1067 at Major Ston;
   hunting at each site) is still to do.
 
+## Ambient respawn and Divide open-ground status
+
+Built on 2026-09-28 after the owner's play report ("they respawn really fast. world seems empty"). Account:
+`docs/retail-accuracy.md`, 2026-09-28 "Ambient respawn from evidence, and the Divide's open ground"; evidence
+`docs/evidence/ambient-respawn-divide-populations-20260928.json`.
+
+- **Built:** `AmbientPoolRespawn` gives 128 hostile ambient pools the owner's staggered 60-300 s (OD-186, owner
+  2026-09-28). These are the 45 pools of the 2026-09-27 batches (2 s before) and the Wilderness world seed's 83 hostile
+  ambient pools (2-5 s before). Bosses and friendly/service pools are excluded. The server has no jitter, so each pool gets
+  a fixed 60 + 10 x ((id x 7) mod 25) s. `DivideOpenGroundPopulations` adds 21 Divide pools (1148214-1148234, 68
+  creatures) and rows 1148008-1148012, placed from TaRapedia/TTH /loc lines, Brady and the final map: 14 inferred, 1
+  measured and 6 analogue places (OD-187 to OD-191).
+- **Open:** no source times one pool, and it is unknown whether retail respawned per creature or per group, from death or
+  from corpse removal. The bosses keep their respawn by the owner's choice (the Divide bosses 50 s against TaRapedia's 7-10
+  min). Still held: Divide Predators, Amoeboids, the D14 dynamic spawners, the Hominis officers and Purgas Valley. Divide
+  levels are analogues. An owner client check (hunting on the Divide; the respawn feel) is still to do.
+
 ## S4 (Capture the Flag) status
 
 - Mission 1994 is seeded by `BootcampS4CaptureTheFlag` (SQLite and MySQL, frozen rows in
@@ -2446,6 +2463,12 @@ its evidence tier.
 | OD-179 The Palisades Warnet pool 1244201 (2026-09-27, agent, pending owner review) | Moved from the analogue valley east of Hightower to the filmed Forean Ruins group (419.2, 368.8), one Warnet (the study's instruction). 368's Warnets are now ~560 m from Kogari; with no timer the mission stays finishable (GAP-PALISADES-368-WARNET-DISTANCE). Alternative: keep an analogue pool near Hightower as well. |
 | OD-180 1067 while 975 Flight Salvage is held (2026-09-27, agent, pending owner review) | Offer 1067 without its prerequisite (the OD-165 rule); 975's salvage object is not placed (GAP-1067-PREREQUISITE). Alternative: hold 1067. |
 | OD-181 Mission level of 1067 (2026-09-27, agent, pending owner review) | 30, the level of the Mires missions already seeded (955, 956, 976; the OD-167 rule); Ston is TaRapedia level 31. The comm devices drop at OD-61's 50%. Alternative: 31. |
+| OD-186 Respawn delay of the hostile ambient pools (2026-09-28, owner) | The owner, 2026-09-28 ~14:42 CDT, relayed by the Devbox Coordinator: "Ambient respawn range: 60-300 s, not 60-240, staggered so pools don't sync". It applies to the two 2026-09-27 batches' 45 pools, the Divide's new open-ground pools and the Wilderness ambient pools, "only hostile ambient creature pools". Friendly/service NPC pools and bosses are excluded, and the boss respawns stay as they are. There's no per-spawn jitter, so each pool takes a fixed 60 + 10 x ((id x 7) mod 25) s. The Class IV Stalkers keep 15 minutes (GAP-AMBIENT-POOL-RESPAWN-VALUE, GAP-AMBIENT-RESPAWN-MECHANISM). |
+| OD-187 The Divide open-ground additions (2026-09-28, agent, pending owner review) | Seed each Divide creature place the text records with coordinates or a named landmark and no pool covers. The sources are TaRapedia/TTH /loc lines, Brady and the final map. The Divide has no recorded rebuild, so the dated launch-era text is used as inferred places, never as analogues. 21 pools. |
+| OD-188 Divide places where only the species and area are known (2026-09-28, agent, pending owner review) | Labelled analogue positions inside the named area, because the owner wants the zone inhabited. Six pools: the road south-east of Delta, the road north of Minos, south-east of Foreas Base, Boargar in the Northwestern Highlands and east of Nidu Dav, and Filchers on the Thoria Das road (GAP-DIVIDE-OPEN-GROUND-PLACES). Alternative: leave them out. |
+| OD-189 Levels of the new Divide rows (2026-09-28, agent, pending owner review) | Analogues within TaRapedia's band of 12-18: Boargar 12 (the band floor), the zone-wide Hominis patrol 15, and the south-east Thrax, Caretakers and Warnets 16. The text ranks Minos, Torcastra, the Meat Grinder and Pogonos More above the north. Alternative: 12 everywhere. |
+| OD-190 Group sizes of the new Divide pools (2026-09-28, agent, pending owner review) | The earlier Divide pools' sizes, or the fewest the text reads: Thrax three (DV2-002) plus one Caretaker, Xanx two (three where "a number"), Warnets and Filchers three, Boargar three ("a handful"), the Meat Grinder's escort seven ("7-8"), the Hominis four (objective 4/4), and analogue pools two. |
+| OD-191 Health, attacks and movement of the new Divide rows (2026-09-28, agent, pending owner review) | Same-class world rows, as in OD-163/OD-178: Boargar 555/4, Hominis Machina 555/2, Thrax PFC 555/33, Caretaker 1000/16, Warnet 555/1; run 9 / walk 5. |
 
 Detailed evidence: [new-character initialization](new-character-client-evidence.md),
 [starter equipment](starter-equipment-research.md),

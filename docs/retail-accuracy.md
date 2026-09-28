@@ -5367,3 +5367,72 @@ database gave 1681/1681. TR was asleep (stackd), so this was a build-and-re-pin 
 `rasa_net_game:dit-20260928j`, nothing started. The DIT files it replaced are in
 `~/backups/rasa-net/overlay-before-C3`, and the database backup from 17:05 UTC still applies. Rollback: re-pin
 `rasa_net_game:dit-20260928i`.
+## 2026-09-28 — Ambient respawn from evidence, and the Divide's open ground
+
+Owner feedback of 2026-09-28 (about 17:55 UTC / 12:55 CDT, playing on the Divide): "i see the mobs, they respawn really
+fast. world seems empty". Migrations `AmbientPoolRespawn` (20260928090000) and `DivideOpenGroundPopulations`
+(20260928091000). Tiers and citations: the manifest's rows and change entries of both; the data points, probes and
+sources: `docs/evidence/ambient-respawn-divide-populations-20260928.json`; the research record (footage readings, text
+sweep, Divide evidence, the Brady map fit, probes, `tools/build.py`): `research/20260928-seed-populations-3`. Decisions
+OD-186 is the owner's decision (2026-09-28 ~14:42 CDT / 19:42 UTC, relayed by the Devbox Coordinator); OD-187 to
+OD-191 are the batch's, agent-approved, pending owner review.
+
+- **Respawn evidence.** Footage, read frame by frame on the Raisuly 1080p captures: no ambient refill is seen anywhere.
+  A Torden Mires Thrax Scavenger/Technician Sergeant group (C2rGwo6fLw0, 2009-02-27, (812, 212)) was not back 36 +/- 4 s
+  after it died; the player came back to loot the corpses. Executor Gantic's site (IDAug5iUa9c, 2008-12-13) stayed empty for
+  109 +/- 6 s. Both are lower bounds. The one timed interval, about 100 s between two Bane dropships at an attacked Torden
+  Plains control point (rCt23ux-kyU), is CP reinforcement, a different mechanism. The Warnet Caverns "respawns" are a scripted
+  bait, and the shutdown-day Iapyx siege can't be separated into events. Text (TaRapedia, dated revisions): Plateau Miasma
+  bulls "about 5 minutes" (2009-01-30); a Palisades patrol after "about 5 minutes of waiting" (2009-01-24); Kael that "respawn
+  fairly quickly"; Mires Beam Mantas "frequently"; Palisades Warnets' "high respawn rate" (2008-10-25); a Mires Stalker "about
+  six minutes"; bosses 5-10 minutes (Meat Grinder about 7, Kennilaxx 5-10, Mordra about 10 after D11.6). Objects: Mires
+  crates 3 minutes (official, 2007-11), Divide food crates "several minutes", "longer than usual" (Brady). No source times
+  one pool.
+- **Respawn set** (OD-186, the owner's decision): "60-300 s, not 60-240, staggered so pools don't sync", for hostile
+  ambient creature pools only. That is 128 pools: the 45 of ConcordiaAmbientPopulations and FootageAmbientPopulations
+  (2 s before) and 83 of the Wilderness (1220) world seed (2-5 s before). The 21 new Divide pools are seeded with the same
+  rule. `SpawnPoolManager` holds one fixed delay per pool, counted from the pool's last death, and has no per-spawn jitter.
+  So the stagger is deterministic: each pool takes 60 + 10 x ((id x 7) mod 25) s. All 25 steps from 60 to 300 s are used,
+  and pools with consecutive ids never share a delay. The upper end matches the final-era "about 5 minutes". Down restores
+  every pool's previous value exactly. Final-era players tie retail respawn to corpse removal ("looted bodies fade (and
+  therefore respawn) faster"). Whether retail respawned per creature or per group is open (GAP-AMBIENT-RESPAWN-MECHANISM).
+- **Wilderness scope.** Of the Wilderness's 241 pools, 97 draw only hostile (faction 0) creatures.
+  - **Changed (83):** 37-48, 52, 54-58, 60, 61, 69, 70, 73-77, 79, 80, 83, 85, 88, 94, 96-99, 102-105, 108-112, 118,
+    121-131, 133, 137-148, 151-154 and 160-167. These are Boargar, Mox, Filcher, Fithik, Xanx and Miasma packs, and Bane
+    Thrax/Hunter/Technician/Grenadier/Caretaker/Amoeboid/Shield Drone groups.
+  - **Left out as bosses:** 156-159 and 520065, the 50 s boss pools (Archfiend Grenadier with Old Scratch, Proctor Fulgor,
+    Arioch Xanx, Atropos Linker, Horntail). Also the named bosses in boss classes: Overseers Glognar 81, Phlegg 82 and
+    Rankash 91 (5 s), the Fithik Hive Monarch 168 and Overseer Graal with his escort 169 (3 s).
+  - **Left out because they draw nothing:** 1, 2, 3 and 132 (counts 0).
+  - **Not touched:** the other 144 pools, which are friendly or service NPCs (vendors, trainers, hospitals, mission
+    givers, companions, AFS).
+  - The Divide Targets-of-Opportunity bosses keep 50 s and the Class IV Stalkers 15 minutes. The owner did not adopt
+    TaRapedia's boss times (GAP-DIVIDE-BOSS-RESPAWN).
+- **Divide audit.** Before this, the open-ground Divide had 14 pools. Xanx: two in the cave by the Give shrine, south of
+  Foreas Base, at the nests. Thrax: the Front Lines dropship, Bane Forward Command, the Hydro Plant. Filchers: three
+  trench/crossroads sites. Warnets: two nests. Class IV Stalkers: two. So the north lobe, Benefactor Valley, the Minos and
+  Delta roads, Pogonos More and the Meat Grinder's trench held nothing. No final-era footage shows a Divide open-ground fight.
+  The Divide has no recorded rebuild: spot adjustments 2008-04-28, fewer Amoeboids in D11, dynamic spawners and more Bane
+  aggression in D14. So TaRapedia and Ten Ton Hammer /loc lines, the BradyGames guide and the final map are used with their
+  dates (OD-187). The Brady leaf-116 map was read through an affine fit to the eleven Logos shrines it prints
+  (leave-one-out rms 82 m). Band: TaRapedia "Mob Levels=12-18" (Brady "Levels 10-20").
+- **Divide seeded** (21 pools, 68 creatures, all on navmesh floor reached from the Foreas Base waypoint):
+
+  | tier of place | pools |
+  | --- | --- |
+  | inferred (text coordinates or a named landmark) | Boargar at the downed airship (95, 300); Xanx at the Calla fronds (440, 75), the War cave (358, 653), the terraform kits (377, 853); Filchers by the War cave (385, 605); Warnets at the Benefactor nests (625, 200), the Enlighten shrine (619, -13), the Minos entrance (640, -124); Thrax at the Foxtrot sandbags (9, -152) and around Rotting Sal (-80, -153); the Meat Grinder's escort (543, -532); Bane Forward Command's east (138, -639) and west (-116, -631) barracks; the Hominis escort at the Thoria Das fire pit (130, 850) |
+  | measured (Brady map, +/-150 m) | Bane troops at Pogonos More (328, -436) |
+  | analogue (inside the named area, OD-188) | Warnets and Thrax on the road south-east of Delta (600, -360); the Bane Battle Plans patrol north of Minos (600, 60); Thrax south-east of Foreas Base (150, 400); Boargar in the Northwestern Highlands (-699, 701) and east of Nidu Dav (-402, 419); Filchers on the Thoria Das road (150, 720) |
+
+  New rows 1148008-1148012: a Boargar (12), Hominis Machina (15), and south-east Thrax PFC, Caretaker and Warnet (16).
+  These levels are analogues within the band (OD-189). Counts are the earlier Divide pools', or the fewest the text reads:
+  Thrax threes with a Caretaker, the Meat Grinder's seven, the Hominis four from the objective 4/4 (OD-190). Stats are
+  same-class world rows (OD-191). Respawn follows OD-186.
+- **Held** (GAP-DIVIDE-UNPLACED-SPECIES): Predators (Brady's patrols south-west of the Hydro Dam; flying, and the server has
+  no flight movement), Amoeboids (no place; a random spawn component since D11), the D14 dynamic spawners, the Hominis
+  officers Varga and Hraak (373 held), Thrax Officers, the Xanx at the Bane-food crash site (which of the two sites is
+  unstated), and Purgas Valley and the south-west, where no source places a creature.
+- Tests: `AmbientRespawnDividePopulationsTests` covers the respawn set and its spread, the cooldown as the server loads it,
+  navmesh floor and paths, species in and out, store types, manifest rows and change entries, and rollback with
+  SpawnPoolEntries loading. The ContentSchemaMigrationTests block covers rows and rollback. Provider parity is also tested.
+  The Footage block now expects the new respawn.

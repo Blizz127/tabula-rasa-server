@@ -31,7 +31,7 @@ namespace Rasa.Test.Reconstruction
             foreach (var prefix in new[] { SeedMigrationParity.BootcampPrefix, SeedMigrationParity.WildernessPrefix, "MissionAreaLinks",
                 "EarlyReadyMissions", "TordenConversationMissions", "MissionRewardItems", "WorldDefectsFix", "MissingMissionGivers",
                 "OfficialNotesCorrections", "LocalTeleporterGraveyards", "SingleClassTrainers", "LiaisonLogosMissions",
-                "CreatureLootFootage", "CloneCreditNotTradable", "InstanceTravel", "PravusResearchInstance", "DivideOperationsInstances", "PalisadesDossierMissions", "ConcordiaAmbientPopulations", "FootageAmbientPopulations" })
+                "CreatureLootFootage", "CloneCreditNotTradable", "InstanceTravel", "PravusResearchInstance", "DivideOperationsInstances", "PalisadesDossierMissions", "ConcordiaAmbientPopulations", "FootageAmbientPopulations", "AmbientPoolRespawn", "DivideOpenGroundPopulations" })
             {
                 var discovery = SeedMigrationParity.Discover(typeof(Rasa.Migrations.SqliteWorld.CorrectRogersNpcPackage).Assembly,
                     SeedMigrationParity.SqliteNamespace, SeedMigrationParity.MySqlNamespace, prefix);
