@@ -5302,3 +5302,15 @@ next stackd wake starts it. Backup `predeploy-20260928T064956Z` (the only one ke
 
 Not yet verified: startup (at the next wake), and Game's memory and main-loop time with 25 bots online and the owner
 on (`docker stats`, console `perf`).
+
+## 2026-09-28 06:59 UTC (01:59 CDT) — Re-staged while asleep: DIT presence A+B+C
+
+B (combat feel: 300–900 ms reaction, 3–8-shot bursts, turns capped at 360°/s, mixed target choice, a retreat
+threshold per bot) and C (movement: rounded turns and corner cuts where the navmesh allows, ±3% speed, catch-up
+capped at jog + 0.4 m/s, re-rolled follow gaps, idle fidgets and facing people) were built on A by tr-chat
+(`~/scratch/tr-fixes/presence-B`, `presence-C`; `presence-ABC-cumulative.patch` 7f4b6952…,
+`presence-C-on-B.patch` ff0908aa…; copied to `~/backups/rasa-net/research/20260928-dit-presence-{B,C}`). Each has
+a live switch (`combatFeel`, `movement`). Strafing and jumping are left out until the client's move flags are
+evidenced. Only DIT files changed; the 10-hook patch 005369c66b49 is unchanged. The full suite with the world
+database gave 1641/1641. `rasa_net_game:dit-20260928g` (e9cd05833292) replaces the A-only `dit-20260928f` pin,
+still under `.deploy-lock`, with nothing started. Rollback: re-pin `rasa_net_game:dit-20260928e`.
