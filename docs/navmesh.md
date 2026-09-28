@@ -105,6 +105,11 @@ the cell size, or an original drop) is not yet diagnosed. It needs a probe and e
 link. Until 2026-09-28 the per-character boot camp copies had no navmesh at all (`MapChannelManager.PerCharacterInstance`
 did not copy it), so this gap had never been reached in play.
 
+## Open: the Divide north of Delta Outpost (2026-09-28)
+
+`GAP-DIVIDE-DELTA-THORIA-NAVMESH`. DIT's population bots stall on a partial path at about (459, 85) (x, z), north of
+Delta Outpost toward Thoria Das. The DIT squad-chat lane reported it. It is not yet probed.
+
 ## Format notes
 
 `.glm` archives: chunks (zlib or raw), a name table, then a `CHNKBLXX` directory whose offset is

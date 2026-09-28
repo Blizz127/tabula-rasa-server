@@ -119,3 +119,9 @@ has no published `Rasa.Game.dll` at that path. To roll back to one, restore the 
 While a deploy is under way, `~/servers/rasa-net/.deploy-lock` exists. Create it before the backups and remove it
 after Game is healthy. The on-demand sleep service (stackd) and the DIT offline-sim apply step check for it: stackd
 does not stop Game while it exists, and offline-sim keeps its plan pending instead of writing to `rasachar.db`.
+
+Before recreating Game in a deploy, save its full log into that deploy's backup folder
+(`docker logs rasa-net-game-1 > <backup>/game-before.log 2>&1`). `docker compose up` recreates the container, and
+the old container's log is deleted with it. On 2026-09-28 that lost the 02:45–03:00 UTC chat lines the DIT lanes
+needed.
+
