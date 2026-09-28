@@ -5285,3 +5285,20 @@ the hub's `conversation/group` (companion memory keyed to the owner; one pair an
 up. The previous log is saved in `predeploy-20260928T035407Z/game-before.log`, which is the only backup kept.
 Rollback: re-pin `rasa_net_game:dit-20260928d`. Startup was clean (quest book 154/127/146, 864 spawnpools, 0 gaps,
 Auth authenticated).
+
+## 2026-09-28 06:50 UTC (01:50 CDT) — Staged while asleep: DIT presence (A)
+
+tr-chat's presence handoff (`~/scratch/tr-fixes/presence`, `presence-A.patch` sha256 c98e9cef…, copied to
+`~/backups/rasa-net/research/20260928-dit-presence`). It gives each persona a CDT schedule. Whoever's session is
+running is spawned mid-activity at a login or wake, at least 150 m from the owner. The roster grows to 120, with
+at most 25 online, and bots still leave when no human is on. A hot switch (`"schedule": false` in
+`population.json`) restores the old behaviour. Only DIT files changed; the 10 hook files are unchanged. The full
+suite with the world database (ax41, capped) gave 1637/1637.
+
+TR was asleep (stackd, since 04:07 UTC), so this was a build-and-re-pin only, under `.deploy-lock`:
+`rasa_net_game:dit-20260928f` (b5b3b3e0a266) is pinned in `docker-compose.dit.yml`, and nothing was started. The
+next stackd wake starts it. Backup `predeploy-20260928T064956Z` (the only one kept). Rollback: re-pin
+`rasa_net_game:dit-20260928e`.
+
+Not yet verified: startup (at the next wake), and Game's memory and main-loop time with 25 bots online and the owner
+on (`docker stats`, console `perf`).
