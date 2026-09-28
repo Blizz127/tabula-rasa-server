@@ -225,6 +225,9 @@ namespace Rasa.Managers
                 InstanceId = ++_lastInstanceId,
                 OwnerCharacterId = characterId,
                 PlayerLimit = 1,
+                // The context's navmesh, as a squad copy gets in PopulateCopy: without it every private boot camp
+                // ran with no pathing (the escorts, the Thrax, Tizzik Gi and McAllister's walk found no path).
+                NavMesh = shared.NavMesh,
                 ClientList = new List<Client>()
             };
 

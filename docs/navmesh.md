@@ -96,6 +96,15 @@ terrain archive never get the flag. A `.nav` built before the flag existed still
 exactly as before; every player on it just counts as being on the surface, so rebuild to get the
 cavern regions.
 
+## Open: boot camp caldera trench (2026-09-28)
+
+`GAP-BOOTCAMP-TRENCH-NAVMESH`. In `adv_bootcamp.nav`, paths from the caldera trench toward the AFS base end at
+about (183, 108, 83). The mesh picks up again at about (177, 105, 92). The DIT boot camp pilot found this while
+walking two recruits through the camp, and crosses the gap with a logged straight hop. The cause (a terrain cut,
+the cell size, or an original drop) is not yet diagnosed. It needs a probe and either a rebuild or an off-mesh
+link. Until 2026-09-28 the per-character boot camp copies had no navmesh at all (`MapChannelManager.PerCharacterInstance`
+did not copy it), so this gap had never been reached in play.
+
 ## Format notes
 
 `.glm` archives: chunks (zlib or raw), a name table, then a `CHNKBLXX` directory whose offset is
