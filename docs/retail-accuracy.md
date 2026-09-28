@@ -5222,3 +5222,24 @@ The owner was offline in TR. The Devbox Coordinator relayed the owner's approval
 - **Backups**: `~/backups/rasa-net/predeploy-20260928T012244Z/`. Rollback: re-pin `rasa_net_game:dit-20260927g`
   (`docker-compose.dit.yml.before-20260928a`) and relaunch Game, or switch the pilot off with `rm dit/population`.
 - **Startup**: 864 spawnpools, navmeshes 75/75, 16 rules / 577 rows / 0 gaps, Auth authenticated, DIT enabled.
+
+## 2026-09-28 02:01 UTC (2026-09-27 21:01 CDT) — Deploy: DIT Squad Finder and pair lives on banshee-ax41
+
+The owner was offline in TR. This deploy changes only the DIT overlay, using the cumulative bundle
+`~/scratch/tr-fixes/pair-lives` (copied to `~/backups/rasa-net/research/20260928-dit-pair-lives`). The code is still
+development 3ca3247, and there is no migration.
+
+- **Overlay**: Bootcamp pilot, Squad Finder and pair lives, now 10 hook files. The new hooks are the read-only
+  `LookingForGroupManager.Ads`, `PartyManager.JoinRequestsTo` / `InviterOf`, and a try/catch-guarded
+  `DitSquadFinder.Whispered` call in `CommunicatorManager.DeliverWhisper`. The full suite with the world database
+  (run on ax41, capped) gave 1616/1616.
+- **Image**: `rasa_net_game:dit-20260928b` e1c2007a100e, 0 compiler errors; only Game was relaunched.
+- **Switches**: `dit/squadfinder` on. `dit/pair-lives` stays off until the owner confirms the permanent class
+  changes it makes (Mira → Specialist, Tavin → Soldier). Population is unchanged at `{ "target": 25,
+  "requireHuman": true }`.
+- **Backups**: only the latest is kept, `~/backups/rasa-net/predeploy-20260928T020048Z/`. Rollback: re-pin
+  `rasa_net_game:dit-20260928a` (`docker-compose.dit.yml.before-20260928b`) and relaunch Game, or remove a switch
+  file.
+- **Startup**: 864 spawnpools, navmeshes 75/75, 16 rules / 577 rows / 0 gaps, Auth authenticated, DIT enabled.
+- **Not yet verified in play** (needs the owner's client): bots answering his Squad Finder ad, bot ads in Search, and
+  the 25-bot population.
