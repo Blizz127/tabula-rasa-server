@@ -5548,3 +5548,26 @@ disconnect-reason logging from `92e5414`). No restart happened; the server was l
   closed the connection" both times, no server exception or handoff race). It has now recurred on both of the
   first two attempts after a wake, not just the very first connection ever. Worth a packet capture on the next
   wake if it keeps happening, and a client-side log from the owner's machine at the moment of a drop.
+
+## 2026-09-28 21:57–22:06 UTC (16:57–17:06 CDT) — Session-end findings, and the withdrawn-mission log deploy
+
+The owner's session ended at 21:57:10 UTC: his client's connection closed from its own side ("the other side
+closed the connection", state Ingame, account 4, 175 s after connecting, 233 frames in), not through a LogOut
+call. No server-side cause is evident; recorded alongside the connection-drop watch, not acted on.
+
+- **The queue-drop storm was larger than first reported.** Independently counted on Auth's log: 55+ connect
+  events from 107.135.99.150 in the 21:26–21:28 UTC window alone, roughly one pair every 1-2 s, continuing past
+  21:28:18 UTC when last checked, and (per the DIT lane) at about 16/min through 16:33 CDT — all while the
+  owner's own session stayed connected and unaffected. Worth asking him whether a second client, an updater, or
+  another device on his network was active then.
+- **Mission 767 "has no definition" fixed** (development 82bcc44, full suite 1560/1560): the mission (Dr.
+  Munson's Mighty Miasma) was legitimately withdrawn per the official Deployment 11 live notes
+  (`WildernessMunsonWithdrawalRows`, 2026-09-26); the owner's character 9 had accepted it before that migration
+  ran, so every login logged an `Error` for documented, correct content removal. `WithdrawnMissions.IsWithdrawn`
+  now distinguishes a known withdrawal (logs at `Initialize`, citing the reason) from an actual missing
+  definition (still `Error`). What retail did with an in-progress withdrawn mission is unrecorded
+  (`GAP-WITHDRAWN-MISSION-IN-PROGRESS`).
+- **Deploy**: `rasa_net_game:dit-20260928m` (base 82bcc44; the DIT overlay G+C3 is unchanged), Game only, no human
+  online, under `.deploy-lock`. Backup: only `predeploy-20260928T220810Z`. Rollback: re-pin
+  `rasa_net_game:dit-20260928l` and retag `rasa_net_auth:latest` to `release-20260928f`. Startup clean: 885
+  spawnpools, navmeshes 75/75, 0 gaps, Auth authenticated.
