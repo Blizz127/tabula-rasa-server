@@ -5274,3 +5274,14 @@ The owner had logged off; his last ping was at 03:00:26 UTC.
   deploy.
 - **Startup**: "DIT quest book: 154 missions, 127 NPCs, 146 waypoints"; 864 spawnpools, navmeshes 75/75, 0 gaps.
   Rollback: re-pin `rasa_net_game:dit-20260928c`.
+
+## 2026-09-28 03:55 UTC (2026-09-27 22:55 CDT) — Deploy: DIT squad chat via the hub's conversation/group
+
+tr-squadchat's follow-up (`~/scratch/tr-fixes/squad-chat-group`, patch sha256 6cc53b8f…, copied to
+`~/backups/rasa-net/research/20260928-dit-squad-chat-group`). Squad chat, tells and /say to a squadmate now go to
+the hub's `conversation/group` (companion memory keyed to the owner; one pair answer in squad), falling back to
+`conversation/reply` on a 404. Two DIT files changed, with no hook change. The full suite with the world database
+(ax41, capped) gave 1633/1633. `rasa_net_game:dit-20260928e`; Game only, under `.deploy-lock` with Auth already
+up. The previous log is saved in `predeploy-20260928T035407Z/game-before.log`, which is the only backup kept.
+Rollback: re-pin `rasa_net_game:dit-20260928d`. Startup was clean (quest book 154/127/146, 864 spawnpools, 0 gaps,
+Auth authenticated).
