@@ -5519,3 +5519,32 @@ overlay is unchanged), and `rasa_net_game:latest` / `rasa_net_auth:latest` retag
 at the next stackd wake. Backup: only `predeploy-20260928T200841Z`, which includes the previous game and auth logs.
 Rollback: re-pin `rasa_net_game:dit-20260928k` and retag `rasa_net_auth:latest` to `rasa_net_auth:release-20260928e`.
 Not yet verified: the first wake with the new logging.
+
+## 2026-09-28 21:08–21:20 UTC (16:08–16:20 CDT) — Repeat connection drops after a wake; population gating
+
+The owner needed three attempts to get into TR after the 16:08 CDT wake (`dit-20260928l`, which carries the new
+disconnect-reason logging from `92e5414`). No restart happened; the server was left alone while he was online.
+
+- **Attempt 1 (16:08:39):** Game logs "Queue connection from 107.135.99.150 closed: the other side closed the
+  connection (state Authenticating, account 0)" and "World key exchange … ended before it completed", both
+  before any Auth login. Auth shows a `Connected`-state disconnect at the same instant, then an immediate
+  reconnect that completed Login normally. This matches the earlier finding (see the 2026-09-28 first-login
+  investigation) that a connect-and-close probe with no Login precedes a warm login; it is likely the launcher's
+  own reachability check of the game port, not a login attempt. The client reached the server list but never sent
+  `AboutToPlay`, and timed out 5 minutes later (16:13:43, state ServerList).
+- **Attempt 2 (16:20:24):** the same pre-login queue probe pattern repeated, then a real login: Auth login,
+  `ServerListExt`, `AboutToPlay` (16:20:41.004), redirected to server 234's queue (16:20:41.010). The queue
+  connection this time closed in `Redirecting` state 800 ms later ("the other side closed the connection"). A new
+  connection arrived 327 ms after that (16:20:42.139) and proceeded normally (`StoreUserClientInformation`,
+  `MapLoaded` at 16:20:54).
+- **Bot load ruled out:** `DitPopulation`'s login loop only runs once `human != null` (or `RequireHuman` is
+  false; it is true here), and the log confirms zero bot logins before 16:20:55 — after the successful login, not
+  during either failed attempt. The always-on population (C2) does not pre-warm before a human is present, so the
+  world is genuinely empty for the minutes between a wake and the first successful login; TaRapedia/footage
+  evidence doesn't cover this since it is a hosting behaviour, not a retail one. Recorded for the DIT lane's
+  review, not changed here.
+- **Open**: the `Redirecting`-state drop is a second, independent instance of the client/network-side close the
+  2026-09-28 investigation could not attribute to server code (verified again by the new logging: "the other side
+  closed the connection" both times, no server exception or handoff race). It has now recurred on both of the
+  first two attempts after a wake, not just the very first connection ever. Worth a packet capture on the next
+  wake if it keeps happening, and a client-side log from the owner's machine at the moment of a drop.
