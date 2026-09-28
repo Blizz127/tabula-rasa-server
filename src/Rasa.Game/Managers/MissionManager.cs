@@ -446,6 +446,8 @@ namespace Rasa.Managers
 
                 if (LoadedMissions.TryGetValue(mission.MissionId, out var definition))
                     missionStatus[mission.MissionId] = mission.ToMissionInfo(definition, nowMs, client.Player.MapContextId);
+                else if (WithdrawnMissions.IsWithdrawn(mission.MissionId))
+                    Logger.WriteLog(LogType.Initialize, $"Character {client.Player.Id}: saved mission {mission.MissionId} was withdrawn per the official live notes and is not sent (GAP-WITHDRAWN-MISSION-IN-PROGRESS)");
                 else
                     Logger.WriteLog(LogType.Error, $"Character {client.Player.Id}: saved mission {mission.MissionId} has no definition and is not sent");
             }
