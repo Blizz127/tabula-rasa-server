@@ -2,6 +2,7 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rasa.Memory;
 using Rasa.Packets.Party.Client;
+using Rasa.Packets.Party.Server;
 
 namespace Rasa.Test
 {
@@ -30,6 +31,25 @@ namespace Rasa.Test
             Assert.AreEqual(42U, Read(writer => writer.WriteLong(42)));
             Assert.AreEqual(0U, Read(writer => writer.WriteLong(0)));
             Assert.AreEqual(0U, Read(writer => writer.WriteLong(-5_000_000_000L)));
+        }
+
+        // Live 2026-09-28 16:16 UTC: the owner kicked a DIT bot and its row stayed in his squad window. The client got the
+        // id as WriteUInt in the member tuple (a signed int to it) but RemovePartyMember sent it as a long, so they never
+        // matched. The removal must carry the id exactly as the member tuple did.
+        [TestMethod]
+        public void RemovePartyMemberWritesTheIdAsTheMemberTupleDid()
+        {
+            byte[] Bytes(System.Action<PythonWriter> write)
+            {
+                using var stream = new MemoryStream();
+                using (var writer = new PythonWriter(new BinaryWriter(stream, System.Text.Encoding.UTF8, true)))
+                    write(writer);
+                return stream.ToArray();
+            }
+
+            var removal = Bytes(new RemovePartyMemberPacket(BotAccountId, true).Write);
+            var tupleId = Bytes(writer => writer.WriteUInt(BotAccountId));
+            CollectionAssert.AreEqual(tupleId, removal[1..(1 + tupleId.Length)]);
         }
 
         private static uint Read(System.Action<PythonWriter> write)
