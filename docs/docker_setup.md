@@ -125,3 +125,10 @@ Before recreating Game in a deploy, save its full log into that deploy's backup 
 the old container's log is deleted with it. On 2026-09-28 that lost the 02:45–03:00 UTC chat lines the DIT lanes
 needed.
 
+
+Before a deploy, check whether the on-demand sleep service has put Tabula Rasa to sleep:
+`journalctl --user -u dit-stackd | grep tabula-rasa | tail`, or `docker ps -a`, which shows auth and game as
+Exited. If it has, either build and re-pin only, without starting anything, or start both auth and game through
+the service's wake. On 2026-09-28 at 03:31 UTC a Game-only deploy of an asleep server started Game without Auth.
+Game retried "Could not connect to the Auth server" for 5 minutes, and stackd went into an error state ("partly
+running outside stackd").

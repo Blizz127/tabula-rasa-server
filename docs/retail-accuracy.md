@@ -5258,3 +5258,19 @@ The owner had logged off; his last ping was at 03:00:26 UTC.
 - **Backups**: only the latest, `~/backups/rasa-net/predeploy-20260928T030149Z/`. `.deploy-lock` was held during
   the deploy. Rollback: re-pin `rasa_net_game:dit-20260928b` (`docker-compose.dit.yml.before-20260928c`).
 - **Startup**: 864 spawnpools, navmeshes 75/75, 0 gaps, Auth authenticated, DIT enabled.
+
+## 2026-09-28 03:31 UTC (2026-09-27 22:31 CDT) — Deploy: DIT squad chat, and a collision with on-demand sleep
+
+- **Overlay**: tr-squadchat's re-handoff (`~/scratch/tr-fixes/squad-chat`, patch sha256 3a321b05…, copied to
+  `~/backups/rasa-net/research/20260928-dit-squad-chat`). It covers hub replies for all bots, open chat, exactly one
+  answer per squad line, invite decisions from pair state, and a 25-minute kick cooldown. Only DIT files changed;
+  the 10 hook files are unchanged. The full suite with the world database (on ax41, capped) gave 1633/1633. The hub
+  call is async, and its reply is posted back to the game thread (`DitPopulation.Post`).
+- **Image**: `rasa_net_game:dit-20260928d`, 0 compiler errors. Backup `predeploy-20260928T033041Z`, which now also
+  holds `game-before.log`, the previous container's full log.
+- **Collision**: stackd had slept TR at 03:25:58 UTC (idle 1505 s), so Auth was down. The Game-only relaunch
+  started Game alone, and Game could not reach Auth from 03:31:39 to 03:37:10 UTC, when Auth was started by hand.
+  No player was on. stackd logged an error state. `docs/docker_setup.md` now says to check for sleep before a
+  deploy.
+- **Startup**: "DIT quest book: 154 missions, 127 NPCs, 146 waypoints"; 864 spawnpools, navmeshes 75/75, 0 gaps.
+  Rollback: re-pin `rasa_net_game:dit-20260928c`.
