@@ -1158,3 +1158,13 @@ Palisades from footage".
 | creature stats, respawn, group sizes | - | world-seed counterparts; 20; the fewest the footage shows | OD-177, OD-178 | analogue / observed lower bound |
 | 1067 Can't Survive Without My Radio | unseeded | defined at Major Ston; comm devices from the two officers; 66,000 XP / 5,800 cr | client objectives; TaRapedia rev 33372 (post-1.4), walkthrough spots | inferred; level and drop analogue |
 | unregistered species, Abyss, Plateau, Howling Maw | - | recorded in the evidence file, not seeded | footage study | gap |
+
+## Use-object range (2026-09-28)
+
+`GAP-USE-OBJECT-RANGE`. `DynamicObjectManager.RequestUseObject` adds the requesting player to a usable's
+`TriggeredByPlayers` (Logos shrines, footlockers and the other usables at lines 91, 107 and 119) without checking
+the player's distance. Only waypoints check (`IsNear2m`). A client can therefore start a shrine's 10 s channel
+from any distance. The original server's use range is not recorded. The client may enforce its own click range,
+and that hasn't been checked either. Needed: the client's use-range constant (1.16.5.0 scripts) or original footage
+of a failed out-of-range use. Until then the server does not enforce a range. DIT's Logos-hunting bots walk to
+within 2.5 m, as a player would. Found by the DIT tr-chat lane, 2026-09-28.
