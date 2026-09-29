@@ -5590,3 +5590,49 @@ actually ships, since it's the exact tree being deployed).
 
 TR was asleep, so this was build-and-re-pin only under `.deploy-lock`: `rasa_net_game:dit-20260929a`, nothing
 started. Rollback: re-pin `rasa_net_game:dit-20260928m`.
+
+## 2026-09-29 04:06 UTC — DIT package C4 staged while asleep (arrival fill, departure grace, stagger)
+
+tr-chat delivered package C4 ("arrival fill plus departure grace") stacked on C5 (`presence-C4-on-C5.patch`,
+`overlay/dit-overlay.patch` sha256 `69a209833a2c…`). New 11th hook file `src/Rasa.Game/Queue/QueueClient.cs`:
+`Redirect` now calls the guarded `Dit.DitPopulation.HumanArriving(UserId)` before the handoff packet, giving the
+population a signal about 12 s before the arriving account's `MapLoaded` — the 10 existing hook files are
+unchanged. New `Dit/DitPopulationPresence.cs` (`PopPresence`) is pure ms-clock logic (no `Client`/`Server`)
+covering wake fill, arrival burst, grace and staggered logout; `DitPopulation.cs` and `DitPopulationPlan.cs` are
+extended to call it (8 new `population.json` keys, all defaulted, `presence: true`). Only those two Dit files
+changed from the already-staged `dit-20260929a` (C5) content; the other 13 Dit files plus the one C5 added are
+byte-identical (checked file-by-file, sha256).
+
+This replaces the old "fill after MapLoaded" / 20-180 s random drift-off path while `presence` is on (`presence:
+false` restores C5 behaviour exactly). tr-chat's writeup also identifies the drift-off's actual live bug: on every
+tick with nobody in the world, `LogoutAt = Math.Min(LogoutAt, now + Rng.Next(20_000, 180_000))` re-rolled every
+tick, so repeated minimums across many ticks converge toward the low end — matching the observed mass logout of
+24 bots together at 21:54Z (16:54 CDT) on 2026-09-28.
+
+**Verification (learning from the C5 `git apply --check`-only mistake):** built a fresh test tree from `git
+archive` of current `development` (`e90402b`, docs-only ahead of 82bcc44 — no code drift), added C4's Dit/ and
+test files, ran `git apply --check` **then `git apply`** on the now-11-file `dit-overlay.patch`, and confirmed the
+new hook line present in `QueueClient.cs` and the (differently-named) existing symbols (`IsDitBot`, `CreateDitBot`)
+present in the other 10 hook files before packaging anything.
+
+**Test result and a separate, pre-existing finding:** with the current live `rasaworld.db` mounted, the C4 tree
+gave 1593 passed / 8 failed / 0 skipped (1601 total). To rule out a C4 regression, the exact same live
+`rasaworld.db` was also run against a bare `development` checkout with **no DIT overlay at all**: identically
+1552 passed / 8 failed (1560 total) — the same 8 named failures
+(`TheWildernessChangeIsExactlyItsHostileAmbientPools`, `CraterLakeResearchFacilityTests`/`DitDiscrepancyFixesTests`/
+`DivideOperationsInstancesTests`/`PalisadesDossierMissionsTests` each `TheDeployedWorldHasWhatTheSeedStandsOn`,
+`MissionLinkAuditTests.EveryObjectiveConversationPackageIsCarriedByASpawnedCreature` (mission 575/4, package 468),
+`MissionMapIndicatorTests.TheWorldsOwnObjectivesAreMostlyPlaceable` (210/239 placeable), and
+`WorldPositionAuditTests.EveryWorldPositionStandsWhereABodyCanWalk` (3 Pravus Research "Living Infestation" dish
+props 0.6-1.23 m over the navmesh surface)). These are content/world-DB audits unrelated to DIT and were **not**
+failing in the 1587/1587 C5 run a few hours earlier against the same host's db at the time — the live
+`rasaworld.db` has drifted since then (plausibly the in-progress, owner-authorized navmesh rebuild touching
+terrain/placement data). Flagged to tr-chat/Devbox Coordinator as a separate, non-DIT issue to track; not a
+blocker for C4, since C4 adds 41 passing tests and zero new failures over the same baseline. `GAP-WORLDDB-AUDIT-DRIFT-20260929`.
+
+TR was asleep (no containers running, `dit/status.json` leader `null` and stale), so this was build-and-re-pin
+only under `.deploy-lock`: fresh backup `predeploy-20260929T020427Z` (only backup kept, per the minimal-backup
+rule), image built from the repo Dockerfile per the updated DIT overlay build process in `AGENTS.md`/
+`docs/docker_setup.md` (base commit e90402b, no base-image retag needed — docs-only ahead of 82bcc44).
+`rasa_net_game:dit-20260929b` pinned in `docker-compose.dit.yml`, nothing started. Rollback: re-pin
+`rasa_net_game:dit-20260929a` and restore `predeploy-20260929T020427Z`.
