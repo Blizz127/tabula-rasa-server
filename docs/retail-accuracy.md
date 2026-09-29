@@ -5751,3 +5751,13 @@ gear catch-up content).
 **Not staged or deployed.** Per the Devbox Coordinator's standing order (the owner and a friend are online now):
 no restart or deploy of TR without asking first. Built the image only (no live-system effect); holding the
 `docker-compose.dit.yml` re-pin and any deploy for explicit clearance at the next TR sleep window.
+
+## 2026-09-29 (re-pin cleared) — dit-20260929d staged, no restart
+
+Devbox Coordinator cleared staging (re-pin only, no restart/recreate) for the mission-log privacy fix while the
+owner was online, to take effect at TR's next natural sleep/wake rather than forcing a restart. `.deploy-lock`
+held for the re-pin; no containers were running before or after (nothing to restart). `docker-compose.dit.yml`
+now pins `rasa_net_game:dit-20260929d`. Rollback: re-pin `rasa_net_game:dit-20260929c`.
+
+At the next wake, still to check: TR comes up clean, gear catch-up works, and bot chat carries no mission-log
+fact on non-party channels.
