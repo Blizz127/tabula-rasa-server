@@ -5698,3 +5698,32 @@ None of this blocked or was caused by DIT C4/C5 (confirmed earlier the same 8 fa
 at commit 92e5414 with no DIT overlay at all) or by the in-progress navmesh rebuild (confirmed live db unchanged).
 Continuing the remaining three items (the four stale pre-migration test methods, the Pravus dish migration, the
 objective-placement floor) as background work; not urgent, not blocking anything.
+
+## 2026-09-29 14:29 UTC — DIT gear catch-up (owner's gear policy: earned first, catch-up as a safety net)
+
+offline-sim delivered a small patch (Devbox task 7b2f7bd8e302) implementing the owner's gear policy: bots earn
+gear through the same vendor shopping DitPopulationGear.cs already does, and a slot more than one distinct grade
+behind what the vendor offers for its level (or an empty slot with something on offer) gets a catch-up visit —
+several purchases (up to `CatchUpBuys` = 4, never at or below the ammo reserve) instead of the usual one upgrade,
+capped at `min(level, spread-anchor)` so gear can't run ahead of the population the owner plays with. A missing or
+unreadable `/app/dit/spread-anchor.json` logs a visible "catches up UNCAPPED" line rather than silently
+uncapping (my requirement from the design review). Purchases are logged to `/app/dit/gear/events.jsonl` as
+`earned` (normal) or `granted` (catch-up); still only real packets (`RequestVendorPurchase`, `RequestEquip*`),
+no inventory or DB writes, per my read-only-write recommendation from the same review (see the read-only Q&A
+above on why offline item writes are unsafe — `items`/`character_inventory` durability and slot-encoding risk,
+same class of problem as offline level-crossing).
+
+Verified the patch (sha256 `cb2ac98b99b96bf0…`) against the actual staged `dit-20260929b` (C4) tree, not an
+assumption of it: fresh `git archive` of `development` (`cda46f5`), the 11-hook `dit-overlay.patch` applied for
+real (`git apply`, not `--check`), C4's Dit/test files copied in, then this patch applied cleanly (`patch -p1`,
+dry-run first) on top — all 4 files patched, new symbols (`IsBehind`, `BehindSlots`, `ChooseCatchUp`,
+`ContinueVisit`, `PopAnchor`, `PopGearLog`) and the 5 new test methods present. Full suite with the current live
+`rasaworld.db` (sha256-verified unchanged, `13cf4220…`): 1609 passed / 6 failed / 1615 total — the same 6
+already-documented pre-existing failures from the 2026-09-29 05:xx UTC entry above (two of the original 8 are
+already fixed on `development`), zero new failures, all 14 `DitPopulationGearTests` (9 existing + 5 new) passing.
+
+TR was asleep (no containers, humans=0), so build-and-re-pin only under `.deploy-lock`: fresh backup
+`predeploy-20260929T142750Z` (only backup kept), image built via the repo Dockerfile with the AX41 disk gate run
+first (`~/.local/share/dit-stackd/disk-gate.sh`, new standing rule after the 2026-09-29 disk-full incident).
+`rasa_net_game:dit-20260929c` pinned in `docker-compose.dit.yml`, nothing started. Rollback: re-pin
+`rasa_net_game:dit-20260929b` and restore `predeploy-20260929T142750Z`.
