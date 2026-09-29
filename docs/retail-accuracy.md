@@ -5624,11 +5624,20 @@ gave 1593 passed / 8 failed / 0 skipped (1601 total). To rule out a C4 regressio
 `MissionLinkAuditTests.EveryObjectiveConversationPackageIsCarriedByASpawnedCreature` (mission 575/4, package 468),
 `MissionMapIndicatorTests.TheWorldsOwnObjectivesAreMostlyPlaceable` (210/239 placeable), and
 `WorldPositionAuditTests.EveryWorldPositionStandsWhereABodyCanWalk` (3 Pravus Research "Living Infestation" dish
-props 0.6-1.23 m over the navmesh surface)). These are content/world-DB audits unrelated to DIT and were **not**
-failing in the 1587/1587 C5 run a few hours earlier against the same host's db at the time — the live
-`rasaworld.db` has drifted since then (plausibly the in-progress, owner-authorized navmesh rebuild touching
-terrain/placement data). Flagged to tr-chat/Devbox Coordinator as a separate, non-DIT issue to track; not a
-blocker for C4, since C4 adds 41 passing tests and zero new failures over the same baseline. `GAP-WORLDDB-AUDIT-DRIFT-20260929`.
+props 0.6-1.23 m over the navmesh surface)). These are content/world-DB audits unrelated to DIT.
+
+**Correction (superseding the "live db drifted" claim below when first written):** the navmesh helper checked the
+live `rasaworld.db` directly — mtime 14:34 CDT, no WAL, sha256 `13cf4220…`, byte-identical to the
+`predeploy-20260929T020427Z` copy used above — and nothing of theirs writes it; their work reads client files
+only. To find the real cause, the same live db (sha256-verified identical) was also run against a bare `git
+archive` of **92e5414** (C5's own base commit, no DIT overlay): identically 8 failed / 1551 passed / 1559 total,
+the same 8 tests. So these failures pre-exist at 92e5414 already, against this exact db — there was no drift.
+The C5 report of "1587/1587" a few hours earlier must have run against a different (older or otherwise distinct)
+`rasaworld.db` copy than this one, not the current live file; that report's db provenance was not sha256-checked
+at the time, which is the actual gap. Retracting `GAP-WORLDDB-AUDIT-DRIFT-20260929` as filed (no evidence of live
+DB drift); the 8 failures are a genuine pre-existing content/placement discrepancy against the current live db,
+present at least since 92e5414, still not caused by C4 or C5 (zero new failures in either), and still not a
+blocker for staging C4. Worth a follow-up: identify what `rasaworld.db` the earlier C5 test actually opened.
 
 TR was asleep (no containers running, `dit/status.json` leader `null` and stale), so this was build-and-re-pin
 only under `.deploy-lock`: fresh backup `predeploy-20260929T020427Z` (only backup kept, per the minimal-backup
