@@ -5727,3 +5727,27 @@ TR was asleep (no containers, humans=0), so build-and-re-pin only under `.deploy
 first (`~/.local/share/dit-stackd/disk-gate.sh`, new standing rule after the 2026-09-29 disk-full incident).
 `rasa_net_game:dit-20260929c` pinned in `docker-compose.dit.yml`, nothing started. Rollback: re-pin
 `rasa_net_game:dit-20260929b` and restore `predeploy-20260929T142750Z`.
+
+## 2026-09-29 (build only, held) — DIT mission-log privacy fix built as dit-20260929d
+
+tr-chat relayed a fix for a privacy bug under the owner's new rule (bots/hub should only know about a player what
+a player could actually see in-game): `DitSquadChat.cs`'s `Describe()` unconditionally added the human's full
+mission log as a fact (`asker_missions`) for ANY interaction, not just squadmates, and included it in the fact
+filter fed to reply generation. Two pure removals (the fact line and the filter key), verified against the exact
+line numbers/content in the staged tree before applying.
+
+Reviewing it surfaced a fourth, uncovered instance of the same pattern: `DitBotManager.Heard()` builds a single
+shared `topFacts` array (mission log included) sent once per hub payload for every hearer in the group — but
+`CanHear` only guarantees squad-only hearers for the "party" channel; any other channel (plain "say", etc.) lets
+any bot within 70 m hear, regardless of party membership, and would leak the log via hub telemetry rather than
+in-game speech. Flagged to tr-chat, confirmed as a genuine miss, and fixed the same way: the mission-log fact is
+now only appended to `topFacts` when `channel == "party"`.
+
+Built and tested against the current live `rasaworld.db` twice (the `DitSquadChat.cs` fix alone, then combined
+with the `DitBotManager.cs` fix): both runs 1609 passed / 6 failed / 1615 total, the same 6 already-documented
+pre-existing failures, zero new ones. Image built as `rasa_net_game:dit-20260929d` (on top of the already-staged
+gear catch-up content).
+
+**Not staged or deployed.** Per the Devbox Coordinator's standing order (the owner and a friend are online now):
+no restart or deploy of TR without asking first. Built the image only (no live-system effect); holding the
+`docker-compose.dit.yml` re-pin and any deploy for explicit clearance at the next TR sleep window.
