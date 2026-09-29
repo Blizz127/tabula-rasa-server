@@ -5571,3 +5571,22 @@ call. No server-side cause is evident; recorded alongside the connection-drop wa
   online, under `.deploy-lock`. Backup: only `predeploy-20260928T220810Z`. Rollback: re-pin
   `rasa_net_game:dit-20260928l` and retag `rasa_net_auth:latest` to `release-20260928f`. Startup clean: 885
   spawnpools, navmeshes 75/75, 0 gaps, Auth authenticated.
+
+## 2026-09-29 01:24 UTC (2026-09-28 20:24 CDT) — Staged while asleep: DIT C5 (stuck-bot detection and recovery)
+
+tr-chat's C5 (`~/scratch/tr-fixes/presence-C5`, `presence-C5-on-l.patch` sha256 c648cf57e1f1, copied to
+`~/backups/rasa-net/research/20260929-dit-presence-C5`). Adds `DitPopulationStuck.cs`: detects a bot making no
+progress, colliding repeatedly, oscillating, dying repeatedly in one spot, or finding no path (sampled from
+`MoveTo` on legs of 8 m or more), including a navmesh-height-vs-actual-Y check that logs both heights for the
+navmesh work. Recovery ladder: repath, back off and repath, change goal and avoid the spot for 30 min; relocates
+only as a last resort and only with no player within about 150 m. A kill switch (`StuckRecovery`, default true)
+can leave it at detect-only.
+
+Only `DitPopulation.cs` and `DitPopulationPlan.cs` changed plus the new file; verified byte-for-byte identical to
+the live overlay's other 13 files. My own test build applies the patch and hooks against a fresh `git archive` of
+development, not just `git apply --check`, and passed 1587/1587 with the world database on the exact combination
+below; tr-chat's own run reported 1719/1719, a discrepancy not yet resolved (my run is authoritative for what
+actually ships, since it's the exact tree being deployed).
+
+TR was asleep, so this was build-and-re-pin only under `.deploy-lock`: `rasa_net_game:dit-20260929a`, nothing
+started. Rollback: re-pin `rasa_net_game:dit-20260928m`.
