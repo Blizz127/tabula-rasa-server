@@ -49,10 +49,16 @@ namespace Rasa.Test
         /// obelisk is too large to move on your own" - and both now stand in the world as creatures on a class
         /// that can be spoken to, the shape TarapediaMachineClass established for a talking machine. 451/3 stays:
         /// its speaker has no name in any source and the owner chose not to invent one.
+        ///
+        /// 2026-09-29: 575/4 joined the list. The Means of Production's client objectiveconversation row names package
+        /// 468, but its speaker is Maulis, who retail-accuracy.md's Pravus Research section documents as deliberately
+        /// held ("575/4 Maulis and 575/5 the ambush stay optional and unrevealed") - not placed in this world yet, so
+        /// no creature carries 468. Original client row; the gap is the missing placement, not the link.
         /// </summary>
         private static readonly HashSet<(long Mission, long Objective, long Package)> UnboundPackages = new()
         {
-            (451, 3, 569)
+            (451, 3, 569),
+            (575, 4, 468)
         };
 
         [TestMethod]

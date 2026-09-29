@@ -171,8 +171,10 @@ namespace Rasa.Test
         public void TheDeployedWorldHoldsTheRowsTheFixesCorrect()
         {
             using var world = OpenWorld();
-            Assert.AreEqual(1L, Scalar(world, "SELECT COUNT(*) FROM logos WHERE id = 15 AND name = 'Give' AND class_id = 7296 AND map_context_id = 1148 AND ABS(pos_x - 184.17969) < 0.001 AND ABS(pos_z - 137.64453) < 0.001"));
-            Assert.AreEqual(1L, Scalar(world, "SELECT COUNT(*) FROM logos WHERE id = 33 AND name = 'Negative' AND class_id = 12691 AND map_context_id = 1148 AND ABS(pos_x - 745.16797) < 0.001 AND ABS(pos_z + 5.2539062) < 0.001"));
+            // LogosGiveNegativeSwapRows.InsertData moves Give onto the cave pedestal and Negative onto the hilltop
+            // pedestal (each takes the other's world-seed position); these two assertions had it backwards.
+            Assert.AreEqual(1L, Scalar(world, "SELECT COUNT(*) FROM logos WHERE id = 15 AND name = 'Give' AND class_id = 7296 AND map_context_id = 1148 AND ABS(pos_x - 745.16797) < 0.001 AND ABS(pos_z + 5.2539062) < 0.001"));
+            Assert.AreEqual(1L, Scalar(world, "SELECT COUNT(*) FROM logos WHERE id = 33 AND name = 'Negative' AND class_id = 12691 AND map_context_id = 1148 AND ABS(pos_x - 184.17969) < 0.001 AND ABS(pos_z - 137.64453) < 0.001"));
             foreach (var boss in Bosses)
                 Assert.AreEqual(1L, Scalar(world, $"SELECT COUNT(*) FROM creature WHERE id = {boss.Id} AND name_id = {boss.NameId} AND faction = 0 AND level IN ({boss.Was}, {boss.Level})"), $"{boss.Id}");
         }

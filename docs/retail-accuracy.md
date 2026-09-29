@@ -5645,3 +5645,56 @@ rule), image built from the repo Dockerfile per the updated DIT overlay build pr
 `docs/docker_setup.md` (base commit e90402b, no base-image retag needed — docs-only ahead of 82bcc44).
 `rasa_net_game:dit-20260929b` pinned in `docker-compose.dit.yml`, nothing started. Rollback: re-pin
 `rasa_net_game:dit-20260929a` and restore `predeploy-20260929T020427Z`.
+
+## 2026-09-29 05:xx UTC — the 8 pre-existing audit failures: root cause, and two fixed
+
+Following up on GAP-WORLDDB-AUDIT-DRIFT-20260929's correction (no live db drift): root-caused all 8 failures the
+current live `rasaworld.db` gives against `development`. None needed a world-DB migration; the live db is correct.
+
+- **Six are test bugs, not DB bugs**, all only surfaced now because earlier full-suite runs this project were
+  apparently checking an older local `rasaworld.db` snapshot that predated several 2026-09-27/28 migrations, so
+  their assertions coincidentally matched:
+  - `CraterLakeResearchFacilityTests`, `DivideOperationsInstancesTests`, `PalisadesDossierMissionsTests`
+    (`TheDeployedWorldHasWhatTheSeedStandsOn`) and `AmbientRespawnDividePopulationsTests`
+    (`TheWildernessChangeIsExactlyItsHostileAmbientPools`) each assert the *pre-migration seed* state against the
+    live db, but their own migrations (`WildernessCraterLakeResearchFacility`, `DivideOperationsInstances`,
+    `PalisadesDossierMissions`, `AmbientPoolRespawn`) are already applied (confirmed in `__EFMigrationsHistory`,
+    163 total). These four methods are stale pre-merge guard checks that were never converted to check the
+    post-migration state once their migrations shipped. **Not yet fixed** — each method has several chained
+    `Assert.AreEqual` calls and MSTest stops at the first failure, so properly updating all of them means
+    checking every assertion against its migration's actual `Up()` output and the live db, not just the one
+    that happened to fail first. Left as follow-up work.
+  - `DitDiscrepancyFixesTests.TheDeployedWorldHoldsTheRowsTheFixesCorrect` had the Give/Negative shrine coordinates
+    backwards: it expected logos 15 (Give) on the hilltop and 33 (Negative) in the cave, the opposite of what
+    `LogosGiveNegativeSwapRows.InsertData` (extensively evidence-documented) actually does and what the live db
+    correctly holds. Simple swapped-constants bug, confirmed against the file's own correctly-written
+    `TheMigratedWorldLoadsTheCorrectedShrinesAndLevels`, which had it right. **Fixed**: swapped the two
+    assertions' expected coordinates.
+  - `MissionLinkAuditTests.EveryObjectiveConversationPackageIsCarriedByASpawnedCreature` flagged mission 575/4
+    (package 468) as unbound. This is the client's original objectiveconversation row for The Means of
+    Production; its speaker is Maulis, already documented as deliberately held ("575/4 Maulis and 575/5 the
+    ambush stay optional and unrevealed", Pravus Research section above) — no creature carries 468 because Maulis
+    isn't placed yet, which is a known, decided gap, not a missing link. **Fixed**: added `(575, 4, 468)` to the
+    file's existing `UnboundPackages` allowlist, citing the held-content note.
+  - Filtered test run confirms both fixes pass against the live db: `TheDeployedWorldHoldsTheRowsTheFixesCorrect`,
+    `EveryObjectiveConversationPackageIsCarriedByASpawnedCreature`, `EveryMissionGiverAndReceiverIsACreatureThatSpawns`
+    all green (3/3).
+- **One is a genuine, confirmed content bug**, not yet fixed: `WorldPositionAuditTests` — three of the six Pravus
+  Research "Living Infestation" (323 Pirate Radio) dish props float above the navmesh surface by more than the
+  0.5 m `FloorTolerance`: content_placement 1430130 (1.227 m over, surface 46.737 at x -0.4, z 298.7), 1430131
+  (0.654 m over, surface 47.309980 at x -5.4, z 298.7) and 1430132 (0.6 m over, surface 30.937 at x -52.1, z 163).
+  Exact unrounded ground heights obtained via a filtered single-test run with the audit's own print format
+  widened to 6 decimals. Target `pos_y` (surface - `WorldPlacementFloorSnapRows.OriginalSpawnOffset` of -0.276,
+  the same floor definition used everywhere else): 1430130 → 46.461, 1430131 → 47.03398, 1430132 → 30.661.
+  **Not yet fixed** — needs a small follow-up migration in the same shape as `WorldPlacementFloorSnapRows`
+  (new WildernessData rows class + Sqlite/MySql migration + Designer files + model snapshot), not edits to the
+  already-shipped `PravusResearchInstanceRows` migration that placed them.
+- **Not yet investigated**: `MissionMapIndicatorTests.TheWorldsOwnObjectivesAreMostlyPlaceable`'s floor
+  (`placed >= objectives - 12`) was calibrated 2026-09-22 at 133 objectives/8 unplaceable; the world has grown to
+  239 objectives/29 unplaceable since. Needs the 21 new unplaceable objectives identified individually against
+  already-documented Held/gap content before fixing the real ones or raising the floor with citations.
+
+None of this blocked or was caused by DIT C4/C5 (confirmed earlier the same 8 failures occur on bare `development`
+at commit 92e5414 with no DIT overlay at all) or by the in-progress navmesh rebuild (confirmed live db unchanged).
+Continuing the remaining three items (the four stale pre-migration test methods, the Pravus dish migration, the
+objective-placement floor) as background work; not urgent, not blocking anything.
