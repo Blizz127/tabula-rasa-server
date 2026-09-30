@@ -5761,3 +5761,40 @@ now pins `rasa_net_game:dit-20260929d`. Rollback: re-pin `rasa_net_game:dit-2026
 
 At the next wake, still to check: TR comes up clean, gear catch-up works, and bot chat carries no mission-log
 fact on non-party channels.
+
+## 2026-10-01 01:50–02:20 UTC (2026-09-30 20:50–21:20 CDT) — Resume after the dev-box crash: live state re-verified
+
+The dev box (not banshee-ax41; its uptime was 5 d 20 h) crashed on 2026-09-30 11:37 CDT and this session was lost.
+Devbox task 6a6716eed7e9 asked for the true state of three ledger items. Read-only inspection of ax41; nothing was
+restarted, re-pinned or built (the load gate read 13.6 on 12 cores, and no restart was needed).
+
+- **Release runtime + creature batch (ledger 3c8c97d52d30) — landed 2026-09-27 23:00 UTC** (the entry above).
+  Live evidence now: `docker-compose.yml` runs `dotnet src/Rasa.Game/Rasa.Game.dll` / `Rasa.Auth.dll` with
+  `mem_limit` 4g / 512m; every image since `release-20260927g` is 398–399 MB; `rasaworld.db` holds 163 migrations
+  ending `20260927080000_FootageAmbientPopulations`, `20260928090000_AmbientPoolRespawn`,
+  `20260928091000_DivideOpenGroundPopulations`. The last run (2026-09-29 17:05–18:06 UTC, `dit-20260929c`) loaded
+  885 SpawnPools, navmeshes 75/75, 16 rules / 577 rows / 0 gaps, cold start 9.4 s, and both containers exited 0
+  when stackd's idle reaper put TR to sleep ("idle 1522s"). The wake path works: the owner's launcher woke TR at
+  17:05:16 UTC and it was ready at 17:05:25.
+- **DIT spawn-anywhere (ledger 745a9ebb46ff) — deployed 2026-09-27 17:29 UTC as `dit-20260927d`** (entry above)
+  and carried by every later cumulative overlay: the live `DitBotManager.cs` spawns beside the leader on any
+  shared map (`FollowableLeader`, `FollowAcrossMaps`, `LeaderTeleported` after a ≥ 40 m jump). No in-play log of
+  the pair spawning in the Divide after a relog or `.tele` was captured (the 09-27 container logs were not saved;
+  saving began 09-28). Since 2026-09-28 02:03 UTC the `dit/pair-lives` switch is on, so the pair no longer appears
+  uninvited: they join on the owner's invite, "lfg" or Squad Finder ad during their evening windows, and only then
+  does the companion code (with this fix) play them. The 09-29 session had no invite, hence no Mira/Tavin lines.
+- **Owner items (ledger 1d9213819e9f)**: client login on the Release build is verified twice — 2026-09-27 (owner
+  playing) and 2026-09-29 17:06–17:38 UTC (character 9, Blizz, 32 min, 2167 frames, disconnect "the other side
+  closed the connection … last Ping", i.e. a clean client logout). The Divide is not empty on live: the world
+  database has 77 pools on map 1148 — 37 service and mission NPC pools (hospitals, trainers, armor/weapon/medical
+  vendors, token bankers, Agent Cicely, Captain Rankin, Dr. Hansen …) and 40 hostile pools (including the 21 seeded
+  09-28) — and the 09-29 log shows population bots killed by creatures at 12 distinct Divide positions (Thoria Das
+  slopes, Hydro Plant, Delta Outpost, the Foreas Base road). The owner has not yet played the Divide since the
+  09-28 19:34 UTC deploy, so his confirmation is still open. OD-125..OD-160 review remains with the owner.
+- **Finding for DIT** (not fixed here; `Dit/` is DIT's): the 09-29 run logged 254 `[Error] DIT population <name>:
+  Object reference not set to an instance of an object.` (0 in the 09-28 21:08 run), each right after a
+  `DIT stuck <name> … attempt 3 changegoal` line, swallowed by the per-bot catch at `DitPopulation.cs:448`. It
+  appeared with the C4/C5 stuck-recovery overlays staged 09-29 and aborts that bot's tick each time.
+- **Still to check at the next wake** (unchanged): `dit-20260929d` comes up clean (pinned, never yet run), gear
+  catch-up, and no mission-log fact on non-party channels. `dit-rasa-native-learning.service` on ax41 is in
+  `failed` state (DIT's unit; reported to the Coordinator).
