@@ -1,0 +1,59 @@
+--- a/app.py
++++ b/app.py
+@@ -26,9 +26,9 @@
+ _rate_lock = threading.Lock()
+ 
+ EMAIL_RE = re.compile(r"^[^@\s]{1,64}@[^@\s]{1,255}\.[^@\s]{2,64}$")
+-USER_RE = re.compile(r"^[A-Za-z0-9_\-.]{3,32}$")
+-# Password: printable ASCII, no spaces (auth splits on whitespace)
+-PASS_RE = re.compile(r"^[\x21-\x7E]{6,64}$")
++USER_RE = re.compile(r"^[A-Za-z0-9_\-.]{3,14}$")
++# Preserve the existing supported password character policy; do not normalize secrets.
++PASS_RE = re.compile(r"^[\x21-\x7E]{6,16}$")
+ 
+ app = FastAPI(title="Tabula Rasa Create Account", docs_url=None, redoc_url=None)
+ 
+@@ -133,20 +133,18 @@
+ 
+ 
+ def _validate(email: str, username: str, password: str, confirm: str) -> str | None:
+-    # Banshee SSO may include spaces in display names/passwords; auth is whitespace-split,
+-    # so strip ALL whitespace before validate/hash (parity with Client Bot).
++    # Match the original login packet: 14 username bytes, 16 password bytes.
++    # Passwords must be validated and hashed exactly as supplied by the launcher.
+     email = "".join(email.split())
+     username = "".join(username.split())
+-    password = "".join(password.split())
+-    confirm = "".join(confirm.split())
+     if not EMAIL_RE.match(email):
+         return "Invalid email"
+-    if not USER_RE.match(username):
+-        return "Username must be 3–32 chars: letters, digits, _ - ."
++    if not USER_RE.fullmatch(username):
++        return "Username must be 3–14 ASCII bytes: letters, digits, _ - ."
+     if password != confirm:
+         return "Passwords do not match"
+-    if not PASS_RE.match(password):
+-        return "Password must be 6–64 printable ASCII with no spaces"
++    if not PASS_RE.fullmatch(password):
++        return "Tabula Rasa requires 6–16 ASCII password bytes with no whitespace; use a shared launcher password that fits this limit"
+     # Refuse shell metacharacters that could confuse the console command line
+     for part in (email, username, password):
+         if any(c in part for c in " \t\r\n\"'`$;|&<>\\"):
+@@ -359,7 +357,6 @@
+ 
+     email = "".join(email.split())
+     username = "".join(username.split())
+-    password = "".join(password.split())
+ 
+     try:
+         action = _upsert_account(email, username, password)
+@@ -398,7 +395,7 @@
+         return JSONResponse(status_code=400, content={"ok": False, "error": err})
+     email = "".join(body.email.split())
+     username = "".join(body.username.split())
+-    password = "".join(body.password.split())
++    password = body.password
+     try:
+         action = _upsert_account(email, username, password)
+     except ValueError as e:
